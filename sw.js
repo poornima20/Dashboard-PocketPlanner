@@ -1,15 +1,15 @@
-const CACHE_NAME = "planner-v1";
+const CACHE_NAME = "planner-v0.1";
 
 self.addEventListener("install", (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then(cache => {
       return cache.addAll([
-        "/",
-        "/index.html",
-        "/style.css",
-        "/script.js",
-        "/icon-192.png",
-        "/icon-512.png"
+        "./",
+        "./index.html",
+        "./style.css",
+        "./script.js",
+        "./icon-192.png",
+        "./icon-512.png"
       ]);
     })
   );
