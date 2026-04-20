@@ -215,6 +215,7 @@ nav{
 .topbar {
   display: grid;
   grid-template-columns: 1fr 4fr 1fr;
+  grid-template-areas: "left search right";
   align-items: center;
   top: 0;
   margin: 10px;
@@ -229,6 +230,13 @@ nav{
   justify-self: end;  
 }
 
+@media (max-width: 768px) {
+  .topbar {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "search right";
+  }
+}
+
 /* ======================================================
    4. TOPBAR - Search
 ====================================================== */
@@ -239,6 +247,7 @@ nav{
   position: relative;
   margin: 0;
   padding: 0;
+  grid-area: search;
 }
 
 /* INPUT */
@@ -284,6 +293,7 @@ nav{
   background: transparent;
   color: var(--button-font-color);
 
+  grid-area: right;
   cursor: pointer;
   font-size: 12px;
   margin-right: 13px;
