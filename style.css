@@ -11,6 +11,7 @@
 body {
   background: #0b0b0b;
   color: #ffffff;
+  overflow: hidden;
 }
 
 :root {
@@ -37,6 +38,12 @@ body {
 
 .main {
   flex: 1;
+  margin-left: 220px;
+  transition: 0.25s ease;
+}
+
+.sidebar.collapsed ~ .main {
+  margin-left: 56px;
 }
 
 .content {
@@ -48,14 +55,46 @@ body {
    3. SIDEBAR
 ====================================================== */
 .sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+   height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
   width: 220px;
+
   background: var(--sidebar-bg);
   padding: 0 10px;
+
   transition: 0.25s ease;
+  z-index: 1000;
 }
 
+/* collapsed */
 .sidebar.collapsed {
   width: 56px;
+}
+
+/* MOBILE ONLY */
+@media (max-width: 768px) {
+
+  /* DEFAULT → show collapsed sidebar */
+  .sidebar {
+    transform: translateX(0);
+  }
+
+  /* WHEN FULLY OPEN */
+  .sidebar.open {
+    width: 220px;
+  }
+
+  /* OPTIONAL: if you want FULL HIDE state */
+  .sidebar.hidden {
+    transform: translateX(-100%);
+  }
+
 }
 
 /* ======================================================
@@ -102,8 +141,7 @@ body {
 .sidebar-body {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 60px); 
-  /* adjust 60px = your logo height */
+  height: 100%;
 }
 
 nav{
@@ -186,7 +224,6 @@ nav{
 }
 
 .sidebar-footer {
-  margin-top: auto;
   padding: 12px 6px;
   padding-left: 12px;
 
@@ -207,6 +244,30 @@ nav{
 
 .bottom {
   margin-top: auto;
+}
+
+/* ======================================================
+   3. Siderbar overlay for mobile
+====================================================== */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: 0.25s ease;
+  z-index: 900;
+}
+
+/* when active */
+.overlay.active {
+  opacity: 1;
+  pointer-events: all;
 }
 
 /* ======================================================

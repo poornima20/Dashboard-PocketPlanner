@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const sidebar = document.getElementById("sidebar");
   const toggle = document.getElementById("toggleSidebar");
   const content = document.getElementById("content");
+  const overlay = document.getElementById("overlay");
 
   const navItems = document.querySelectorAll(".nav-item");
   const resultItems = document.querySelectorAll(".result-item");
@@ -16,8 +17,31 @@ document.addEventListener("DOMContentLoaded", () => {
      1. SIDEBAR TOGGLE
   ========================================== */
   toggle.onclick = () => {
+  if (window.innerWidth <= 768) {
+
+    const isOpen = sidebar.classList.contains("open");
+
+    if (isOpen) {
+      sidebar.classList.remove("open");
+      sidebar.classList.add("collapsed");   // back to icon-only
+      overlay.classList.remove("active");
+    } else {
+      sidebar.classList.remove("collapsed"); // 🔥 IMPORTANT
+      sidebar.classList.add("open");         // full sidebar
+      overlay.classList.add("active");
+    }
+
+  } else {
     sidebar.classList.toggle("collapsed");
-  };
+  }
+};
+
+/* close when clicking overlay */
+overlay.onclick = () => {
+  sidebar.classList.remove("open");
+  sidebar.classList.add("collapsed");   // 🔥 THIS IS MISSING
+  overlay.classList.remove("active");
+};
 
   /* ==========================================
      2. PAGE + ACTIVE STATE (CORE FUNCTION)

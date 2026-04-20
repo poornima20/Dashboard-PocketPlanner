@@ -1,6 +1,6 @@
 {
   "name": "Pocket Planner",
-  "short_name": "Planner",
+  "short_name": "PocketPlan",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#0b0b0b",
