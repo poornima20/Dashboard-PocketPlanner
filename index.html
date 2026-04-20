@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pocket Planner</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0b0b">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="/icon-192.png">
+  <link rel="icon" href="/icon-192.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar collapsed" id="sidebar">
+
+      <!-- SIDEBAR: LOGO -->
+      <div class="logo" id="toggleSidebar">
+        <img src="icon.png">
+        <span>Pocket Planner</span>
+      </div>
+
+    <div class="sidebar-body">
+        <!-- SIDEBAR: NAV -->
+        <nav class="sidebar-menu">
+
+            <!-- PRIMARY -->
+            <div class="menu-group">
+              <div class="item nav-item" data-page="all">
+                <i data-lucide="book-text"></i><span>My Space</span>
+              </div>
+
+              <div class="item nav-item" data-page="dated">
+                <i data-lucide="calendar"></i><span>Dated</span>
+              </div>
+
+              <div class="item nav-item" data-page="undated">
+                <i data-lucide="edit"></i><span>Undated</span>
+              </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- TEMPLATE -->
+            <div class="menu-group">
+              <div class="item nav-item" data-page="templates">
+                <i data-lucide="layout-template"></i><span>Templates</span>
+              </div>
+            </div>
+
+
+        </nav>
+
+        <div class="bottom">
+          <div class="divider"></div>
+
+            <!-- SYSTEM -->
+            <div class="menu-group">
+              <div class="item">
+                <i data-lucide="upload"></i><span>Backup</span>
+              </div>
+
+              <div class="item">
+                <i data-lucide="download"></i><span>Restore</span>
+              </div>
+            </div>
+
+        <!-- FOOTER -->
+        <div class="sidebar-footer">
+          <span class="usage-text">3 / 70 templates used</span>
+        </div>
+        </div>
+
+    </div>
+
+
+  </aside>
+
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- MAIN: TOPBAR -->
+   <div class="topbar">
+
+  <div></div>
+
+  <!-- MAIN - TOPBAR: SEARCH -->
+  <div class="search" id="searchBox">
+
+    <i data-lucide="search" class="search-icon"></i>
+    <input type="text" placeholder="Search Pocket Planner" id="searchInput">
+
+    <div class="search-dropdown" id="searchDropdown">
+      <p class="section">Planner</p>
+      <div class="result-item" data-page="all">All Docs</div>
+      <div class="result-item" data-page="dated">Dated</div>
+      <div class="result-item" data-page="undated">Undated</div>
+      <div class="result-item">Templates</div>
+    </div>
+
+  </div>
+
+  <!-- MAIN - TOPBAR: HELP -->
+
+ <button class="help-btn">
+   <span>Guide</span>
+  <i data-lucide="book-a"  class="help-icon"></i>
+ 
+</button>
+
+
+</div>
+
+
+    <!-- CONTENT -->
+    <div class="content" id="content">
+      <h2>All Docs</h2>
+    </div>
+
+  </main>
+
+</div>
+
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
