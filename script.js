@@ -178,6 +178,12 @@ overlay.onclick = () => {
   ========================================== */
   function loadPage(page, label) {
 
+    const topbar = document.getElementById("topbar");
+    const viewerTopbar = document.getElementById("viewerTopbar");
+
+    topbar.classList.remove("viewer-mode");
+    viewerTopbar.innerHTML = "";
+
   // ---- PAGE MAP ----
   const pages = {
     all: renderMySpace,
@@ -684,30 +690,32 @@ function openViewer(index, list) {
   currentList = list;
 
   const item = currentList[currentIndex];
-
   const content = document.getElementById("content");
+  const topbar = document.getElementById("topbar");
+  const viewerTopbar = document.getElementById("viewerTopbar");
+
+  topbar.classList.add("viewer-mode");
+
+  viewerTopbar.innerHTML = `
+    <button class="nav-btn" id="prevBtn">
+      <i data-lucide="chevron-left"></i>
+    </button>
+
+    <h2 class="viewer-title">${item.name}</h2>
+
+    <button class="nav-btn" id="nextBtn">
+      <i data-lucide="chevron-right"></i>
+    </button>
+  `;
 
   content.innerHTML = `
-  <div class="viewer-page">
-
-    <div class="viewer-header">
-      <button class="nav-btn" id="prevBtn">
-        <i data-lucide="chevron-left"></i>
-      </button>
-
-      <h2 class="viewer-title">${item.name}</h2>
-
-      <button class="nav-btn" id="nextBtn">
-        <i data-lucide="chevron-right"></i>
-      </button>
+    <div class="viewer-page">
+      <iframe class="viewer-frame" src="${item.url}"></iframe>
     </div>
+  `;
 
-    <iframe class="viewer-frame" src="${item.url}"></iframe>
+  lucide.createIcons();
 
-  </div>
-`;
-lucide.createIcons();
-  // re-bind navigation
   document.getElementById("nextBtn").onclick = nextTemplate;
   document.getElementById("prevBtn").onclick = prevTemplate;
 }
