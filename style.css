@@ -685,7 +685,7 @@ nav{
 
 @media (min-width: 769px) {
   .viewer-topbar {
-    grid-area: right;
+    grid-area: center;
   }
 }
 
@@ -746,6 +746,52 @@ nav{
 
 }
 
+/* ==========================================
+   FLOATING HOME BUTTON
+========================================== */
+
+.fab-home {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+
+  width: 45px;
+  height: 45px;
+
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.1);
+
+  background: #111;
+  backdrop-filter: blur(10px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 2000;
+  cursor: pointer;
+
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.9);
+
+  transition: all 0.25s ease;
+}
+
+.fab-home img {
+  width: 28px;
+  height: 28px;
+}
+
+/* SHOW ONLY IN MOBILE VIEWER MODE */
+@media (max-width: 768px) {
+  body.viewer-active .fab-home {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1);
+  }
+}
+
 
 /* ======================================================
    6. RESPONSIVE
@@ -754,6 +800,35 @@ nav{
   .search {
     max-width: 90%;
   }
+
+  .template-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 200px));
+    justify-content: center; /* 🔥 centers instead of stretching */
+  }
+
+  .content{
+    margin: 5px;
+  }
+
+  .templates-title{
+    font-size: 15px;
+  }
+
 }
 
+/* ==========================================
+   MOBILE VIEWER MODE (FULLSCREEN)
+========================================== */
+
+@media (max-width: 768px) {
+
+  body.viewer-active .sidebar {
+    transform: translateX(-100%); /* FULLY HIDE */
+  }
+
+  body.viewer-active .main {
+    margin-left: 0 !important; /* TAKE FULL WIDTH */
+  }
+
+}
 

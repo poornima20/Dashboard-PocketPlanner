@@ -178,6 +178,8 @@ overlay.onclick = () => {
   ========================================== */
   function loadPage(page, label) {
 
+    document.body.classList.remove("viewer-active");
+
     const topbar = document.getElementById("topbar");
     const viewerTopbar = document.getElementById("viewerTopbar");
 
@@ -211,6 +213,10 @@ overlay.onclick = () => {
 
   // ---- CLOSE SEARCH ----
   searchBox.classList.remove("active");
+
+  document.getElementById("fabHome").onclick = () => {
+    loadPage("all", "My Space");
+  };
 
   // ---- AFTER RENDER (IMPORTANT) ----
   setTimeout(() => {
@@ -686,6 +692,9 @@ function setupAllCardActions() {
 let currentList = [];
 
 function openViewer(index, list) {
+
+  document.body.classList.add("viewer-active");
+
   currentIndex = index;
   currentList = list;
 
@@ -774,3 +783,4 @@ function setupCardOpen() {
     });
   });
 }
+
