@@ -717,16 +717,6 @@ nav{
 }
 
 
-/* ======================================================
-   6. title for sections in myspace and templates
-====================================================== */
-
-.menu-title {
-  font-size: 18px;  
-  font-weight: 600;
-  letter-spacing: 0.4px;
-  color: var(--text-font-color);
-}
 
 
 /* ======================================================
@@ -835,6 +825,233 @@ nav{
   background: #111;
 
 
+}
+
+
+
+/* ======================================================
+   Myspace toggle and title
+====================================================== */
+
+.menu-title {
+  font-size: 16px;  
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  color: var(--text-font-color);
+  margin-left: 10px;
+}
+
+
+.myspace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 5px;
+}
+
+.view-toggle {
+  display: flex;
+  background: var(--section-color);
+  border-radius: 999px;
+  padding: 4px;
+  gap: 6px;
+}
+
+.view-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  border: none;
+  background: transparent;
+  color: #aaa;
+
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.view-btn:hover {
+  color: white;
+}
+
+/* icon size */
+.view-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* active */
+.view-btn.active {
+  background: var(--active-color);
+  color: white;
+}
+
+
+@media (max-width: 768px) {
+
+  .menu-title {
+  font-size: 14px;
+  }
+
+
+  .view-btn span {
+    display: none; /* hide text */
+  }
+
+  .view-btn {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+  }
+
+  .view-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+}
+
+/* ==========================================
+  List view in myspace
+========================================== */
+/* ==========================================
+   LIST VIEW (My Space)
+========================================== */
+
+/* ---------- HEADER ---------- */
+.list-header {
+  display: none;
+}
+
+.myspace-container.list-view .list-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 80px 80px;
+  padding: 10px;
+  font-size: 11px;
+  color: var(--muted-text);
+  border-bottom: 1px solid var(--divider);
+}
+
+/* ---------- GRID → LIST ---------- */
+.myspace-container.list-view .template-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ---------- ROW ---------- */
+.myspace-container.list-view .template-card {
+  padding: 12px 10px;
+  border-bottom: 1px solid var(--divider);
+  background: transparent;
+}
+
+/* remove hover lift */
+.myspace-container.list-view .template-card:hover {
+  background: rgba(255,255,255,0.04);
+  transform: none;
+}
+
+/* ---------- HIDE IMAGE ---------- */
+.myspace-container.list-view .template-card img {
+  display: none;
+}
+
+/* ---------- ROW LAYOUT ---------- */
+.myspace-container.list-view .template-info {
+  display: grid;
+  grid-template-columns: 2fr 1fr 80px 80px;
+  align-items: center;
+  width: 100%;
+}
+
+/* ---------- NAME COLUMN ---------- */
+.myspace-container.list-view .name-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.myspace-container.list-view .template-name {
+  font-size: 13px;
+}
+
+/* category caption */
+.myspace-container.list-view .template-category-label {
+  font-size: 11px;
+  color: var(--muted-text);
+  margin-top: 2px;
+}
+
+/* ---------- LAST USED ---------- */
+.myspace-container.list-view .lastused-col {
+  font-size: 12px;
+  color: var(--muted-text);
+}
+
+/* ---------- ACTIONS ---------- */
+.myspace-container.list-view .edit-col,
+.myspace-container.list-view .delete-col {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.myspace-container.list-view .edit-col:hover,
+.myspace-container.list-view .delete-col:hover {
+  color: white;
+}
+
+
+/* ==========================================
+   GRID VIEW PROTECTION (IMPORTANT)
+========================================== */
+
+/* restore original layout for grid */
+.myspace-container.grid-view .template-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ensure grid stays untouched */
+.myspace-container.grid-view .template-grid {
+  display: grid;
+}
+
+/* hide list-only elements */
+.myspace-container.grid-view .list-header,
+.myspace-container.grid-view .lastused-col,
+.myspace-container.grid-view .edit-col,
+.myspace-container.grid-view .delete-col,
+.myspace-container.grid-view .template-category-label {
+  display: none;
+}
+
+/* GRID → show card-actions */
+.myspace-container.grid-view .card-actions {
+  display: flex;
+}
+
+/* GRID → hide list columns */
+.myspace-container.grid-view .lastused-col,
+.myspace-container.grid-view .edit-col,
+.myspace-container.grid-view .delete-col,
+.myspace-container.grid-view .template-category-label {
+  display: none;
+}
+
+/* LIST → hide grid actions */
+.myspace-container.list-view .card-actions {
+  display: none;
 }
 
 /* ==========================================

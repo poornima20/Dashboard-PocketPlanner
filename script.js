@@ -90,19 +90,19 @@ const templatesData = {
       }
     ],
 
-    "Music": [
-      {
-        name: "Arirang",
-        image: "./Icons/arirang.png",
-        url: "https://poornima20.github.io/PocketPlanner-Music-Arirang/"
-      }
-    ],
-
     "Entertainment": [
       {
         name: "Bookshelf",
         image: "./Icons/bookshelf.png",
         url: "https://poornima20.github.io/PocketPlanner-Entertainment-Bookshelf/"
+      }
+    ],
+
+    "Music": [
+      {
+        name: "Arirang",
+        image: "./Icons/arirang.png",
+        url: "https://poornima20.github.io/PocketPlanner-Music-Arirang/"
       }
     ]
   }
@@ -137,13 +137,13 @@ const categoryMeta = {
     icon: "notebook",
     desc: "Capture thoughts and ideas quickly"
   },
-  "Music": {
-    icon: "music",
-    desc: "Organize playlists and inspiration"
-  },
   "Entertainment": {
     icon: "film",
     desc: "Track shows, movies, and fun stuff"
+  },
+  "Music": {
+    icon: "music",
+    desc: "Organize playlists and inspiration"
   }
 };
 
@@ -279,6 +279,7 @@ overlay.onclick = () => {
 
   if (page === "all" || page === "dated" || page === "undated") {
     setupAllCardActions();
+    setupViewToggle();
   }
 
   lucide.createIcons();
@@ -499,37 +500,96 @@ setTimeout(() => {
 
 function renderMySpace() {
   
-  let html = `<h2 class="menu-title">My Space</h2>`;
+    let html = `
+    <div class="myspace-header">
+
+      <h2 class="menu-title">My Space</h2>
+
+      <div class="view-toggle">
+        <button class="view-btn active" data-view="grid">
+          <i data-lucide="layout-grid" class="view-icon"></i>
+          <span>Grid</span>
+        </button>
+
+        <button class="view-btn" data-view="list">
+          <i data-lucide="list" class="view-icon"></i>
+          <span>List</span>
+        </button>
+      </div>
+
+    </div>
+    `;
+
+
 
   if (myTemplates.length === 0) {
     return html + `<p>No templates added yet</p>`;
   }
 
+  html += `<div class="myspace-container grid-view">`;
+
+      html += `
+      <div class="list-header">
+        <span>Name</span>
+        <span>Last Used</span>
+        <span>Edit</span>
+        <span>Delete</span>
+      </div>
+      `;
   html += `<div class="template-grid">`;
 
   myTemplates.forEach(template => {
     html += `
   <div class="template-card" draggable="true" data-id="${template.id || ''}">
-    
-    <img src="${template.image}" />
+  
+  <img src="${template.image}" />
 
-    <div class="template-info">
+  <div class="template-info">
+
+    <!-- NAME -->
+    <div class="name-col">
       <span class="template-name">${template.name}</span>
-
-      <div class="card-actions">
-        <button class="edit-btn">
-          <i data-lucide="pencil"></i>
-        </button>
-        <button class="delete-btn">
-          <i data-lucide="trash-2"></i>
-        </button>
-      </div>
+      <span class="template-category-label">
+  ${
+    template.type === "dated"
+      ? "Dated Planner"
+      : template.type === "undated"
+      ? "Undated Planner"
+      : "General"
+  }
+</span>
     </div>
+
+    <!-- LAST USED (LIST ONLY) -->
+    <div class="lastused-col">
+      Just now
+    </div>
+
+    <!-- LIST VIEW ACTIONS -->
+    <div class="edit-col edit-btn">
+      <i data-lucide="pencil"></i>
+    </div>
+
+    <div class="delete-col delete-btn">
+      <i data-lucide="trash-2"></i>
+    </div>
+
+    <!-- GRID VIEW ACTIONS (RESTORE THIS) -->
+    <div class="card-actions">
+      <button class="edit-btn">
+        <i data-lucide="pencil"></i>
+      </button>
+      <button class="delete-btn">
+        <i data-lucide="trash-2"></i>
+      </button>
+    </div>
+
   </div>
+</div>
 `;
   });
 
-  html += `</div>`;
+  html += `</div></div>`;
 
   return html;
 }
@@ -730,6 +790,36 @@ function setupDrag() {
 }
 
 /* ==========================================
+     List view in myspace
+  ========================================== */
+
+function setupViewToggle() {
+  const buttons = document.querySelectorAll(".view-btn");
+  const container = document.querySelector(".myspace-container");
+
+  buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+
+      // active state
+      buttons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      const view = btn.dataset.view;
+
+      // switch class
+      if (view === "list") {
+        container.classList.remove("grid-view");
+        container.classList.add("list-view");
+      } else {
+        container.classList.remove("list-view");
+        container.classList.add("grid-view");
+      }
+
+    });
+  });
+}
+
+/* ==========================================
      6. After rendering MySpace, we need to setup delete, edit and drag actions again (called from index.html)
   ========================================== */
 function setupAllCardActions() {
@@ -738,6 +828,7 @@ function setupAllCardActions() {
   setupDrag();
   setupCardOpen(); // 🔥 ADD THIS
 }
+
 
 
 /* ==========================================
