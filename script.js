@@ -277,10 +277,14 @@ overlay.onclick = () => {
     setupTemplateToggle();
   }
 
-  if (page === "all" || page === "dated" || page === "undated") {
-    setupAllCardActions();
-    setupViewToggle();
-  }
+  if (page === "all") {
+  setupAllCardActions();
+  setupViewToggle();
+}
+
+if (page === "dated" || page === "undated") {
+  setupCardOpen(); // only open viewer
+}
 
   lucide.createIcons();
 
@@ -370,17 +374,18 @@ function renderTemplates(filter = "all") {
 
   categories[category].forEach(template => {
     html += `
-      <div class="template-card">
-        <img src="${template.image}" />
-        
-        <div class="template-info">
-          <span>${template.name}</span>
-          <button class="add-btn" data-url="${template.url}">
-            <i data-lucide="plus" class="btn-icon"></i>
-            <span class="btn-text">Add</span>
-          </button>
-        </div>
+      <div class="preview-card" data-id="${template.id || ''}">
+
+      <div class="preview-header">
+        <span class="preview-title">${template.name}</span>
+        <span class="preview-meta">Updated 1 day ago</span>
       </div>
+
+      <div class="preview-body">
+        <iframe src="${template.url}" loading="lazy"></iframe>
+      </div>
+
+    </div>
     `;
   });
 
@@ -604,30 +609,26 @@ function renderFilteredTemplates(type) {
   const filtered = myTemplates.filter(t => t.type === type);
 
   if (filtered.length === 0) {
-    return html + `<p>No templates added</p>`;
+    return html + `<p>No Planner added</p>`;
   }
 
-  html += `<div class="template-grid">`;
+  html += `<div class="preview-grid">`;
 
   filtered.forEach(template => {
     html += `
-  <div class="template-card" data-id="${template.id || ''}">
-    <img src="${template.image}" />
-    
-    <div class="template-info">
-      <span class="template-name">${template.name}</span>
+      <div class="preview-card" data-id="${template.id || ''}">
 
-      <div class="card-actions">
-        <button class="edit-btn">
-          <i data-lucide="pencil"></i>
-        </button>
-        <button class="delete-btn">
-          <i data-lucide="trash-2"></i>
-        </button>
+        <div class="preview-header">
+          <span class="preview-title">${template.name}</span>
+          <span class="preview-meta">Updated just now</span>
+        </div>
+
+        <div class="preview-body">
+          <iframe src="${template.url}" loading="lazy"></iframe>
+        </div>
+
       </div>
-    </div>
-  </div>
-`;
+    `;
   });
 
   html += `</div>`;
@@ -753,7 +754,7 @@ function setupEditButtons() {
   let draggedId = null;
 
 function setupDrag() {
-  const cards = document.querySelectorAll(".template-card");
+  const cards = document.querySelectorAll(".template-card, .preview-card");
 
   cards.forEach(card => {
 
