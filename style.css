@@ -27,6 +27,7 @@ html, body {
   --divider: rgba(255,255,255,0.06);
   --sidebar-bg: #111;
   --active-color:rgba(255,255,255,0.06);
+  --border-color: rgba(255,255,255,0.1);
 }
 
 /* Lucide Icons height and width should be 13px */
@@ -595,7 +596,7 @@ nav{
   width: 100%;
   aspect-ratio: 3.4 / 4;  /* 🔥 key fix */
   height: auto;
-  object-fit: fill;
+  object-fit: auto;
 }
 
 /* INFO */
@@ -604,26 +605,67 @@ nav{
   justify-content: space-between;
   align-items: center;
   padding: 8px;
-  font-size:10px;
-  font-weight: 600;
+  font-size: 10px;
+  font-weight: 500;
   letter-spacing: 0.2px;
   color: var(--text-font-color);
 }
 
 /* BUTTON */
 .add-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
   background: transparent;
-  border: 1px solid #444;
+  border: 1px solid var(--border-color);
   padding: 4px 10px;
   border-radius: 6px;
   cursor: pointer;
   color: white;
 }
 
+/* ICON SIZE */
+.btn-icon {
+  width: 12px;
+  height: 12px;
+}
+
 .add-btn.added {
   background: #2a2a2a;
   color: #aaa;
   cursor: default;
+}
+
+.template-card:has(.add-btn.added) {
+  opacity: 0.85;              /* subtle, not dead */
+  transform: scale(0.98);     /* slight “settled” feel */
+}
+
+@media (max-width: 768px) {
+
+  .add-btn {
+    padding: 6px;              /* square-ish button */
+    justify-content: center;
+  }
+
+  .add-btn .btn-text {
+    display: none;             /* 🔥 hide text */
+  }
+
+  .add-btn .btn-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+}
+
+@media (max-width: 768px) {
+  .add-btn {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+  }
 }
 
 

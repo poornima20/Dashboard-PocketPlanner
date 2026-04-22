@@ -348,6 +348,7 @@ function renderTemplates(filter = "all") {
   const meta = categoryMeta[category] || {};
   const icon = meta.icon || "folder";
   const desc = meta.desc || "";
+  
 
   html += `
     <div class="template-group">
@@ -374,7 +375,8 @@ function renderTemplates(filter = "all") {
         <div class="template-info">
           <span>${template.name}</span>
           <button class="add-btn" data-url="${template.url}">
-            Add
+            <i data-lucide="plus" class="btn-icon"></i>
+            <span class="btn-text">Add</span>
           </button>
         </div>
       </div>
@@ -435,7 +437,10 @@ function setupTemplateButtons() {
 
     if (exists) {
       btn.classList.add("added");
-      btn.textContent = "Added";
+      btn.innerHTML = `
+        <i data-lucide="check" class="btn-icon"></i>
+        <span class="btn-text">Added</span>
+      `;
     }
 
     // 🔥 Click handler
