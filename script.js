@@ -124,6 +124,31 @@ const categoryIcons = {
 let myTemplates = JSON.parse(localStorage.getItem("myTemplates")) || [];
 
 /* ==========================================
+     5. Service Worker Registration
+  ========================================== */
+if ("serviceWorker" in navigator) {
+
+  // ❌ Disable SW on localhost
+  if (
+    location.hostname === "localhost" ||
+    location.hostname === "127.0.0.1"
+  ) {
+    console.log("SW disabled on localhost");
+
+    // also remove any existing SW
+    navigator.serviceWorker.getRegistrations().then(regs => {
+      regs.forEach(reg => reg.unregister());
+    });
+
+  } else {
+    // ✅ Enable only in production
+    navigator.serviceWorker.register("/sw.js")
+      .then(() => console.log("SW registered"))
+      .catch(err => console.log("SW error", err));
+  }
+}
+
+/* ==========================================
      1. Render Data
   ========================================== */
 
@@ -270,14 +295,7 @@ overlay.onclick = () => {
 
 });
 
-/* ==========================================
-     5. Service Worker Registration
-  ========================================== */
-if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/sw.js")
-    .then(() => console.log("SW registered"))
-    .catch(err => console.log("SW error", err));
-}
+
 
 /* ==========================================
      6. Render Templates (called from index.html)
