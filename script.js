@@ -277,14 +277,10 @@ overlay.onclick = () => {
     setupTemplateToggle();
   }
 
-  if (page === "all") {
-  setupAllCardActions();
-  setupViewToggle();
-}
-
-if (page === "dated" || page === "undated") {
-  setupCardOpen(); // only open viewer
-}
+  if (page === "all" || page === "dated" || page === "undated") {
+    setupAllCardActions();
+    setupViewToggle();
+  }
 
   lucide.createIcons();
 
@@ -374,18 +370,17 @@ function renderTemplates(filter = "all") {
 
   categories[category].forEach(template => {
     html += `
-      <div class="preview-card" data-id="${template.id || ''}">
-
-      <div class="preview-header">
-        <span class="preview-title">${template.name}</span>
-        <span class="preview-meta">Updated 1 day ago</span>
+      <div class="template-card">
+        <img src="${template.image}" />
+        
+        <div class="template-info">
+          <span>${template.name}</span>
+          <button class="add-btn" data-url="${template.url}">
+            <i data-lucide="plus" class="btn-icon"></i>
+            <span class="btn-text">Add</span>
+          </button>
+        </div>
       </div>
-
-      <div class="preview-body">
-        <iframe src="${template.url}" loading="lazy"></iframe>
-      </div>
-
-    </div>
     `;
   });
 
@@ -554,15 +549,7 @@ function renderMySpace() {
     <!-- NAME -->
     <div class="name-col">
       <span class="template-name">${template.name}</span>
-      <span class="template-category-label">
-  ${
-    template.type === "dated"
-      ? "Dated Planner"
-      : template.type === "undated"
-      ? "Undated Planner"
-      : "General"
-  }
-</span>
+      <span class="template-category-label">${template.type || "General"}</span>
     </div>
 
     <!-- LAST USED (LIST ONLY) -->
@@ -603,8 +590,9 @@ function renderMySpace() {
      6. Dated and Undated Pages (called from index.html)
   ========================================== */
 
+
 function renderFilteredTemplates(type) {
-  let html = `<h2 class="menu-title">${type === "dated" ? "Dated Planner" : "Undated Planner"}</h2>`;
+  let html = `<h2 class="craft-title">${type === "dated" ? "Dated Planner" : "Undated Planner"}</h2>`;
 
   const filtered = myTemplates.filter(t => t.type === type);
 
@@ -612,20 +600,13 @@ function renderFilteredTemplates(type) {
     return html + `<p>No Planner added</p>`;
   }
 
-  html += `<div class="preview-grid">`;
+  html += `<div class="craft-grid">`;
 
   filtered.forEach(template => {
     html += `
-      <div class="preview-card" data-id="${template.id || ''}">
+      <div class="craft-card" data-id="${template.id || ''}">
 
-        <div class="preview-header">
-          <span class="preview-title">${template.name}</span>
-          <span class="preview-meta">Updated just now</span>
-        </div>
-
-        <div class="preview-body">
-          <iframe src="${template.url}" loading="lazy"></iframe>
-        </div>
+          <iframe classname="craft-iframe" src="${template.url}" loading="lazy"></iframe>
 
       </div>
     `;
@@ -635,6 +616,7 @@ function renderFilteredTemplates(type) {
 
   return html;
 }
+
 
 /* ==========================================
      6. delete button logic in MySpace (called from index.html)
@@ -754,7 +736,7 @@ function setupEditButtons() {
   let draggedId = null;
 
 function setupDrag() {
-  const cards = document.querySelectorAll(".template-card, .preview-card");
+  const cards = document.querySelectorAll(".template-card");
 
   cards.forEach(card => {
 
