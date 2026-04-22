@@ -108,17 +108,43 @@ const templatesData = {
   }
 };
 
-const categoryIcons = {
-  "Daily Planner": "calendar-days",
-  "Weekly Planner": "calendar",
-  "Monthly Planner": "calendar-range",
-  "Yearly Planner": "calendar-clock",
-  "Tracker": "activity",
-
-  "Goals": "target",
-  "Notes": "notebook",
-  "Music": "music",
-  "Entertainment": "film"
+const categoryMeta = {
+  "Daily Planner": {
+    icon: "calendar-days",
+    desc: "Plan your day with clarity and focus"
+  },
+  "Weekly Planner": {
+    icon: "calendar",
+    desc: "Organize your entire week efficiently"
+  },
+  "Monthly Planner": {
+    icon: "calendar-range",
+    desc: "Track long-term goals and events"
+  },
+  "Yearly Planner": {
+    icon: "calendar-clock",
+    desc: "Visualize your year at a glance"
+  },
+  "Tracker": {
+    icon: "activity",
+    desc: "Track habits, mood, and progress"
+  },
+  "Goals": {
+    icon: "target",
+    desc: "Define and crush your goals"
+  },
+  "Notes": {
+    icon: "notebook",
+    desc: "Capture thoughts and ideas quickly"
+  },
+  "Music": {
+    icon: "music",
+    desc: "Organize playlists and inspiration"
+  },
+  "Entertainment": {
+    icon: "film",
+    desc: "Track shows, movies, and fun stuff"
+  }
 };
 
 let myTemplates = JSON.parse(localStorage.getItem("myTemplates")) || [];
@@ -319,15 +345,22 @@ function renderTemplates(filter = "all") {
     const categories = templatesData[section];
 
     for (let category in categories) {   
-  const icon = categoryIcons[category] || "folder";  
+  const meta = categoryMeta[category] || {};
+  const icon = meta.icon || "folder";
+  const desc = meta.desc || "";
 
   html += `
     <div class="template-group">
 
       <div class="template-category">
+      <div class="category-left">
         <i data-lucide="${icon}" class="category-icon"></i>
-        <span>${category}</span>
+        <div class="category-text">
+          <span class="category-title">${category}</span>
+          <p class="category-desc">${desc}</p>
+        </div>
       </div>
+    </div>
       <div class="divider"></div>
 
       <div class="template-grid">
