@@ -80,7 +80,13 @@ const templatesData = {
   },
 
   undated: {
-    "Goals": [],
+    "Goals": [
+      {
+        name: "Portfolio",
+        image: "./Icons/cornellnotes.png",
+        url: "https://poornima20.github.io/Fullmoon/"
+      }
+    ],
 
     "Notes": [
       {
