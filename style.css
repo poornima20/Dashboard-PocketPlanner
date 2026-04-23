@@ -67,6 +67,7 @@ html, body {
   margin-left: 56px;
 }
 
+
 /* ======================================================
    2. Layout: Content Area (with custom scrollbar)
 ====================================================== */
@@ -74,7 +75,8 @@ html, body {
 .content {
   margin: 20px;
 
-  height: calc(100vh - 80px); /* adjust based on topbar */
+  min-height: calc(100vh - 80px); /* adjust based on topbar */
+  padding:10px;
   display: flex;
   flex-direction: column;
   scrollbar-width: thin;
@@ -1177,6 +1179,7 @@ nav{
   grid-template-columns: 1fr; /* 🔥 always 1 per row */
   gap: 0;
   padding: 0;
+  margin: 0;
 }
 
 
@@ -1296,7 +1299,7 @@ nav{
   }
 
   .templates-title{
-    font-size: 15px;
+    font-size: 13px;
   }
 
 }
