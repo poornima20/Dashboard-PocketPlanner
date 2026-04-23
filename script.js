@@ -154,6 +154,7 @@ const categoryMeta = {
 };
 
 let myTemplates = JSON.parse(localStorage.getItem("myTemplates")) || [];
+let currentView = "grid";
 
 /* ==========================================
      5. Service Worker Registration
@@ -504,7 +505,7 @@ setTimeout(() => {
      6. Render MySpace (called from index.html)
   ========================================== */
 
-function renderMySpace() {
+function renderMySpace(view = "grid") {
   
     let html = `
     <div class="myspace-header">
@@ -512,12 +513,12 @@ function renderMySpace() {
       <h2 class="menu-title">My Space</h2>
 
       <div class="view-toggle">
-        <button class="view-btn active" data-view="grid">
+        <button class="view-btn ${view === "grid" ? "active" : ""}" data-view="grid">
           <i data-lucide="layout-grid" class="view-icon"></i>
           <span>Grid</span>
         </button>
 
-        <button class="view-btn" data-view="list">
+        <button class="view-btn ${view === "list" ? "active" : ""}" data-view="list">
           <i data-lucide="list" class="view-icon"></i>
           <span>List</span>
         </button>
@@ -529,66 +530,89 @@ function renderMySpace() {
 
 
   if (myTemplates.length === 0) {
-    return html + `<p>No templates added yet</p>`;
+    return html + `<p class="paragraph-design">No templates added yet</p>`;
   }
 
-  html += `<div class="myspace-container grid-view">`;
+  html += `<div class="myspace-container ${view}-view">`;
 
-      html += `
-      <div class="list-header">
-        <span>Name</span>
-        <span>Last Used</span>
-        <span>Edit</span>
-        <span>Delete</span>
-      </div>
-      `;
+      if (view === "list") {
+        html += `
+          <div class="list-header">
+            <span>#</span>
+            <span>Name</span>
+            <span>Move</span>
+            <span>Edit</span>
+            <span>Delete</span>
+          </div>
+        `;
+      }
+
+if (view === "grid") {
   html += `<div class="template-grid">`;
 
   myTemplates.forEach(template => {
     html += `
-  <div class="template-card" draggable="true" data-id="${template.id || ''}">
-  
-  <img src="${template.image}" />
+      <div class="template-card" draggable="true" data-id="${template.id}">
+        <img src="${template.image}" />
 
-  <div class="template-info">
+        <div class="template-info">
+           <span class="template-name">${template.name}</span>
 
-    <!-- NAME -->
-    <div class="name-col">
-      <span class="template-name">${template.name}</span>
-      <span class="template-category-label">${template.type || "General"}</span>
-    </div>
-
-    <!-- LAST USED (LIST ONLY) -->
-    <div class="lastused-col">
-      Just now
-    </div>
-
-    <!-- LIST VIEW ACTIONS -->
-    <div class="edit-col edit-btn">
-      <i data-lucide="pencil"></i>
-    </div>
-
-    <div class="delete-col delete-btn">
-      <i data-lucide="trash-2"></i>
-    </div>
-
-    <!-- GRID VIEW ACTIONS (RESTORE THIS) -->
-    <div class="card-actions">
-      <button class="edit-btn">
-        <i data-lucide="pencil"></i>
-      </button>
-      <button class="delete-btn">
-        <i data-lucide="trash-2"></i>
-      </button>
-    </div>
-
-  </div>
-</div>
-`;
+          <div class="card-actions">
+            <button class="edit-btn">
+              <i data-lucide="pencil"></i>
+            </button>
+            <button class="delete-btn">
+              <i data-lucide="trash-2"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
   });
 
-  html += `</div></div>`;
+  html += `</div>`;
+}
 
+if (view === "list") {
+  html += `<div class="list-container">`;
+
+  myTemplates.forEach((template, index) => {
+    html += `
+      <div class="list-row" data-id="${template.id}">
+
+        <div class="serial-col">${index + 1}</div>
+
+        <div class="name-col">
+          <div class="template-name">${template.name}</div>
+          <div class="template-category-label">
+            ${template.type === "dated" ? "Dated Planner" : "Undated Planner"}
+          </div>
+        </div>
+
+        <div class="move-col">
+          <button class="move-up" data-id="${template.id}">
+            <i data-lucide="arrow-up"></i>
+          </button>
+          <button class="move-down" data-id="${template.id}">
+            <i data-lucide="arrow-down"></i>
+          </button>
+        </div>
+
+        <div class="edit-col edit-btn">
+          <i data-lucide="pencil"></i>
+        </div>
+
+        <div class="delete-col delete-btn">
+          <i data-lucide="trash-2"></i>
+        </div>
+
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+}
   return html;
 }
 
@@ -612,7 +636,7 @@ function renderFilteredTemplates(type) {
     html += `
       <div class="craft-card" data-id="${template.id || ''}">
 
-          <iframe classname="craft-iframe" src="${template.url}" loading="lazy"></iframe>
+          <iframe class="craft-iframe" src="${template.url}" loading="lazy"></iframe>
 
       </div>
     `;
@@ -633,7 +657,7 @@ function setupDeleteButtons() {
     btn.addEventListener("click", (e) => {
 
       const btn = e.currentTarget;
-      const card = btn.closest(".template-card");
+      const card = btn.closest(".template-card, .list-row");
       const id = Number(card.dataset.id);
       if (!id) return;
 
@@ -651,14 +675,17 @@ function setupDeleteButtons() {
         document.getElementById("content").innerHTML = renderFilteredTemplates("undated");
       } 
       else {
-        document.getElementById("content").innerHTML = renderMySpace();
+        document.getElementById("content").innerHTML = renderMySpace(currentView);
       }
 
-      // re-bind
+
       setTimeout(() => {
-        setupAllCardActions();
-        lucide.createIcons();
-      }, 0);
+      lucide.createIcons();
+
+      setupAllCardActions();
+      setupViewToggle(); // 🔥 THIS FIXES YOUR ISSUE
+
+    }, 0);
 
     });
   });
@@ -667,11 +694,71 @@ function setupDeleteButtons() {
 /* ==========================================
      6. edit button logic in MySpace (called from index.html)
   ========================================== */
+
+function setupReorderButtons() {
+
+  document.querySelectorAll(".move-up").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      const id = Number(btn.dataset.id);
+      const index = myTemplates.findIndex(t => t.id === id);
+
+      if (index <= 0) return;
+
+      // swap with previous
+      [myTemplates[index - 1], myTemplates[index]] =
+      [myTemplates[index], myTemplates[index - 1]];
+
+      localStorage.setItem("myTemplates", JSON.stringify(myTemplates));
+
+      // re-render SAME view
+      document.getElementById("content").innerHTML = renderMySpace(currentView);
+
+      setTimeout(() => {
+        lucide.createIcons();
+        setupAllCardActions();
+        setupViewToggle();
+      }, 0);
+    });
+  });
+
+
+  document.querySelectorAll(".move-down").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+
+      const id = Number(btn.dataset.id);
+      const index = myTemplates.findIndex(t => t.id === id);
+
+      if (index >= myTemplates.length - 1) return;
+
+      // swap with next
+      [myTemplates[index + 1], myTemplates[index]] =
+      [myTemplates[index], myTemplates[index + 1]];
+
+      localStorage.setItem("myTemplates", JSON.stringify(myTemplates));
+
+      // re-render SAME view
+      document.getElementById("content").innerHTML = renderMySpace(currentView);
+
+      setTimeout(() => {
+        lucide.createIcons();
+        setupAllCardActions();
+        setupViewToggle();
+      }, 0);
+    });
+  });
+
+}
+/* ==========================================
+     6. edit button logic in MySpace (called from index.html)
+  ========================================== */
 function setupEditButtons() {
   document.querySelectorAll(".edit-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
 
-      const card = e.currentTarget.closest(".template-card");
+      const card = e.currentTarget.closest(".template-card, .list-row");
       const id = Number(card.dataset.id);
       if (!id) return;
 
@@ -770,10 +857,14 @@ function setupDrag() {
       localStorage.setItem("myTemplates", JSON.stringify(myTemplates));
 
       // re-render
-      document.getElementById("content").innerHTML = renderMySpace();
+      document.getElementById("content").innerHTML = renderMySpace(currentView);
       setTimeout(() => {
-        setupAllCardActions();
-      }, 0);
+      lucide.createIcons();
+
+      setupAllCardActions();
+      setupViewToggle(); // 🔥 THIS FIXES YOUR ISSUE
+
+    }, 0);
     });
   });
 }
@@ -784,26 +875,19 @@ function setupDrag() {
 
 function setupViewToggle() {
   const buttons = document.querySelectorAll(".view-btn");
-  const container = document.querySelector(".myspace-container");
 
   buttons.forEach(btn => {
     btn.addEventListener("click", () => {
 
-      // active state
-      buttons.forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
+      currentView = btn.dataset.view; // 🔥 STORE VIEW
 
-      const view = btn.dataset.view;
+      document.getElementById("content").innerHTML = renderMySpace(currentView);
 
-      // switch class
-      if (view === "list") {
-        container.classList.remove("grid-view");
-        container.classList.add("list-view");
-      } else {
-        container.classList.remove("list-view");
-        container.classList.add("grid-view");
-      }
-
+      setTimeout(() => {
+        lucide.createIcons();
+        setupAllCardActions();
+        setupViewToggle();
+      }, 0);
     });
   });
 }
@@ -815,6 +899,7 @@ function setupAllCardActions() {
   setupDeleteButtons();
   setupEditButtons();
   setupDrag();
+  setupReorderButtons();
   setupCardOpen(); // 🔥 ADD THIS
 }
 
@@ -843,13 +928,13 @@ function openViewer(index, list) {
 
   viewerTopbar.innerHTML = `
     <button class="nav-btn" id="prevBtn">
-      <i data-lucide="chevron-left"></i>
+      <i data-lucide="circle-arrow-left"></i>
     </button>
 
     <h2 class="viewer-title">${item.name}</h2>
 
     <button class="nav-btn" id="nextBtn">
-      <i data-lucide="chevron-right"></i>
+      <i data-lucide="circle-arrow-right"></i>
     </button>
   `;
 
@@ -885,17 +970,22 @@ function prevTemplate() {
   ========================================== */
 
 function setupCardOpen() {
-  const cards = document.querySelectorAll(".template-card");
 
-  cards.forEach(card => {
-    card.addEventListener("click", (e) => {
+  const items = document.querySelectorAll(".template-card, .list-row");
 
+  items.forEach(item => {
+    item.addEventListener("click", (e) => {
+
+      // ❌ ignore clicks on buttons
       if (
         e.target.closest(".edit-btn") ||
-        e.target.closest(".delete-btn")
+        e.target.closest(".delete-btn") ||
+        e.target.closest(".move-up") ||
+        e.target.closest(".move-down")
       ) return;
 
-      const id = Number(card.dataset.id);
+      const id = Number(item.dataset.id);
+      if (!id) return;
 
       const activePage = document.querySelector(".nav-item.active")?.dataset.page;
 
@@ -912,7 +1002,6 @@ function setupCardOpen() {
       }
 
       const index = list.findIndex(t => t.id === id);
-
       if (index === -1) return;
 
       openViewer(index, list);

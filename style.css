@@ -761,7 +761,7 @@ nav{
 }
 
 .viewer-topbar .viewer-title {
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   letter-spacing: 0.4px;
   color: var(--text-font-color);
@@ -788,9 +788,6 @@ nav{
   }
 }
 
-/* ======================================================
-   Viewer the main worspace for opened template, with topbar and content area
-====================================================== */
 /* 🔥 VIEWER MODE */
 body.viewer-active .topbar {
   margin-bottom: 0;
@@ -820,13 +817,6 @@ body.viewer-active .content {
   flex-shrink: 0;
 }
 
-/* TITLE */
-.viewer-title {
-    font-size: 14px;  
-  font-weight: 500;
-  letter-spacing: 0.4px;
-  color: var(--text-font-color);
-}
 
 /* NAV BUTTONS */
 .nav-btn {
@@ -951,56 +941,46 @@ body.viewer-active .content {
 
 
 /* ==========================================
-   LIST VIEW — CLEAN REDESIGN
+   LIST VIEW (FINAL CLEAN)
 ========================================== */
-.myspace-container.list-view .template-grid {
-  display: block !important;
+
+.list-container {
+  display: flex;
+  flex-direction: column;
 }
 
-.myspace-container.list-view {
-  margin-top: 20px;
-}
-
-/* ---------- HEADER ---------- */
-.myspace-container.list-view .list-header {
+/* HEADER */
+.list-header {
   display: grid;
-  grid-template-columns: 40px 1fr 100px;
+  grid-template-columns: 40px 1fr 80px 40px 40px;
   padding: 10px 12px;
   font-size: 11px;
   color: var(--muted-text);
   border-bottom: 1px solid var(--divider);
-  margin: 5px;
 }
 
-/* ---------- ROW ---------- */
-.myspace-container.list-view .template-card {
-  background: transparent;
-  border-bottom: 1px solid var(--divider);
-  margin: 0 5px;
+/* ROW */
+.list-row {
+  display: grid;
+  grid-template-columns: 40px 1fr 80px 40px 40px;
+  align-items: center;
   padding: 12px;
+  border-bottom: 1px solid var(--divider);
   transition: 0.2s ease;
 }
 
-.myspace-container.list-view .template-card:hover {
+.list-row:hover {
   background: rgba(255,255,255,0.04);
 }
 
-/* ---------- GRID STRUCTURE ---------- */
-.myspace-container.list-view .template-info {
-  display: grid;
-  grid-template-columns: 40px 1fr auto;
-  align-items: center;
-  gap: 10px;
-}
-
-/* ---------- SERIAL ---------- */
+/* SERIAL */
 .serial-col {
+  text-align: center;
   font-size: 12px;
   color: var(--muted-text);
-  text-align: center;
 }
 
-/* ---------- NAME ---------- */
+/* NAME */
 .name-col {
   display: flex;
   flex-direction: column;
@@ -1014,20 +994,13 @@ body.viewer-active .content {
 .template-category-label {
   font-size: 11px;
   color: var(--muted-text);
-  margin-top: 2px;
-}
-
-/* ---------- ACTION GROUP ---------- */
-.action-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
 }
 
 /* MOVE */
 .move-col {
   display: flex;
   gap: 4px;
+  justify-content: center;
 }
 
 .move-col button {
@@ -1041,11 +1014,13 @@ body.viewer-active .content {
   color: white;
 }
 
-/* EDIT / DELETE */
+/* EDIT + DELETE */
 .edit-col,
 .delete-col {
-  color: #9ca3af;
+  display: flex;
+  justify-content: center;
   cursor: pointer;
+  color: #9ca3af;
 }
 
 .edit-col:hover,
@@ -1053,6 +1028,7 @@ body.viewer-active .content {
   color: white;
 }
 
+/* ICON SIZE */
 .move-col svg,
 .edit-col svg,
 .delete-col svg {
@@ -1060,90 +1036,11 @@ body.viewer-active .content {
   height: 14px;
 }
 
-/* ---------- HIDE IMAGE ---------- */
-.myspace-container.list-view .template-card img {
-  display: none;
-}
-
-/* ---------- REMOVE GRID ACTIONS ---------- */
-.myspace-container.list-view .card-actions {
-  display: none;
-}
-
-/* ==========================================
-   GRID VIEW PROTECTION (IMPORTANT)
-========================================== */
-
-/* restore original layout for grid */
-.myspace-container.grid-view .template-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* ensure grid stays untouched */
-.myspace-container.grid-view .template-grid {
-  display: grid;
-}
-
-/* hide list-only elements */
-.myspace-container.grid-view .list-header,
-.myspace-container.grid-view .lastused-col,
-.myspace-container.grid-view .edit-col,
-.myspace-container.grid-view .delete-col,
-.myspace-container.grid-view .template-category-label {
-  display: none;
-}
-
-/* GRID → show card-actions */
-.myspace-container.grid-view .card-actions {
-  display: flex;
-}
-
-/* GRID → hide list columns */
-.myspace-container.grid-view .lastused-col,
-.myspace-container.grid-view .edit-col,
-.myspace-container.grid-view .delete-col,
-.myspace-container.grid-view .template-category-label {
-  display: none;
-}
-
-/* LIST → hide grid actions */
-.myspace-container.list-view .card-actions {
-  display: none;
-}
-
- /* make icons slightly bigger for touch */
-  .myspace-container.list-view .edit-col svg,
-  .myspace-container.list-view .delete-col svg {
-    width: 14px;
-    height: 14px;
-  }
-
-  /* GRID VIEW → hide list stuff */
-  .myspace-container.grid-view .serial-col,
-  .myspace-container.grid-view .move-col,
-  .myspace-container.grid-view .list-header {
-    display: none;
-  }
-
-  /* LIST VIEW → hide grid overlay actions */
-  .myspace-container.list-view .card-actions {
-    display: none;
-  }
-
-  .myspace-container.list-view .template-card {
-  cursor: default;
-}
-
-/* ==========================================
-   MOBILE LIST VIEW (My Space)
-========================================== */
-
+/* MOBILE */
 @media (max-width: 768px) {
-
-  .myspace-container.list-view .template-info {
-    grid-template-columns: 30px 1fr auto;
+  .list-row,
+  .list-header {
+    grid-template-columns: 30px 1fr 70px 30px 30px;
     gap: 6px;
   }
 
@@ -1153,10 +1050,6 @@ body.viewer-active .content {
 
   .template-category-label {
     font-size: 10px;
-  }
-
-  .action-group {
-    gap: 6px;
   }
 
   .move-col svg,
@@ -1169,7 +1062,7 @@ body.viewer-active .content {
 
 
 /* ==========================================
-   GRID
+   GRID for the dated and undated
 ========================================== */
 
 
@@ -1199,7 +1092,7 @@ body.viewer-active .content {
 ========================================== */
 
 .craft-title {
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   color: var(--text-font-color);
   margin: 12px;
@@ -1225,6 +1118,10 @@ body.viewer-active .content {
   border: none;
   display: block;
   zoom: 0.7;
+}
+
+.craft-title{
+  font-size: 13px;
 }
 
 }
