@@ -265,6 +265,21 @@ window.addEventListener("resize", () => {
   sidebar.classList.remove("expanded"); // start collapsed via CSS
 }
 })();
+
+
+  /* ==========================================
+    FAB home toggle 
+  ========================================== */
+const fabHome = document.getElementById("fabHome");
+
+if (fabHome) {
+  fabHome.onclick = () => {
+    // go back to My Space
+    loadPage("all", "My Space");
+  };
+}
+
+
   /* ==========================================
     MObiel onclick toggle
   ========================================== */

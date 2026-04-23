@@ -1150,6 +1150,53 @@ body.viewer-active .content {
 
 }
 
+
+/* ==========================================
+   FAB HOME (VIEWER MODE - MOBILE ONLY)
+========================================== */
+
+.fab-home {
+  position: fixed;
+  bottom: 20px;
+  right: 16px;
+
+  width: 52px;
+  height: 52px;
+
+  border-radius: 50%;
+  border: none;
+
+  background: #1f1f1f;
+  color: white;
+
+  display: none; /* hidden by default */
+  align-items: center;
+  justify-content: center;
+
+  z-index: 3000; /* 🔥 above iframe */
+  cursor: pointer;
+
+  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  transition: 0.2s ease;
+}
+
+.fab-home svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* show ONLY in viewer + mobile */
+@media (max-width: 768px) {
+  body.viewer-active .fab-home {
+    display: flex;
+  }
+}
+
+/* click feedback */
+.fab-home:active {
+  transform: scale(0.92);
+}
+
 /* ======================================================
 mobiel button
 ====================================================== */
