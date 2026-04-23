@@ -98,8 +98,7 @@ html, body {
   position: fixed;
   top: 0;
   left: 0;
-
-   height: 100vh;
+  height: 100vh;
   height: 100dvh;
   display: flex;
   flex-direction: column;
@@ -120,24 +119,72 @@ html, body {
   width: 56px;
 }
 
-/* MOBILE ONLY */
-@media (max-width: 768px) {
 
-  /* DEFAULT → show collapsed sidebar */
+/* ---------- TABLET (collapsed sidebar) ---------- */
+/* 📲 TABLET */
+@media (max-width: 1024px) and (min-width: 769px) {
+
+  /* default collapsed */
   .sidebar {
-    transform: translateX(0);
+    width: 56px;
   }
 
-  /* WHEN FULLY OPEN */
-  .sidebar.open {
+  /* expanded state */
+  .sidebar.expanded {
     width: 220px;
   }
 
-  /* OPTIONAL: if you want FULL HIDE state */
-  .sidebar.hidden {
-    transform: translateX(-100%);
+  /* hide text when collapsed */
+  .sidebar:not(.expanded) .item span,
+  .sidebar:not(.expanded) .logo span,
+  .sidebar:not(.expanded) .usage-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
   }
 
+  /* show text when expanded */
+  .sidebar.expanded .item span,
+  .sidebar.expanded .logo span,
+  .sidebar.expanded .usage-text {
+    opacity: 1;
+    width: auto;
+  }
+
+  /* main shift */
+  .main {
+    margin-left: 56px;
+  }
+
+  .sidebar.expanded ~ .main {
+    margin-left: 220px;
+  }
+}
+
+/* ---------- MOBILE (fullscreen sidebar) ---------- */
+@media (max-width: 768px) {
+
+  .sidebar {
+    transform: translateX(-100%);
+    width: 100% !important;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main {
+    margin-left: 0 !important;
+  }
+
+  /* show full text */
+  .sidebar .item span,
+  .sidebar .logo span,
+  .sidebar .usage-text {
+    opacity: 1 !important;
+    width: auto !important;
+    overflow: visible !important;
+  }
 }
 
 /* ======================================================
@@ -289,29 +336,6 @@ nav{
   margin-top: auto;
 }
 
-/* ======================================================
-   3. Siderbar overlay for mobile
-====================================================== */
-
-.overlay {
-  position: fixed;
-  inset: 0;
-
-  background: rgba(0,0,0,0.5);
-  backdrop-filter: blur(10px);
-
-  opacity: 0;
-  pointer-events: none;
-
-  transition: 0.25s ease;
-  z-index: 900;
-}
-
-/* when active */
-.overlay.active {
-  opacity: 1;
-  pointer-events: all;
-}
 
 /* ======================================================
    4. TOPBAR (CLEAN + RESPONSIVE)
@@ -336,8 +360,8 @@ nav{
 
 @media (max-width: 768px) {
   .topbar {
-    grid-template-columns: 1fr auto;
-    grid-template-areas: "search right";
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "left search right";
   }
 }
 
@@ -1126,50 +1150,27 @@ body.viewer-active .content {
 
 }
 
-/* ==========================================
-   FLOATING HOME BUTTON
-========================================== */
-
-.fab-home {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-
-  width: 45px;
-  height: 45px;
-
-  border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.1);
-
-  background: #111;
-  backdrop-filter: blur(10px);
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  z-index: 2000;
+/* ======================================================
+mobiel button
+====================================================== */
+/* hide by default */
+.mobile-logo {
+  display: none;
   cursor: pointer;
-
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.9);
-
-  transition: all 0.25s ease;
+  grid-area: left;
 }
 
-.fab-icon {
-  width: 20px;
-  height: 20px;
-  color: #ffffff;
-}
-
-/* SHOW ONLY IN MOBILE VIEWER MODE */
+/* show only on mobile */
 @media (max-width: 768px) {
-  body.viewer-active .fab-home {
-    opacity: 1;
-    pointer-events: all;
-    transform: scale(1);
+  .mobile-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* optional: make it smaller for topbar */
+  .mobile-logo img {
+    width: 38px;
   }
 }
 
@@ -1205,8 +1206,9 @@ body.viewer-active .content {
 
 @media (max-width: 768px) {
 
-  body.viewer-active .sidebar {
-    transform: translateX(-100%); /* FULLY HIDE */
+    /* ✅ INSTEAD: only hide when NOT open */
+  body.viewer-active .sidebar:not(.open) {
+    transform: translateX(-100%);
   }
 
   body.viewer-active .main {

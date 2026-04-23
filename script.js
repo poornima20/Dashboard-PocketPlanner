@@ -192,7 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const sidebar = document.getElementById("sidebar");
   const toggle = document.getElementById("toggleSidebar");
   const content = document.getElementById("content");
-  const overlay = document.getElementById("overlay");
 
   const navItems = document.querySelectorAll(".nav-item");
   const resultItems = document.querySelectorAll(".result-item");
@@ -204,31 +203,82 @@ document.addEventListener("DOMContentLoaded", () => {
   /* ==========================================
      1. SIDEBAR TOGGLE
   ========================================== */
-  toggle.onclick = () => {
-  if (window.innerWidth <= 768) {
+toggle.onclick = () => {
+  const width = window.innerWidth;
 
-    const isOpen = sidebar.classList.contains("open");
+  // 📱 MOBILE
+  if (width <= 768) {
 
-    if (isOpen) {
-      sidebar.classList.remove("open");
-      sidebar.classList.add("collapsed");   // back to icon-only
-      overlay.classList.remove("active");
-    } else {
-      sidebar.classList.remove("collapsed"); // 🔥 IMPORTANT
-      sidebar.classList.add("open");         // full sidebar
+    sidebar.classList.toggle("open");
+
+    // overlay sync
+    if (sidebar.classList.contains("open")) {
       overlay.classList.add("active");
+    } else {
+      overlay.classList.remove("active");
     }
+  }
 
-  } else {
+  // 📲 TABLET
+  else if (width <= 1024) {
+
+  sidebar.classList.toggle("expanded");
+  sidebar.classList.remove("collapsed");
+  }
+  // 💻 DESKTOP
+  else {
     sidebar.classList.toggle("collapsed");
   }
 };
 
-/* close when clicking overlay */
-overlay.onclick = () => {
-  sidebar.classList.remove("open");
-  sidebar.classList.add("collapsed");   // 🔥 THIS IS MISSING
-  overlay.classList.remove("active");
+window.addEventListener("resize", () => {
+  const width = window.innerWidth;
+
+  // 💻 Desktop → always open
+  if (width > 1024) {
+    sidebar.classList.remove("collapsed");
+    sidebar.classList.remove("open");
+    overlay.classList.remove("active");
+  }
+
+  // 📲 Tablet → start collapsed
+  if (width > 768 && width <= 1024) {
+  sidebar.classList.remove("collapsed"); // 🔥 important
+}
+
+  // 📱 Mobile → reset state
+  if (width <= 768) {
+    sidebar.classList.remove("collapsed");
+    sidebar.classList.remove("open");
+    overlay.classList.remove("active");
+  }
+});
+
+(function initSidebar() {
+  const width = window.innerWidth;
+
+  if (width > 1024) {
+    sidebar.classList.remove("collapsed", "expanded");
+  } 
+  else if (width > 768) {
+  sidebar.classList.remove("collapsed");
+  sidebar.classList.remove("expanded"); // start collapsed via CSS
+}
+})();
+  /* ==========================================
+    MObiel onclick toggle
+  ========================================== */
+
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+
+mobileMenuBtn.onclick = () => {
+  sidebar.classList.toggle("open");
+
+  if (sidebar.classList.contains("open")) {
+    overlay.classList.add("active");
+  } else {
+    overlay.classList.remove("active");
+  }
 };
 
   /* ==========================================
@@ -259,22 +309,16 @@ overlay.onclick = () => {
     content.innerHTML = `<h2>${label}</h2>`;
   }
 
-  // ---- ACTIVE STATE ----
-  navItems.forEach(item => {
-    item.classList.remove("active");
-  });
 
-  const activeItem = document.querySelector(`.nav-item[data-page="${page}"]`);
-  if (activeItem) {
-    activeItem.classList.add("active");
-  }
+ // 🔥 clear all first
+    navItems.forEach(item => item.classList.remove("active"));
+
+    // 🔥 set only one
+    const activeItem = document.querySelector(`.nav-item[data-page="${page}"]`);
+    if (activeItem) activeItem.classList.add("active");
 
   // ---- CLOSE SEARCH ----
   searchBox.classList.remove("active");
-
-  document.getElementById("fabHome").onclick = () => {
-    loadPage("all", "My Space");
-  };
 
   // ---- AFTER RENDER (IMPORTANT) ----
   setTimeout(() => {
@@ -297,11 +341,22 @@ overlay.onclick = () => {
   /* ==========================================
      3. NAV CLICK
   ========================================== */
-  navItems.forEach(item => {
-    item.addEventListener("click", () => {
-      loadPage(item.dataset.page, item.innerText);
-    });
+navItems.forEach(item => {
+  item.addEventListener("click", () => {
+
+    // 1️⃣ Navigate
+    loadPage(item.dataset.page, item.innerText);
+
+    // 2️⃣ Close sidebar ONLY on mobile
+    if (window.innerWidth <= 768) {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+
+      sidebar.classList.remove("open");
+      overlay.classList.remove("active");
+    }
   });
+});
 
   /* ==========================================
      4. SEARCH DROPDOWN
@@ -915,6 +970,8 @@ let currentList = [];
 function openViewer(index, list) {
 
   document.body.classList.add("viewer-active");
+   const sidebar = document.getElementById("sidebar");
+  sidebar.classList.remove("open"); // 🔥 ADD THIS
 
   currentIndex = index;
   currentList = list;
