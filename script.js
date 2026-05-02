@@ -101,6 +101,12 @@ const templatesData = {
         name: "Bookshelf",
         image: "./Icons/bookshelf.png",
         url: "https://poornima20.github.io/PocketPlanner-Entertainment-Bookshelf/"
+      },
+
+      {
+        name: "Media History",
+        image: "./Icons/mediahistory.png",
+        url: "https://poornima20.github.io/PocketPlanner-Entertainment-MediaHistory/"
       }
     ],
 
