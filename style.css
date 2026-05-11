@@ -1088,13 +1088,17 @@ body.viewer-active .content {
    GRID for the dated and undated
 ========================================== */
 
+/* FULL BLEED PLANNER MODE */
+.content.planner-mode {
+  margin: 0;
+}
 
 .craft-grid {
   display: grid;
   grid-template-columns: 1fr; /* 🔥 always 1 per row */
   gap: 0;
   padding: 0;
-  margin: 0;
+  margin-top: -25px;
 }
 
 
@@ -1121,6 +1125,78 @@ body.viewer-active .content {
   margin: 12px;
 }
 
+/* ==========================================
+   FLOATING TAG
+========================================== */
+
+.craft-header {
+  position: sticky;
+
+  top: 18px;
+  left: 0;
+
+  z-index: 500;
+
+  pointer-events: none;
+}
+
+
+/* TAG */
+.craft-tag {
+  position: relative;
+
+  display: inline-flex;
+  align-items: center;
+
+  height: 30px;
+  padding: 0 16px 0 12px;
+
+  background: #000;
+  color: #fff;
+
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+
+  border-radius: 4px 0 0 4px;
+  left: 10px;
+}
+
+/* TRIANGLE */
+.craft-tag::after {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  right: -14.3px;
+
+  width: 0;
+  height: 0;
+
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 15px solid #000;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+
+  .craft-tag {
+    height: 34px;
+    font-size: 11px;
+
+    padding: 0 16px 0 12px;
+  }
+
+  .craft-tag::after {
+    right: -16px;
+
+    border-top: 17px solid transparent;
+    border-bottom: 17px solid transparent;
+    border-left: 17px solid #000;
+  }
+}
 
 /* ==========================================
    IFRAME (FULL WIDTH STACKED)
@@ -1140,7 +1216,7 @@ body.viewer-active .content {
   height: 780px;   /* 🔥 control row height */
   border: none;
   display: block;
-  zoom: 0.7;
+  zoom: 0.9;
 }
 
 .craft-title{
@@ -1233,11 +1309,6 @@ mobiel button
   .template-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-  }
-
-
-  .content{
-    margin: 5px;
   }
 
   .templates-title{

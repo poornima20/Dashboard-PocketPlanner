@@ -308,6 +308,7 @@ mobileMenuBtn.onclick = () => {
   function loadPage(page, label) {
 
     document.body.classList.remove("viewer-active");
+    content.classList.remove("planner-mode");
 
     const topbar = document.getElementById("topbar");
     const viewerTopbar = document.getElementById("viewerTopbar");
@@ -349,7 +350,11 @@ mobileMenuBtn.onclick = () => {
     setupTemplateToggle();
   }
 
-  if (page === "all" || page === "dated" || page === "undated") {
+  if (page === "dated" || page === "undated") {
+  content.classList.add("planner-mode");
+}
+
+if (page === "all" || page === "dated" || page === "undated") {
     setupAllCardActions();
     setupViewToggle();
   }
@@ -698,7 +703,13 @@ if (view === "list") {
 
 
 function renderFilteredTemplates(type) {
-  let html = `<h2 class="craft-title">${type === "dated" ? "Dated Planner" : "Undated Planner"}</h2>`;
+  let html = `
+    <div class="craft-header">
+      <div class="craft-tag">
+        ${type === "dated" ? "Dated Planner" : "Undated Planner"}
+      </div>
+    </div>
+    `;
 
   const filtered = myTemplates.filter(t => t.type === type);
 
