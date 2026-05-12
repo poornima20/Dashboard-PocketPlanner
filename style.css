@@ -1790,3 +1790,30 @@ mobiel button
 .cloud-logout:hover {
   background: rgba(255,255,255,0.1);
 }
+
+.cloud-logout {
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+
+  .cloud-logout {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+
+}
+
+.cloud-account-item {
+  position: relative;
+}
+
+.cloud-account-item .cloud-logout {
+  position: relative;
+  z-index: 20;
+}
+
+.cloud-logout {
+  touch-action: manipulation;
+}
