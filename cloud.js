@@ -146,7 +146,21 @@ signupBtn?.addEventListener("click", async () => {
       plannerName
     );
 
-    alert("Account created!");
+    signupBtn.innerText = "Account Created ✓";
+
+    signupBtn.disabled = true;
+
+    setTimeout(() => {
+
+    // switch to login tab
+    document.querySelector('[data-tab="login"]')
+        .click();
+
+    signupBtn.innerText = "Create Account";
+
+    signupBtn.disabled = false;
+
+    }, 1200);
 
   }
 
