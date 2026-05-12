@@ -611,7 +611,7 @@ function renderMySpace(view = "grid") {
 
 
   if (myTemplates.length === 0) {
-    return html + `<p class="paragraph-design">No templates added yet</p>`;
+    return html + `<div class="empty-message"> No planners added yet . Go to 'Templates' to add Planner</div>`;
   }
 
   html += `<div class="myspace-container ${view}-view">`;
@@ -714,7 +714,7 @@ function renderFilteredTemplates(type) {
   const filtered = myTemplates.filter(t => t.type === type);
 
   if (filtered.length === 0) {
-    return html + `<p>No Planner added</p>`;
+    return html + `<div class="empty-message"> No planners added yet </div>`;
   }
 
   html += `<div class="craft-grid">`;

@@ -1696,3 +1696,58 @@ mobiel button
 .confirm-btn:hover {
   transform: translateY(-1px);
 }
+
+/* ==========================================
+   EMPTY STATE QUOTE
+========================================== */
+
+.empty-message {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 80px 24px;
+
+  color: rgba(255,255,255,0.5);
+
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.4px;
+  line-height: 1.8;
+
+  min-height: 55vh;
+}
+
+/* subtle quote marks */
+.empty-message::before,
+.empty-message::after {
+  color: rgba(255,255,255,0.18);
+  font-size: 32px;
+  font-family: serif;
+}
+
+.empty-message::before {
+  content: "“";
+  margin-right: 8px;
+}
+
+.empty-message::after {
+  content: "”";
+  margin-left: 8px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+
+  .empty-message {
+    font-size: 18px;
+    padding: 60px 20px;
+    line-height: 1.7;
+  }
+
+}
