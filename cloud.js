@@ -72,6 +72,25 @@ document.getElementById("loginBtn");
 const cloudBtn =
 document.getElementById("cloudAccountBtn");
 
+// ==========================================
+// ELEMENTS - toast and confirmation
+// ==========================================
+
+const toast =
+document.getElementById("toast");
+
+function showToast(message) {
+
+  toast.innerText = message;
+
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2400);
+
+}
+
 
 // ==========================================
 // SIGNUP
@@ -95,7 +114,7 @@ signupBtn?.addEventListener("click", async () => {
     .value;
 
   if (!plannerName || !email || !password) {
-    alert("Fill all fields");
+    showToast("Fill all fields");
     return;
   }
 
@@ -109,7 +128,7 @@ signupBtn?.addEventListener("click", async () => {
       await getDoc(plannerRef);
 
     if (plannerSnap.exists()) {
-      alert("Planner name already taken");
+      showToast("Planner name already taken");
       return;
     }
 
@@ -166,7 +185,7 @@ signupBtn?.addEventListener("click", async () => {
 
   catch(err) {
     console.error(err);
-    alert(err.message);
+    showToast(err.message);
   }
 
 });
@@ -188,7 +207,7 @@ loginBtn?.addEventListener("click", async () => {
     .value;
 
   if (!email || !password) {
-    alert("Fill all fields");
+    showToast("Fill all fields");
     return;
   }
 
@@ -215,13 +234,13 @@ loginBtn?.addEventListener("click", async () => {
       plannerName
     );
 
-    alert("Logged in!");
+    showToast("Logged in!");
 
   }
 
   catch(err) {
     console.error(err);
-    alert("Wrong email or password");
+    showToast("Wrong email or password");
   }
 
 });
@@ -272,16 +291,15 @@ onAuthStateChanged(auth, async (user) => {
   // LOGOUT CLICK
   cloudBtn.onclick = async () => {
 
-    const confirmLogout =
-      confirm("Logout?");
-
-    if (!confirmLogout) return;
-
     await signOut(auth);
 
-    localStorage.removeItem("plannerName");
+        localStorage.removeItem("plannerName");
 
-    location.reload();
+        showToast("Logged out");
+
+        setTimeout(() => {
+        location.reload();
+        }, 800);
 
   };
 
