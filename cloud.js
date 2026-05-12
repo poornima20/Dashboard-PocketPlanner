@@ -328,25 +328,6 @@ confirm(
   "Cloud save found.\nReplace local data?"
 );
 
-if (useCloud) {
-
-  await restorePlannerData(uid);
-
-  showToast("Cloud restored");
-
-  setTimeout(() => {
-    location.reload();
-  }, 1200);
-
-}
-
-else {
-
-  await uploadPlannerData(uid);
-
-  showToast("Local data synced");
-
-}
   if (useCloud) {
 
     await restorePlannerData(uid);
