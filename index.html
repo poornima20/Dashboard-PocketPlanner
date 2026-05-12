@@ -61,12 +61,9 @@
 
             <!-- SYSTEM -->
             <div class="menu-group">
-              <div class="item">
-                <i data-lucide="upload"></i><span>Backup</span>
-              </div>
-
-              <div class="item">
-                <i data-lucide="download"></i><span>Restore</span>
+              <div class="item" id="cloudAccountBtn">
+              <i data-lucide="cloud"></i>
+              <span>Cloud Account</span>
               </div>
             </div>
 
@@ -136,7 +133,77 @@
   <i data-lucide="home"></i>
 </button>
 
+<div class="auth-modal" id="authModal">
+
+  <div class="auth-box">
+
+    <!-- CLOSE -->
+    <button class="auth-close" id="closeAuth">
+      <i data-lucide="x"></i>
+    </button>
+
+    <!-- HEADER -->
+    <div class="auth-header">
+      <img src="icon.png" class="auth-logo">
+      <h2>Pocket Planner Cloud</h2>
+      <p>Sync your planners across devices</p>
+    </div>
+
+    <!-- TOGGLE -->
+    <div class="auth-switch">
+      <button class="auth-tab active" data-tab="login">
+        Login
+      </button>
+
+      <button class="auth-tab" data-tab="signup">
+        Sign Up
+      </button>
+    </div>
+
+    <!-- LOGIN -->
+    <div class="auth-form active" id="loginForm">
+
+      <div class="input-group">
+        <label>Planner Name</label>
+        <input type="text" placeholder="@plannername">
+      </div>
+
+      <button class="auth-submit">
+        Login
+      </button>
+
+    </div>
+
+    <!-- SIGNUP -->
+    <div class="auth-form" id="signupForm">
+
+      <div class="input-group">
+        <label>Planner Name</label>
+        <input type="text" placeholder="@plannername">
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <input type="email" placeholder="Enter your email">
+      </div>
+
+      <div class="input-group">
+        <label>Password</label>
+        <input type="password" placeholder="Create password">
+      </div>
+
+      <button class="auth-submit">
+        Create Account
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
 <script src="https://unpkg.com/lucide@latest"></script>
+<script type="module" src="cloud.js"></script>
 <script src="script.js"></script>
 
 </body>

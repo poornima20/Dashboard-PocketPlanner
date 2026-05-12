@@ -1098,3 +1098,64 @@ function setupCardOpen() {
   });
 }
 
+
+/* ==========================================
+   CLOUD ACCOUNT MODAL
+========================================== */
+
+const cloudBtn = document.getElementById("cloudAccountBtn");
+const authModal = document.getElementById("authModal");
+const closeAuth = document.getElementById("closeAuth");
+
+const authTabs = document.querySelectorAll(".auth-tab");
+const authForms = document.querySelectorAll(".auth-form");
+
+/* OPEN */
+cloudBtn.onclick = () => {
+  authModal.classList.add("active");
+};
+
+/* CLOSE */
+closeAuth.onclick = () => {
+  authModal.classList.remove("active");
+};
+
+/* OUTSIDE CLICK */
+authModal.addEventListener("click", (e) => {
+
+  if (e.target === authModal) {
+    authModal.classList.remove("active");
+  }
+
+});
+
+/* TAB SWITCH */
+authTabs.forEach(tab => {
+
+  tab.addEventListener("click", () => {
+
+    const selected = tab.dataset.tab;
+
+    authTabs.forEach(t =>
+      t.classList.remove("active")
+    );
+
+    authForms.forEach(f =>
+      f.classList.remove("active")
+    );
+
+    tab.classList.add("active");
+
+    if (selected === "login") {
+      document.getElementById("loginForm")
+        .classList.add("active");
+    }
+
+    if (selected === "signup") {
+      document.getElementById("signupForm")
+        .classList.add("active");
+    }
+
+  });
+
+});
