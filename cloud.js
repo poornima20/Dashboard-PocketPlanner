@@ -25,6 +25,7 @@ import {
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 
+
 // ==========================================
 // FIREBASE CONFIG
 // ==========================================
@@ -72,6 +73,21 @@ document.getElementById("loginBtn");
 const cloudBtn =
 document.getElementById("cloudAccountBtn");
 
+const confirmModal =
+document.getElementById("confirmModal");
+
+const confirmTitle =
+document.getElementById("confirmTitle");
+
+const confirmText =
+document.getElementById("confirmText");
+
+const confirmOkBtn =
+document.getElementById("confirmOkBtn");
+
+const confirmCancelBtn =
+document.getElementById("confirmCancelBtn");
+
 // ==========================================
 // ELEMENTS - toast and confirmation
 // ==========================================
@@ -88,6 +104,42 @@ function showToast(message) {
   setTimeout(() => {
     toast.classList.remove("show");
   }, 2400);
+
+}
+
+
+function showConfirm({
+
+  title = "Are you sure?",
+  text = "",
+  confirmText = "Confirm",
+  onConfirm = () => {}
+
+}) {
+
+  confirmTitle.innerText = title;
+
+  confirmText.innerText = text;
+
+  confirmOkBtn.innerText = confirmText;
+
+  confirmModal.classList.add("active");
+
+  // CANCEL
+  confirmCancelBtn.onclick = () => {
+
+    confirmModal.classList.remove("active");
+
+  };
+
+  // CONFIRM
+  confirmOkBtn.onclick = async () => {
+
+    confirmModal.classList.remove("active");
+
+    await onConfirm();
+
+  };
 
 }
 
@@ -234,7 +286,90 @@ loginBtn?.addEventListener("click", async () => {
       plannerName
     );
 
-    showToast("Logged in!");
+    // ==========================================
+// CHECK LOCAL DATA
+// ==========================================
+
+const localPlannerData =
+  getPlannerStorage();
+
+const hasLocalData =
+  Object.keys(localPlannerData).length > 0;
+
+
+// ==========================================
+// CHECK CLOUD DATA
+// ==========================================
+
+const cloudSnap =
+  await getDoc(
+    doc(db, "plannerData", uid)
+  );
+
+const hasCloudData =
+  cloudSnap.exists() &&
+  cloudSnap.data().storage &&
+  Object.keys(
+    cloudSnap.data().storage
+  ).length > 0;
+
+
+// ==========================================
+// CLOUD EXISTS
+// ==========================================
+
+if (hasCloudData) {
+
+  const useCloud =
+    confirm(
+      "Cloud save found.\nReplace local data?"
+    );
+
+  if (useCloud) {
+
+    await restorePlannerData(uid);
+
+    showToast("Cloud restored");
+
+    setTimeout(() => {
+      location.reload();
+    }, 1200);
+
+  }
+
+  else {
+
+    await uploadPlannerData(uid);
+
+    showToast("Local data synced");
+
+  }
+
+}
+
+
+// ==========================================
+// CLOUD EMPTY
+// ==========================================
+
+else if (hasLocalData) {
+
+  await uploadPlannerData(uid);
+
+  showToast("Local data synced");
+
+}
+
+
+// ==========================================
+// NOTHING EXISTS
+// ==========================================
+
+else {
+
+  showToast(`Welcome @${plannerName}`);
+
+}
 
   }
 
@@ -289,18 +424,164 @@ onAuthStateChanged(auth, async (user) => {
   lucide.createIcons();
 
   // LOGOUT CLICK
-  cloudBtn.onclick = async () => {
+cloudBtn.onclick = () => {
 
-    await signOut(auth);
+  showConfirm({
 
-        localStorage.removeItem("plannerName");
+    title: "Logout?",
 
-        showToast("Logged out");
+    text:
+      "You will need to login again to access your cloud planners.",
 
-        setTimeout(() => {
+    confirmText: "Logout",
+
+    onConfirm: async () => {
+
+      await signOut(auth);
+
+      localStorage.removeItem("plannerName");
+
+      showToast("Logged out");
+
+      setTimeout(() => {
         location.reload();
-        }, 800);
+      }, 800);
 
-  };
+    }
+
+  });
+
+};
 
 });
+
+
+// ==========================================
+// GET ALL PLANNER STORAGE
+// ==========================================
+
+function getPlannerStorage() {
+
+  const data = {};
+
+  for (let i = 0; i < localStorage.length; i++) {
+
+    const key = localStorage.key(i);
+
+    if (
+      key.startsWith("fullmoon.pocketplanner.")
+    ) {
+
+      data[key] = localStorage.getItem(key);
+
+    }
+
+  }
+
+  return data;
+
+}
+
+
+
+// ==========================================
+// CLEAR ALL PLANNER STORAGE
+// ==========================================
+
+
+function clearPlannerStorage() {
+
+  const keysToRemove = [];
+
+  for (let i = 0; i < localStorage.length; i++) {
+
+    const key = localStorage.key(i);
+
+    if (
+      key.startsWith("fullmoon.pocketplanner.")
+    ) {
+      keysToRemove.push(key);
+    }
+
+  }
+
+  keysToRemove.forEach(key => {
+    localStorage.removeItem(key);
+  });
+
+}
+
+// ==========================================
+// SAVE CLOUD DATA
+// ==========================================
+
+async function uploadPlannerData(uid) {
+
+  const plannerData =
+    getPlannerStorage();
+
+  await setDoc(
+    doc(db, "plannerData", uid),
+    {
+      storage: plannerData,
+      updatedAt: Date.now()
+    }
+  );
+
+  console.log("Cloud synced");
+
+}
+
+// ==========================================
+// RESTORE CLOUD DATA
+// ==========================================
+
+async function restorePlannerData(uid) {
+
+  const snap =
+    await getDoc(
+      doc(db, "plannerData", uid)
+    );
+
+  if (!snap.exists()) return false;
+
+  const cloudData =
+    snap.data().storage || {};
+
+  clearPlannerStorage();
+
+  Object.entries(cloudData)
+    .forEach(([key, value]) => {
+
+      localStorage.setItem(key, value);
+
+    });
+
+  return true;
+
+}
+
+// ==========================================
+// Auto Snyc on unload
+// ==========================================
+window.addEventListener("beforeunload", async () => {
+
+  const user = auth.currentUser;
+
+  if (!user) return;
+
+  await uploadPlannerData(user.uid);
+
+});
+
+setInterval(async () => {
+
+  const user = auth.currentUser;
+
+  if (!user) return;
+
+  await uploadPlannerData(user.uid);
+
+  console.log("Auto synced");
+
+}, 30000);

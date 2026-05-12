@@ -159,7 +159,7 @@ const categoryMeta = {
   }
 };
 
-let myTemplates = JSON.parse(localStorage.getItem("myTemplates")) || [];
+let myTemplates = JSON.parse(localStorage.getItem("fullmoon.pocketplanner.templates")) || [];
 let currentView = "grid";
 
 /* ==========================================
@@ -181,7 +181,7 @@ if ("serviceWorker" in navigator) {
 
   } else {
     // ✅ Enable only in production
-    navigator.serviceWorker.register("/sw.js")
+    navigator.serviceWorker.register("sw.js")
       .then(() => console.log("SW registered"))
       .catch(err => console.log("SW error", err));
   }
@@ -561,7 +561,7 @@ function setupTemplateButtons() {
 
   if (!exists) {
     myTemplates.push(selectedTemplate);
-    localStorage.setItem("myTemplates", JSON.stringify(myTemplates));
+    localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
   }
 
   // get current active filter
@@ -750,7 +750,7 @@ function setupDeleteButtons() {
 
       // remove from state
       myTemplates = myTemplates.filter(t => t.id !== id);
-      localStorage.setItem("myTemplates", JSON.stringify(myTemplates));
+      localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
 
       // 🔥 RE-RENDER CURRENT PAGE
       const activePage = document.querySelector(".nav-item.active")?.dataset.page;
@@ -797,7 +797,7 @@ function setupReorderButtons() {
       [myTemplates[index - 1], myTemplates[index]] =
       [myTemplates[index], myTemplates[index - 1]];
 
-      localStorage.setItem("myTemplates", JSON.stringify(myTemplates));
+      localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
 
       // re-render SAME view
       document.getElementById("content").innerHTML = renderMySpace(currentView);
@@ -824,7 +824,7 @@ function setupReorderButtons() {
       [myTemplates[index + 1], myTemplates[index]] =
       [myTemplates[index], myTemplates[index + 1]];
 
-      localStorage.setItem("myTemplates", JSON.stringify(myTemplates));
+      localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
 
       // re-render SAME view
       document.getElementById("content").innerHTML = renderMySpace(currentView);
@@ -878,7 +878,7 @@ function setupEditButtons() {
         }
 
         template.name = newName;
-        localStorage.setItem("myTemplates", JSON.stringify(myTemplates));
+        localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
 
         const newSpan = document.createElement("span");
         newSpan.className = "template-name";
@@ -941,7 +941,7 @@ function setupDrag() {
       myTemplates[fromIndex] = myTemplates[toIndex];
       myTemplates[toIndex] = temp;
 
-      localStorage.setItem("myTemplates", JSON.stringify(myTemplates));
+      localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
 
       // re-render
       document.getElementById("content").innerHTML = renderMySpace(currentView);
@@ -1159,3 +1159,5 @@ authTabs.forEach(tab => {
   });
 
 });
+
+
