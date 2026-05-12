@@ -1877,3 +1877,41 @@ mobiel button
   }
 
 }
+
+/* ==========================================
+   TABLET COLLAPSED CLOUD FIX
+========================================== */
+
+@media (max-width: 1024px) and (min-width: 769px) {
+
+  /* shrink account button itself */
+  .sidebar:not(.expanded) #cloudAccountBtn {
+    justify-content: center;
+    padding: 10px 0;
+    gap: 0;
+  }
+
+  /* remove flex stretching */
+  .sidebar:not(.expanded) .cloud-user {
+    width: auto;
+    justify-content: center;
+  }
+
+  .sidebar:not(.expanded) .cloud-user-info {
+    flex: unset;
+    width: auto;
+    justify-content: center;
+    gap: 0;
+  }
+
+  /* hide username */
+  .sidebar:not(.expanded) .cloud-user-info span {
+    display: none !important;
+  }
+
+  /* hide logout */
+  .sidebar:not(.expanded) .cloud-logout {
+    display: none !important;
+  }
+
+}
