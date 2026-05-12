@@ -1768,29 +1768,47 @@ mobiel button
 }
 
 
+
+
+/* ==========================================
+   CLOUD ACCOUNT
+========================================== */
+
 .cloud-user {
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   width: 100%;
+  gap: 10px;
 }
 
 .cloud-user-info {
   display: flex;
   align-items: center;
   gap: 10px;
+
+  min-width: 0;
+  flex: 1;
+}
+
+.cloud-user-info span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cloud-logout {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
+
+  min-width: 32px;
+  flex-shrink: 0;
 
   border: none;
   border-radius: 10px;
 
   background: rgba(255,255,255,0.05);
-
   color: white;
 
   display: flex;
@@ -1806,45 +1824,33 @@ mobiel button
   background: rgba(255,255,255,0.1);
 }
 
-.cloud-logout {
-  flex-shrink: 0;
+.cloud-logout svg {
+  width: 16px;
+  height: 16px;
 }
 
+/* MOBILE */
 @media (max-width: 768px) {
 
-  .cloud-logout {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+  .cloud-user {
+    align-items: center;
+  }
+
+  .cloud-user-info span {
+    font-size: 12px;
   }
 
 }
 
-.cloud-account-item {
-  position: relative;
-}
-
-.cloud-account-item .cloud-logout {
-  position: relative;
-  z-index: 20;
-}
-
-.cloud-logout {
-  touch-action: manipulation;
-}
-
 /* ==========================================
-   COLLAPSED CLOUD ACCOUNT FIX
+   COLLAPSED SIDEBAR
 ========================================== */
 
 .sidebar.collapsed .cloud-user {
   justify-content: center;
 }
 
-.sidebar.collapsed .cloud-user-info span {
-  display: none;
-}
-
+.sidebar.collapsed .cloud-user-info span,
 .sidebar.collapsed .cloud-logout {
   display: none;
 }
