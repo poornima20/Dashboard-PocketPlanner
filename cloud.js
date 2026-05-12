@@ -416,15 +416,30 @@ onAuthStateChanged(auth, async (user) => {
   );
 
   // CHANGE SIDEBAR UI
-  cloudBtn.innerHTML = `
-    <i data-lucide="user"></i>
-    <span>@${plannerName}</span>
-  `;
+ cloudBtn.innerHTML = `
+  <div class="cloud-user">
+
+    <div class="cloud-user-info">
+      <i data-lucide="user"></i>
+      <span>@${plannerName}</span>
+    </div>
+
+    <button class="cloud-logout" id="logoutBtn">
+      <i data-lucide="log-out"></i>
+    </button>
+
+  </div>
+`;
 
   lucide.createIcons();
 
   // LOGOUT CLICK
-cloudBtn.onclick = () => {
+const logoutBtn =
+document.getElementById("logoutBtn");
+
+logoutBtn.onclick = (e) => {
+
+  e.stopPropagation();
 
   showConfirm({
 

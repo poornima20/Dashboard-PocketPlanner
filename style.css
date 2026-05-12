@@ -1751,3 +1751,42 @@ mobiel button
   }
 
 }
+
+
+.cloud-user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  width: 100%;
+}
+
+.cloud-user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cloud-logout {
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: rgba(255,255,255,0.05);
+
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.cloud-logout:hover {
+  background: rgba(255,255,255,0.1);
+}
