@@ -230,6 +230,9 @@ signupBtn?.addEventListener("click", async () => {
     signupBtn.innerText = "Create Account";
 
     signupBtn.disabled = false;
+    document
+  .getElementById("authModal")
+  .classList.remove("active");
 
     }, 1200);
 
@@ -321,10 +324,29 @@ const hasCloudData =
 if (hasCloudData) {
 
   const useCloud =
-    confirm(
-      "Cloud save found.\nReplace local data?"
-    );
+confirm(
+  "Cloud save found.\nReplace local data?"
+);
 
+if (useCloud) {
+
+  await restorePlannerData(uid);
+
+  showToast("Cloud restored");
+
+  setTimeout(() => {
+    location.reload();
+  }, 1200);
+
+}
+
+else {
+
+  await uploadPlannerData(uid);
+
+  showToast("Local data synced");
+
+}
   if (useCloud) {
 
     await restorePlannerData(uid);
@@ -370,6 +392,11 @@ else {
   showToast(`Welcome @${plannerName}`);
 
 }
+
+// CLOSE AUTH MODAL
+document
+  .getElementById("authModal")
+  .classList.remove("active");
 
   }
 
@@ -452,15 +479,13 @@ logoutBtn.onclick = (e) => {
 
     onConfirm: async () => {
 
-      await signOut(auth);
+  showToast("Logging out...");
 
-      localStorage.removeItem("plannerName");
+  await signOut(auth);
 
-      showToast("Logged out");
+  localStorage.removeItem("plannerName");
 
-      setTimeout(() => {
-        location.reload();
-      }, 800);
+
 
     }
 
