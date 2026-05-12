@@ -424,6 +424,7 @@ onAuthStateChanged(auth, async (user) => {
       <span>Cloud Account</span>
     `;
 
+    cloudBtn.classList.remove("logged-in");
     lucide.createIcons();
 
     return;
@@ -458,6 +459,7 @@ onAuthStateChanged(auth, async (user) => {
   </div>
 `;
 
+  cloudBtn.classList.add("logged-in");
   lucide.createIcons();
 
   // LOGOUT CLICK
@@ -477,17 +479,25 @@ logoutBtn.onclick = (e) => {
 
     confirmButtonText: "Logout",
 
-    onConfirm: async () => {
+onConfirm: async () => {
 
-  showToast("Logging out...");
+  showToast("Syncing cloud...");
 
-  await signOut(auth);
+  // SAVE LATEST DATA TO FIREBASE
+  await uploadPlannerData(user.uid);
 
+  // CLEAR ALL PLANNER LOCAL DATA
+  clearPlannerStorage();
+
+  // REMOVE ACCOUNT NAME
   localStorage.removeItem("plannerName");
 
+  // SIGN OUT
+  await signOut(auth);
 
+  showToast("Logged out");
 
-    }
+}
 
   });
 

@@ -107,7 +107,7 @@ html, body {
   padding: 0 10px;
 
   transition: 0.25s ease;
-  z-index: 1000;
+  z-index: 100;
 
   overflow-x: hidden;   /* 🔥 stops horizontal scroll */
   overflow-y: auto; 
@@ -184,6 +184,21 @@ html, body {
     width: auto !important;
     overflow: visible !important;
   }
+}
+
+.confirm-modal,
+.auth-modal,
+.toast {
+  position: fixed !important;
+  isolation: isolate;
+}
+
+.confirm-modal.active {
+  z-index: 999999 !important;
+}
+
+.auth-modal.active {
+  z-index: 999998 !important;
 }
 
 /* ======================================================
@@ -1816,4 +1831,20 @@ mobiel button
 
 .cloud-logout {
   touch-action: manipulation;
+}
+
+/* ==========================================
+   COLLAPSED CLOUD ACCOUNT FIX
+========================================== */
+
+.sidebar.collapsed .cloud-user {
+  justify-content: center;
+}
+
+.sidebar.collapsed .cloud-user-info span {
+  display: none;
+}
+
+.sidebar.collapsed .cloud-logout {
+  display: none;
 }

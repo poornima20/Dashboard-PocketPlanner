@@ -1112,7 +1112,14 @@ const authForms = document.querySelectorAll(".auth-form");
 
 /* OPEN */
 cloudBtn.onclick = () => {
+
+  // DON'T OPEN IF LOGGED IN
+  if (
+    cloudBtn.classList.contains("logged-in")
+  ) return;
+
   authModal.classList.add("active");
+
 };
 
 /* CLOSE */
