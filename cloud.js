@@ -112,7 +112,7 @@ function showConfirm({
 
   title = "Are you sure?",
   text = "",
-  confirmText = "Confirm",
+  confirmButtonText = "Confirm",
   onConfirm = () => {}
 
 }) {
@@ -121,7 +121,7 @@ function showConfirm({
 
   confirmText.innerText = text;
 
-  confirmOkBtn.innerText = confirmText;
+  confirmOkBtn.innerText = confirmButtonText;
 
   confirmModal.classList.add("active");
 
@@ -433,7 +433,7 @@ cloudBtn.onclick = () => {
     text:
       "You will need to login again to access your cloud planners.",
 
-    confirmText: "Logout",
+    confirmButtonText: "Logout",
 
     onConfirm: async () => {
 
