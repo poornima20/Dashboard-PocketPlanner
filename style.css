@@ -1841,16 +1841,39 @@ mobiel button
   }
 
 }
-
 /* ==========================================
-   COLLAPSED SIDEBAR
+   COLLAPSED CLOUD ACCOUNT
 ========================================== */
 
+/* DESKTOP COLLAPSED */
 .sidebar.collapsed .cloud-user {
   justify-content: center;
 }
 
+.sidebar.collapsed .cloud-user-info {
+  flex: unset;
+}
+
 .sidebar.collapsed .cloud-user-info span,
 .sidebar.collapsed .cloud-logout {
-  display: none;
+  display: none !important;
+}
+
+/* TABLET COLLAPSED */
+@media (max-width: 1024px) and (min-width: 769px) {
+
+  .sidebar:not(.expanded) .cloud-user {
+    justify-content: center;
+  }
+
+  .sidebar:not(.expanded) .cloud-user-info {
+    flex: unset;
+  }
+
+  .sidebar:not(.expanded) .cloud-user-info span,
+
+  .sidebar:not(.expanded) .cloud-logout {
+    display: none !important;
+  }
+
 }
