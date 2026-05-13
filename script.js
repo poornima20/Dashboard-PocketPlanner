@@ -52,6 +52,11 @@ const templatesData = {
         name: "Year Overview",
         image: "./Icons/yearoverview.png",
         url: "https://poornima20.github.io/PocketPlanner-MonthlyPlanner-YearOverview/"
+      },
+      {
+        name: "Yearly Log",
+        image: "./Icons/yearlylog.png",
+        url: "https://poornima20.github.io/PocketPlanner-YearlyPlanner-YearlyLog/"
       }
     ],
 
