@@ -323,10 +323,10 @@ const hasCloudData =
 
 if (hasCloudData) {
 
-  const useCloud =
-confirm(
-  "Cloud save found.\nReplace local data?"
+const useCloud = confirm(
+  "Restore cloud backup?"
 );
+
 
   if (useCloud) {
 
@@ -462,21 +462,36 @@ logoutBtn.onclick = (e) => {
 
 onConfirm: async () => {
 
-  showToast("Syncing cloud...");
+  try {
 
-  // SAVE LATEST DATA TO FIREBASE
-  await uploadPlannerData(user.uid);
+    showToast("Syncing cloud...");
 
-  // CLEAR ALL PLANNER LOCAL DATA
-  clearPlannerStorage();
+    // wait for upload
+    await uploadPlannerData(user.uid);
 
-  // REMOVE ACCOUNT NAME
-  localStorage.removeItem("plannerName");
+    // small safety delay
+    await new Promise(resolve =>
+      setTimeout(resolve, 500)
+    );
 
-  // SIGN OUT
-  await signOut(auth);
+    // clear local ONLY after successful upload
+    clearPlannerStorage();
 
-  showToast("Logged out");
+    localStorage.removeItem("plannerName");
+
+    await signOut(auth);
+
+    showToast("Logged out");
+
+  }
+
+  catch(err){
+
+    console.error(err);
+
+    showToast("Cloud sync failed");
+
+  }
 
 }
 
