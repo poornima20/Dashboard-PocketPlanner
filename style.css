@@ -1966,3 +1966,15 @@ mobiel button
   align-items: center;
   justify-content: center;
 }
+
+/* ==========================================
+   MOBILE FIX - SHOW LOGOUT
+========================================== */
+
+@media (max-width: 768px) {
+
+  .sidebar .cloud-logout {
+    display: flex !important;
+  }
+
+}
