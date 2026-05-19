@@ -1841,140 +1841,56 @@ mobiel button
   }
 
 }
+
 /* ==========================================
-   COLLAPSED CLOUD ACCOUNT
+   CLOUD ACCOUNT CLEAN
 ========================================== */
+
+#cloudAccountBtn.logged-in {
+  padding: 8px;
+}
 
 /* DESKTOP COLLAPSED */
 .sidebar.collapsed .cloud-user {
   justify-content: center;
 }
 
-.sidebar.collapsed .cloud-user-info {
-  flex: unset;
-}
-
 .sidebar.collapsed .cloud-user-info span,
 .sidebar.collapsed .cloud-logout {
-  display: none !important;
+  display: none;
 }
 
-/* TABLET COLLAPSED */
+/* TABLET */
 @media (max-width: 1024px) and (min-width: 769px) {
 
   .sidebar:not(.expanded) .cloud-user {
     justify-content: center;
-  }
-
-  .sidebar:not(.expanded) .cloud-user-info {
-    flex: unset;
   }
 
   .sidebar:not(.expanded) .cloud-user-info span,
-
   .sidebar:not(.expanded) .cloud-logout {
-    display: none !important;
+    display: none;
   }
 
 }
 
-/* ==========================================
-   TABLET COLLAPSED CLOUD FIX
-========================================== */
-
-@media (max-width: 1024px) and (min-width: 769px) {
-
-  /* shrink account button itself */
-  .sidebar:not(.expanded) #cloudAccountBtn {
-    justify-content: center;
-    padding: 10px 0;
-    gap: 0;
-  }
-
-  /* remove flex stretching */
-  .sidebar:not(.expanded) .cloud-user {
-    width: auto;
-    justify-content: center;
-  }
-
-  .sidebar:not(.expanded) .cloud-user-info {
-    flex: unset;
-    width: auto;
-    justify-content: center;
-    gap: 0;
-  }
-
-  /* hide username */
-  .sidebar:not(.expanded) .cloud-user-info span {
-    display: none !important;
-  }
-
-  /* hide logout */
-  .sidebar:not(.expanded) .cloud-logout {
-    display: none !important;
-  }
-
-}
-
-/* ==========================================
-   CLOUD ACCOUNT FIX
-========================================== */
-
-#cloudAccountBtn.logged-in {
-  padding: 8px !important;
-  gap: 0 !important;
-}
-
-#cloudAccountBtn.logged-in:hover {
-  background: #1f1f1f;
-}
-
-/* remove inherited item spacing */
-#cloudAccountBtn.logged-in .cloud-user {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* profile section */
-#cloudAccountBtn.logged-in .cloud-user-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-
-  min-width: 0;
-  flex: 1;
-}
-
-/* username */
-#cloudAccountBtn.logged-in .cloud-user-info span {
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* logout button */
-#cloudAccountBtn.logged-in .cloud-logout {
-  width: 32px;
-  height: 32px;
-
-  min-width: 32px;
-  flex-shrink: 0;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ==========================================
-   MOBILE FIX - SHOW LOGOUT
-========================================== */
-
+/* MOBILE */
 @media (max-width: 768px) {
 
-  .sidebar .cloud-logout {
-    display: flex !important;
+  .sidebar .cloud-user {
+    justify-content: space-between;
+  }
+
+  .sidebar .cloud-user-info span {
+  display: block;
+}
+
+.sidebar .cloud-logout {
+  display: flex;
+}
+
+  .cloud-user-info span {
+    font-size: 12px;
   }
 
 }
