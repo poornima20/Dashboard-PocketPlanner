@@ -323,30 +323,13 @@ const hasCloudData =
 
 if (hasCloudData) {
 
-const useCloud = confirm(
-  "Restore cloud backup?"
-);
+  await restorePlannerData(uid);
 
+  showToast("Cloud restored");
 
-  if (useCloud) {
-
-    await restorePlannerData(uid);
-
-    showToast("Cloud restored");
-
-    setTimeout(() => {
-      location.reload();
-    }, 1200);
-
-  }
-
-  else {
-
-    await uploadPlannerData(uid);
-
-    showToast("Local data synced");
-
-  }
+  setTimeout(() => {
+    location.reload();
+  }, 1200);
 
 }
 
