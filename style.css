@@ -52,21 +52,16 @@ html, body {
 /* ======================================================
    2. LAYOUT
 ====================================================== */
-.app {
-  display: flex;
-  height: 100vh;
+.app{
+  display:flex;
+  min-height:100vh;
+  width:100%;
 }
 
-.main {
-  flex: 1;
-  margin-left: 220px;
-  transition: 0.25s ease;
+.main{
+  flex:1;
+  transition:0.25s ease;
 }
-
-.sidebar.collapsed ~ .main {
-  margin-left: 56px;
-}
-
 
 /* ======================================================
    2. Layout: Content Area (with custom scrollbar)
@@ -93,112 +88,147 @@ html, body {
 /* ======================================================
    3. SIDEBAR
 ====================================================== */
-.sidebar {
+.sidebar{
   position: fixed;
   top: 0;
   left: 0;
+
+  max-width:100vw;
+  width: 56px;
+
   height: 100vh;
   height: 100dvh;
+
   display: flex;
   flex-direction: column;
-  width: 220px;
 
   background: var(--sidebar-bg);
-  padding: 0 10px;
+
+  padding: 0;
 
   transition: 0.25s ease;
+
   z-index: 100;
 
-  overflow-x: hidden;   /* 🔥 stops horizontal scroll */
-  overflow-y: auto; 
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
-/* collapsed */
-.sidebar.collapsed {
-  width: 56px;
+.sidebar-body,
+.logo,
+.sidebar-footer{
+  padding-left:10px;
+  padding-right:10px;
+}
+
+/* expanded */
+.sidebar.expanded{
+  width:220px;
 }
 
 
-/* ---------- TABLET (collapsed sidebar) ---------- */
-/* 📲 TABLET */
-@media (max-width: 1024px) and (min-width: 769px) {
+.overlay{
+  position:fixed;
+  inset:0;
 
-  /* default collapsed */
-  .sidebar {
-    width: 56px;
-  }
+  background:rgba(0,0,0,0.45);
 
-  /* expanded state */
-  .sidebar.expanded {
-    width: 220px;
-  }
+  opacity:0;
+  pointer-events:none;
 
-  /* hide text when collapsed */
-  .sidebar:not(.expanded) .item span,
-  .sidebar:not(.expanded) .logo span,
-  .sidebar:not(.expanded) .usage-text {
-    opacity: 0;
-    width: 0;
-    overflow: hidden;
-  }
+  transition:0.25s ease;
 
-  /* show text when expanded */
-  .sidebar.expanded .item span,
-  .sidebar.expanded .logo span,
-  .sidebar.expanded .usage-text {
-    opacity: 1;
-    width: auto;
-  }
-
-  /* main shift */
-  .main {
-    margin-left: 56px;
-  }
-
-  .sidebar.expanded ~ .main {
-    margin-left: 220px;
-  }
+  z-index:90;
 }
 
-/* ---------- MOBILE (fullscreen sidebar) ---------- */
-@media (max-width: 768px) {
-
-  .sidebar {
-    transform: translateX(-100%);
-    width: 100% !important;
-  }
-
-  .sidebar.open {
-    transform: translateX(0);
-  }
-
-  .main {
-    margin-left: 0 !important;
-  }
-
-  /* show full text */
-  .sidebar .item span,
-  .sidebar .logo span,
-  .sidebar .usage-text {
-    opacity: 1 !important;
-    width: auto !important;
-    overflow: visible !important;
-  }
+.overlay.active{
+  opacity:1;
+  pointer-events:auto;
 }
 
-.confirm-modal,
-.auth-modal,
-.toast {
-  position: fixed !important;
-  isolation: isolate;
+
+/* ==========================================
+   DESKTOP
+========================================== */
+
+@media (min-width:1025px){
+
+  .main{
+    margin-left:220px;
+  }
+
+  body.sidebar-collapsed .main{
+    margin-left:56px;
+  }
+
 }
 
-.confirm-modal.active {
-  z-index: 999999 !important;
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width:1024px) and (min-width:769px){
+
+  .main{
+    margin-left:56px;
+  }
+
+  body.sidebar-expanded .main{
+    margin-left:220px;
+  }
+
 }
 
-.auth-modal.active {
-  z-index: 999998 !important;
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width:768px){
+
+  .main{
+    margin-left:0 !important;
+  }
+
+  .sidebar{
+     z-index:1000;
+  width:100vw;
+  max-width:100vw;
+
+  left:0;
+  top:0;
+
+  transform:translate3d(-100%,0,0);
+}
+
+ .sidebar.expanded{
+  width:100vw;
+  max-width:100vw;
+
+  transform:translate3d(0,0,0);
+}
+}
+
+@media (max-width:768px){
+
+  body.viewer-active .topbar{
+    display:none;
+  }
+
+  body.viewer-active .content{
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  body.viewer-active .viewer-page{
+    height:100dvh;
+    width:100vw;
+  }
+
+  body.viewer-active .viewer-frame{
+    width:100vw;
+    height:100dvh;
+  }
+
 }
 
 /* ======================================================
@@ -231,13 +261,33 @@ html, body {
   white-space: nowrap;
 }
 
-.sidebar.collapsed .logo span {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
+
+/* ==========================================
+   SIDEBAR VISIBILITY
+========================================== */
+
+.sidebar:not(.expanded) .item span,
+.sidebar:not(.expanded) .logo span,
+.sidebar:not(.expanded) .usage-text,
+.sidebar:not(.expanded) .cloud-user-info span,
+.sidebar:not(.expanded) .cloud-logout{
+  opacity:0;
+  width:0;
+  overflow:hidden;
 }
 
+.sidebar.expanded .item span,
+.sidebar.expanded .logo span,
+.sidebar.expanded .usage-text,
+.sidebar.expanded .cloud-user-info span{
+  opacity:1;
+  width:auto;
+  overflow:visible;
+}
 
+.sidebar.expanded .cloud-logout{
+  display:flex;
+}
 
 /* ======================================================
    3. SIDEBAR - title
@@ -302,13 +352,6 @@ nav{
   justify-content: flex-start;
 }
 
-/* COLLAPSED STATE */
-.sidebar.collapsed .item span {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;  
-}
-
 .sidebar-menu {
   display: flex;
   flex-direction: column;
@@ -338,12 +381,6 @@ nav{
   color: var(--muted-text);
   white-space: nowrap;
   transition: 0.2s ease;
-}
-
-.sidebar.collapsed .usage-text {
-  opacity: 0;
-  width: 0;
-  overflow: hidden;
 }
 
 .bottom {
@@ -1336,15 +1373,14 @@ mobiel button
    MOBILE VIEWER MODE (FULLSCREEN)
 ========================================== */
 
-@media (max-width: 768px) {
+@media (max-width:768px){
 
-    /* ✅ INSTEAD: only hide when NOT open */
-  body.viewer-active .sidebar:not(.open) {
-    transform: translateX(-100%);
+  body.viewer-active .sidebar:not(.expanded){
+    transform:translateX(-100%);
   }
 
-  body.viewer-active .main {
-    margin-left: 0 !important; /* TAKE FULL WIDTH */
+  body.viewer-active .main{
+    margin-left:0 !important;
   }
 
 }
@@ -1848,61 +1884,4 @@ mobiel button
 
 #cloudAccountBtn.logged-in {
   padding: 8px;
-}
-
-/* DESKTOP COLLAPSED */
-.sidebar.collapsed .cloud-user {
-  justify-content: center;
-}
-
-.sidebar.collapsed .cloud-user-info span,
-.sidebar.collapsed .cloud-logout {
-  display: none;
-}
-
-/* TABLET */
-@media (max-width: 1024px) and (min-width: 769px) {
-
-  .sidebar:not(.expanded) .cloud-user {
-    justify-content: center;
-  }
-
-  .sidebar:not(.expanded) .cloud-user-info span,
-  .sidebar:not(.expanded) .cloud-logout {
-    display: none;
-  }
-
-}
-
-/* MOBILE */
-@media (max-width: 768px) {
-
-  .sidebar .cloud-user {
-    justify-content: space-between;
-  }
-
-  .sidebar .cloud-user-info span {
-  display: block;
-}
-
-.sidebar .cloud-logout {
-  display: flex;
-}
-
-  .cloud-user-info span {
-    font-size: 12px;
-  }
-
-}
-
-@media (max-width:768px){
-
-  .sidebar.open .cloud-user-info span{
-    display:block !important;
-  }
-
-  .sidebar.open .cloud-logout{
-    display:flex !important;
-  }
-
 }

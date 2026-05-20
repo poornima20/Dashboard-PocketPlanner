@@ -215,68 +215,113 @@ document.addEventListener("DOMContentLoaded", () => {
      1. SIDEBAR TOGGLE
   ========================================== */
 toggle.onclick = () => {
-  const width = window.innerWidth;
 
-  // 📱 MOBILE
-  if (width <= 768) {
+  const expanded =
+    sidebar.classList.toggle("expanded");
 
-    sidebar.classList.toggle("open");
+  // desktop/tablet body states
+  document.body.classList.toggle(
+    "sidebar-expanded",
+    expanded
+  );
 
-    // overlay sync
-    if (sidebar.classList.contains("open")) {
-      overlay.classList.add("active");
-    } else {
-      overlay.classList.remove("active");
-    }
+  document.body.classList.toggle(
+    "sidebar-collapsed",
+    !expanded
+  );
+
+  // mobile overlay
+  if(window.innerWidth <= 768){
+
+    overlay.classList.toggle(
+      "active",
+      expanded
+    );
+
   }
 
-  // 📲 TABLET
-  else if (width <= 1024) {
-
-  sidebar.classList.toggle("expanded");
-  sidebar.classList.remove("collapsed");
-  }
-  // 💻 DESKTOP
-  else {
-    sidebar.classList.toggle("open");
-  }
 };
 
 window.addEventListener("resize", () => {
 
   const width = window.innerWidth;
 
-  // desktop always open
+  // desktop
   if(width > 1024){
 
-    sidebar.classList.add("open");
+    sidebar.classList.add("expanded");
+
+    document.body.classList.add(
+      "sidebar-expanded"
+    );
+
+    document.body.classList.remove(
+      "sidebar-collapsed"
+    );
 
   }
 
-  // tablet/mobile default closed
+  // tablet
+  else if(width > 768){
+
+    document.body.classList.remove(
+      "sidebar-expanded"
+    );
+
+    if(!sidebar.classList.contains("expanded")){
+
+      document.body.classList.add(
+        "sidebar-collapsed"
+      );
+
+    }
+
+  }
+
+  // mobile
   else{
 
-    sidebar.classList.remove("open");
+    document.body.classList.remove(
+      "sidebar-expanded",
+      "sidebar-collapsed"
+    );
+
+  }
+
+  // remove overlay outside mobile
+  if(width > 768){
+
     overlay.classList.remove("active");
 
   }
 
 });
 
-
 (function initSidebar(){
 
-  const width = window.innerWidth;
+  // desktop default expanded
+  if(window.innerWidth > 1024){
 
-  // desktop starts open
-  if(width > 1024){
+    sidebar.classList.add("expanded");
 
-    sidebar.classList.add("open");
+    document.body.classList.add(
+      "sidebar-expanded"
+    );
+
+  }
+
+  // tablet default collapsed
+  else if(window.innerWidth > 768){
+
+    sidebar.classList.remove("expanded");
+
+    document.body.classList.add(
+      "sidebar-collapsed"
+    );
 
   }
 
 })();
-
 
   /* ==========================================
     FAB home toggle 
@@ -298,13 +343,14 @@ if (fabHome) {
 const mobileMenuBtn = document.getElementById("mobileMenuBtn");
 
 mobileMenuBtn.onclick = () => {
-  sidebar.classList.toggle("open");
 
-  if (sidebar.classList.contains("open")) {
-    overlay.classList.add("active");
-  } else {
-    overlay.classList.remove("active");
-  }
+  sidebar.classList.toggle("expanded");
+
+  overlay.classList.toggle(
+    "active",
+    sidebar.classList.contains("expanded")
+  );
+
 };
 
   /* ==========================================
@@ -383,7 +429,7 @@ navItems.forEach(item => {
       const sidebar = document.getElementById("sidebar");
       const overlay = document.getElementById("overlay");
 
-      sidebar.classList.remove("open");
+      sidebar.classList.remove("expanded");
       overlay.classList.remove("active");
     }
   });
@@ -1008,7 +1054,15 @@ function openViewer(index, list) {
 
   document.body.classList.add("viewer-active");
    const sidebar = document.getElementById("sidebar");
-  sidebar.classList.remove("open"); // 🔥 ADD THIS
+  sidebar.classList.remove("expanded");
+
+  document.body.classList.remove(
+    "sidebar-expanded"
+  );
+
+  document.body.classList.add(
+    "sidebar-collapsed"
+  );
 
   currentIndex = index;
   currentList = list;
