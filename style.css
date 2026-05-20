@@ -1894,3 +1894,15 @@ mobiel button
   }
 
 }
+
+@media (max-width:768px){
+
+  .sidebar.open .cloud-user-info span{
+    display:block !important;
+  }
+
+  .sidebar.open .cloud-logout{
+    display:flex !important;
+  }
+
+}

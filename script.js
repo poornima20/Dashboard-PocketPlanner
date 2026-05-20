@@ -238,43 +238,43 @@ toggle.onclick = () => {
   }
   // 💻 DESKTOP
   else {
-    sidebar.classList.toggle("collapsed");
+    sidebar.classList.toggle("open");
   }
 };
 
 window.addEventListener("resize", () => {
+
   const width = window.innerWidth;
 
-  // 💻 Desktop → always open
-  if (width > 1024) {
-    sidebar.classList.remove("collapsed");
-    sidebar.classList.remove("open");
-    overlay.classList.remove("active");
+  // desktop always open
+  if(width > 1024){
+
+    sidebar.classList.add("open");
+
   }
 
-  // 📲 Tablet → start collapsed
-  if (width > 768 && width <= 1024) {
-  sidebar.classList.remove("collapsed"); // 🔥 important
-}
+  // tablet/mobile default closed
+  else{
 
-  // 📱 Mobile → reset state
-  if (width <= 768) {
-    sidebar.classList.remove("collapsed");
     sidebar.classList.remove("open");
     overlay.classList.remove("active");
+
   }
+
 });
 
-(function initSidebar() {
+
+(function initSidebar(){
+
   const width = window.innerWidth;
 
-  if (width > 1024) {
-    sidebar.classList.remove("collapsed", "expanded");
-  } 
-  else if (width > 768) {
-  sidebar.classList.remove("collapsed");
-  sidebar.classList.remove("expanded"); // start collapsed via CSS
-}
+  // desktop starts open
+  if(width > 1024){
+
+    sidebar.classList.add("open");
+
+  }
+
 })();
 
 
