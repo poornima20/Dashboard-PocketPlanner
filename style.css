@@ -1885,13 +1885,13 @@ mobiel button
   align-items: center;
   gap: 10px;
 
-  min-width: 0;
-  flex: 1;
+  min-width: auto;
+  flex:0 1 auto;
 }
 
 .cloud-user-info span {
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: unset;
   white-space: nowrap;
 }
 
