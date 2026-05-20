@@ -231,6 +231,59 @@ html, body {
 
 }
 
+
+/* ==========================================
+   MOBILE CLOUD FIX
+========================================== */
+
+@media (max-width:768px){
+
+  .sidebar.expanded .cloud-user{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    width:100%;
+    gap:12px;
+  }
+
+  .sidebar.expanded .cloud-user-info{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    flex:1;
+    min-width:0;
+  }
+
+  .sidebar.expanded .cloud-user-info span{
+    opacity:1 !important;
+
+    width:auto !important;
+    max-width:none !important;
+
+    overflow:visible !important;
+
+    display:block !important;
+
+    font-size:13px;
+  }
+
+  .sidebar.expanded .cloud-logout{
+    display:flex !important;
+
+    opacity:1 !important;
+
+    width:36px !important;
+    min-width:36px !important;
+
+    overflow:visible !important;
+
+    flex-shrink:0;
+  }
+
+}
+
 /* ======================================================
    3. SIDEBAR - logo
 ====================================================== */
@@ -268,12 +321,20 @@ html, body {
 
 .sidebar:not(.expanded) .item span,
 .sidebar:not(.expanded) .logo span,
-.sidebar:not(.expanded) .usage-text,
-.sidebar:not(.expanded) .cloud-user-info span,
-.sidebar:not(.expanded) .cloud-logout{
+.sidebar:not(.expanded) .usage-text{
   opacity:0;
   width:0;
   overflow:hidden;
+}
+
+.sidebar:not(.expanded) .cloud-user-info span{
+  opacity:0;
+  width:0;
+  overflow:hidden;
+}
+
+.sidebar:not(.expanded) .cloud-logout{
+  display:none;
 }
 
 .sidebar.expanded .item span,
