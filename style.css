@@ -208,28 +208,6 @@ html, body {
 }
 }
 
-@media (max-width:768px){
-
-  body.viewer-active .topbar{
-    display:none;
-  }
-
-  body.viewer-active .content{
-    margin:0 !important;
-    padding:0 !important;
-  }
-
-  body.viewer-active .viewer-page{
-    height:100dvh;
-    width:100vw;
-  }
-
-  body.viewer-active .viewer-frame{
-    width:100vw;
-    height:100dvh;
-  }
-
-}
 
 
 /* ==========================================
@@ -1430,20 +1408,13 @@ mobiel button
 
 }
 
-/* ==========================================
-   MOBILE VIEWER MODE (FULLSCREEN)
-========================================== */
+body.viewer-active .topbar {
+  margin-bottom: 0;
+}
 
-@media (max-width:768px){
-
-  body.viewer-active .sidebar:not(.expanded){
-    transform:translateX(-100%);
-  }
-
-  body.viewer-active .main{
-    margin-left:0 !important;
-  }
-
+body.viewer-active .content {
+  margin: 0;
+  padding: 0;
 }
 
 /* ======================================================
