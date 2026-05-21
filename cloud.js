@@ -50,14 +50,21 @@ const auth = getAuth(app);
 
 const db = getFirestore(app);
 
-console.log("Firebase Connected");
-
 
 // ==========================================
 // KEEP LOGIN SESSION
 // ==========================================
 
-setPersistence(auth, browserLocalPersistence);
+await setPersistence(
+  auth,
+  browserLocalPersistence
+);
+
+console.log("Firebase Connected");
+
+
+
+
 
 
 // ==========================================
@@ -378,6 +385,8 @@ document
 
 onAuthStateChanged(auth, async (user) => {
 
+  console.log("AUTH USER:", user);
+
   if (!cloudBtn) return;
 
   // LOGGED OUT
@@ -459,6 +468,7 @@ onConfirm: async () => {
 
     // clear local ONLY after successful upload
     clearPlannerStorage();
+    sessionStorage.clear();
 
     localStorage.removeItem("plannerName");
 
