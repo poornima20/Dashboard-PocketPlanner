@@ -56,8 +56,6 @@ const db = getFirestore(app);
 
 let isRestoringFromCloud = false;
 
-let lastUploadedHash = "";
-
 let syncTimeout;
 
 let isUploading = false;
@@ -315,71 +313,24 @@ loginBtn?.addEventListener("click", async () => {
 const localPlannerData =
   getPlannerStorage();
 
-const hasLocalData =
-  Object.keys(localPlannerData).length > 0;
-
 
 // ==========================================
-// CHECK CLOUD DATA
+// RESTORE CLOUD
 // ==========================================
 
-const cloudSnap =
-  await getDoc(
-    doc(db, "plannerData", uid)
-  );
+await restorePlannerData(uid);
 
-const hasCloudData =
-  cloudSnap.exists() &&
-  cloudSnap.data().storage &&
-  Object.keys(
-    cloudSnap.data().storage
-  ).length > 0;
+showToast(`Welcome @${plannerName}`);
 
+// refresh UI after restore
+setTimeout(() => {
 
-// ==========================================
-// CLOUD EXISTS
-// ==========================================
+  window.location.href =
+    window.location.pathname +
+    "?refresh=" + Date.now();
 
-if (hasCloudData) {
+}, 1200);
 
-  await restorePlannerData(uid);
-
-  showToast("Cloud restored");
-
-  setTimeout(() => {
-
-  // force fresh reload
-    window.location.href =
-      window.location.pathname +
-      "?refresh=" + Date.now();
-
-  }, 1200);
-
-}
-
-
-// ==========================================
-// CLOUD EMPTY
-// ==========================================
-
-else if (hasLocalData) {
-
-  await uploadPlannerData(uid);
-
-  showToast("Local data synced");
-
-}
-
-
-// ==========================================
-// NOTHING EXISTS
-// ==========================================
-
-else {
-
-  showToast(`Welcome @${plannerName}`);
-
-}
 
 // CLOSE AUTH MODAL
 document
@@ -567,15 +518,6 @@ function getPlannerStorage() {
 }
 
 
-function getPlannerSnapshot() {
-
-  return {
-    storage: getPlannerStorage(),
-    updatedAt: Date.now()
-  };
-
-}
-
 // ==========================================
 // EMERGENCY BACKUP
 // ==========================================
@@ -627,8 +569,12 @@ function clearPlannerStorage() {
     const key = localStorage.key(i);
 
     if (
-      key.startsWith("fullmoon.pocketplanner.")
-    ) {
+  key.startsWith(
+    "fullmoon.pocketplanner."
+  ) &&
+  key !==
+  "fullmoon.pocketplanner.backup"
+) {
       keysToRemove.push(key);
     }
 
@@ -654,30 +600,37 @@ async function uploadPlannerData(uid) {
 
     isUploading = true;
 
-    const snapshot =
-      getPlannerSnapshot();
+    const plannerData =
+      getPlannerStorage();
 
-    const currentHash =
-      JSON.stringify(snapshot.storage);
+    const entries =
+      Object.entries(plannerData);
 
-    if (
-      currentHash ===
-      lastUploadedHash
-    ) {
+    for (const [key, value] of entries) {
 
-      isUploading = false;
-      return;
+      const plannerKey =
+        key.replace(
+          "fullmoon.pocketplanner.",
+          ""
+        );
+
+      await setDoc(
+
+        doc(
+          db,
+          "users",
+          uid,
+          "planners",
+          plannerKey
+        ),
+
+        value,
+
+        { merge: true }
+
+      );
 
     }
-
-    await setDoc(
-      doc(db, "plannerData", uid),
-      snapshot,
-      { merge: true }
-    );
-
-    lastUploadedHash =
-      currentHash;
 
     console.log("Cloud synced");
 
@@ -689,14 +642,13 @@ async function uploadPlannerData(uid) {
 
     isUploading = false;
 
-    console.error(
-      "Cloud sync failed",
-      err
-    );
+    console.error(err);
 
   }
 
 }
+
+
 // ==========================================
 // RESTORE CLOUD DATA
 // ==========================================
@@ -706,104 +658,89 @@ async function restorePlannerData(uid) {
   try {
 
     createEmergencyBackup();
+
     isRestoringFromCloud = true;
 
-    const snap =
-      await getDoc(
-        doc(db, "plannerData", uid)
+    const plannerKeys = [
+
+      "focusgrid",
+      "templates"
+
+      // add future planners here
+
+    ];
+
+    for (const plannerKey of plannerKeys) {
+
+      const snap = await getDoc(
+
+        doc(
+          db,
+          "users",
+          uid,
+          "planners",
+          plannerKey
+        )
+
       );
 
-    if (!snap.exists()) {
-      isRestoringFromCloud = false;
-      return false;
+      if (!snap.exists()) continue;
+
+      const cloudValue =
+        snap.data();
+
+      const localKey =
+        `fullmoon.pocketplanner.${plannerKey}`;
+
+      const rawLocal =
+        localStorage.getItem(localKey);
+
+      let localValue = null;
+
+      try {
+
+        localValue =
+          JSON.parse(rawLocal);
+
+      }
+
+      catch {}
+
+      let finalValue;
+
+      if (!localValue) {
+
+        finalValue = cloudValue;
+
+      }
+
+      else {
+
+        finalValue =
+
+          localValue.updatedAt >
+          cloudValue.updatedAt
+
+            ? localValue
+            : cloudValue;
+
+      }
+
+      localStorage.setItem(
+
+        localKey,
+
+        JSON.stringify(finalValue)
+
+      );
+
     }
 
-    const cloudData =
-      snap.data().storage || {};
-
-    const localData =
-      getPlannerStorage();
-
-    // ==========================================
-    // MERGE DATA
-    // ==========================================
-
-      const mergedData = {};
-
-      const allKeys = new Set([
-        ...Object.keys(cloudData),
-        ...Object.keys(localData)
-      ]);
-
-      allKeys.forEach(key => {
-
-        const cloudItem =
-          cloudData[key];
-
-        const localItem =
-          localData[key];
-
-        // ONLY LOCAL EXISTS
-        if (!cloudItem) {
-
-          mergedData[key] =
-            localItem;
-
-          return;
-
-        }
-
-        // ONLY CLOUD EXISTS
-        if (!localItem) {
-
-          mergedData[key] =
-            cloudItem;
-
-          return;
-
-        }
-
-        // BOTH EXIST
-        mergedData[key] =
-
-          localItem.updatedAt >
-          cloudItem.updatedAt
-
-            ? localItem
-            : cloudItem;
-
-      });
-
-    // ==========================================
-    // SAVE MERGED RESULT LOCALLY
-    // ==========================================
-
-    Object.entries(mergedData)
-      .forEach(([key, value]) => {
-
-        localStorage.setItem(
-          key,
-          JSON.stringify(value)
-        );
-
-      });
-
-    // ==========================================
-    // PUSH MERGED BACK TO CLOUD
-    // ==========================================
-
-    await setDoc(
-      doc(db, "plannerData", uid),
-      {
-        storage: mergedData,
-        updatedAt: Date.now()
-      },
-      { merge: true }
-    );
-
-    console.log("Cloud restored safely");
-
     isRestoringFromCloud = false;
+
+    console.log(
+      "Cloud restored safely"
+    );
 
     return true;
 
