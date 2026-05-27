@@ -41,7 +41,7 @@ const firebaseConfig = {
 
 
 // ==========================================
-// INIT
+// INITIALIZE FIREBASE
 // ==========================================
 
 const app = initializeApp(firebaseConfig);
@@ -49,6 +49,18 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 const db = getFirestore(app);
+
+// ==========================================
+// SYNC FLAGS
+// ==========================================
+
+let isRestoringFromCloud = false;
+
+let lastUploadedHash = "";
+
+let syncTimeout;
+
+let isUploading = false;
 
 
 // ==========================================
@@ -335,7 +347,12 @@ if (hasCloudData) {
   showToast("Cloud restored");
 
   setTimeout(() => {
-    location.reload();
+
+  // force fresh reload
+    window.location.href =
+      window.location.pathname +
+      "?refresh=" + Date.now();
+
   }, 1200);
 
 }
@@ -456,6 +473,7 @@ onConfirm: async () => {
 
   try {
 
+    createEmergencyBackup();
     showToast("Syncing cloud...");
 
     // wait for upload
@@ -503,17 +521,44 @@ function getPlannerStorage() {
 
   const data = {};
 
-  for (let i = 0; i < localStorage.length; i++) {
+  for (
+    let i = 0;
+    i < localStorage.length;
+    i++
+  ) {
 
-    const key = localStorage.key(i);
+    const key =
+      localStorage.key(i);
 
     if (
-      key.startsWith("fullmoon.pocketplanner.")
-    ) {
+  key.startsWith(
+    "fullmoon.pocketplanner."
+  )
+) {
 
-      data[key] = localStorage.getItem(key);
+  const rawValue =
+    localStorage.getItem(key);
 
-    }
+  try {
+
+    data[key] =
+      JSON.parse(rawValue);
+
+  }
+
+  catch {
+
+    data[key] = {
+
+      data: rawValue,
+
+      updatedAt: 0
+
+    };
+
+  }
+
+}
 
   }
 
@@ -521,6 +566,51 @@ function getPlannerStorage() {
 
 }
 
+
+function getPlannerSnapshot() {
+
+  return {
+    storage: getPlannerStorage(),
+    updatedAt: Date.now()
+  };
+
+}
+
+// ==========================================
+// EMERGENCY BACKUP
+// ==========================================
+
+function createEmergencyBackup() {
+
+  try {
+
+    const backup = {
+      createdAt: Date.now(),
+      storage: getPlannerStorage()
+    };
+
+    originalSetItem.call(
+      localStorage,
+      "fullmoon.pocketplanner.backup",
+      JSON.stringify(backup)
+    );
+
+    console.log(
+      "Emergency backup created"
+    );
+
+  }
+
+  catch(err){
+
+    console.error(
+      "Backup failed",
+      err
+    );
+
+  }
+
+}
 
 
 // ==========================================
@@ -556,47 +646,178 @@ function clearPlannerStorage() {
 
 async function uploadPlannerData(uid) {
 
-  const plannerData =
-    getPlannerStorage();
+  try {
 
-  await setDoc(
-    doc(db, "plannerData", uid),
-    {
-      storage: plannerData,
-      updatedAt: Date.now()
+    if (isRestoringFromCloud) return;
+
+    if (isUploading) return;
+
+    isUploading = true;
+
+    const snapshot =
+      getPlannerSnapshot();
+
+    const currentHash =
+      JSON.stringify(snapshot.storage);
+
+    if (
+      currentHash ===
+      lastUploadedHash
+    ) {
+
+      isUploading = false;
+      return;
+
     }
-  );
 
-  console.log("Cloud synced");
+    await setDoc(
+      doc(db, "plannerData", uid),
+      snapshot,
+      { merge: true }
+    );
+
+    lastUploadedHash =
+      currentHash;
+
+    console.log("Cloud synced");
+
+    isUploading = false;
+
+  }
+
+  catch(err){
+
+    isUploading = false;
+
+    console.error(
+      "Cloud sync failed",
+      err
+    );
+
+  }
 
 }
-
 // ==========================================
 // RESTORE CLOUD DATA
 // ==========================================
 
 async function restorePlannerData(uid) {
 
-  const snap =
-    await getDoc(
-      doc(db, "plannerData", uid)
+  try {
+
+    createEmergencyBackup();
+    isRestoringFromCloud = true;
+
+    const snap =
+      await getDoc(
+        doc(db, "plannerData", uid)
+      );
+
+    if (!snap.exists()) {
+      isRestoringFromCloud = false;
+      return false;
+    }
+
+    const cloudData =
+      snap.data().storage || {};
+
+    const localData =
+      getPlannerStorage();
+
+    // ==========================================
+    // MERGE DATA
+    // ==========================================
+
+      const mergedData = {};
+
+      const allKeys = new Set([
+        ...Object.keys(cloudData),
+        ...Object.keys(localData)
+      ]);
+
+      allKeys.forEach(key => {
+
+        const cloudItem =
+          cloudData[key];
+
+        const localItem =
+          localData[key];
+
+        // ONLY LOCAL EXISTS
+        if (!cloudItem) {
+
+          mergedData[key] =
+            localItem;
+
+          return;
+
+        }
+
+        // ONLY CLOUD EXISTS
+        if (!localItem) {
+
+          mergedData[key] =
+            cloudItem;
+
+          return;
+
+        }
+
+        // BOTH EXIST
+        mergedData[key] =
+
+          localItem.updatedAt >
+          cloudItem.updatedAt
+
+            ? localItem
+            : cloudItem;
+
+      });
+
+    // ==========================================
+    // SAVE MERGED RESULT LOCALLY
+    // ==========================================
+
+    Object.entries(mergedData)
+      .forEach(([key, value]) => {
+
+        localStorage.setItem(
+          key,
+          JSON.stringify(value)
+        );
+
+      });
+
+    // ==========================================
+    // PUSH MERGED BACK TO CLOUD
+    // ==========================================
+
+    await setDoc(
+      doc(db, "plannerData", uid),
+      {
+        storage: mergedData,
+        updatedAt: Date.now()
+      },
+      { merge: true }
     );
 
-  if (!snap.exists()) return false;
+    console.log("Cloud restored safely");
 
-  const cloudData =
-    snap.data().storage || {};
+    isRestoringFromCloud = false;
 
-  clearPlannerStorage();
+    return true;
 
-  Object.entries(cloudData)
-    .forEach(([key, value]) => {
+  }
 
-      localStorage.setItem(key, value);
+  catch(err){
 
-    });
+    isRestoringFromCloud = false;
 
-  return true;
+    console.error(err);
+
+    return false;
+
+  }
 
 }
 
@@ -609,18 +830,101 @@ window.addEventListener("beforeunload", async () => {
 
   if (!user) return;
 
+  createEmergencyBackup();
+
   await uploadPlannerData(user.uid);
 
 });
 
-setInterval(async () => {
+
+
+// ==========================================
+// PATCH CLOUD STORAGE
+// ==========================================
+
+function queueCloudSync() {
 
   const user = auth.currentUser;
 
   if (!user) return;
 
-  await uploadPlannerData(user.uid);
+  if (isRestoringFromCloud) return;
 
-  console.log("Auto synced");
+  clearTimeout(syncTimeout);
 
-}, 30000);
+  syncTimeout = setTimeout(async () => {
+
+    try {
+
+      await uploadPlannerData(user.uid);
+
+    }
+
+    catch(err){
+
+      console.error(
+        "Auto sync failed",
+        err
+      );
+
+    }
+
+  }, 1500);
+
+}
+
+// ==========================================
+// PATCH LOCALSTORAGE
+// ==========================================
+
+const originalSetItem =
+  localStorage.setItem;
+
+localStorage.setItem = function(key, value) {
+
+  // run original localStorage
+  originalSetItem.apply(
+    this,
+    [key, value]
+  );
+
+  // only sync planner keys
+  if (
+    key.startsWith(
+      "fullmoon.pocketplanner."
+    )
+  ) {
+
+    queueCloudSync();
+
+  }
+
+};
+
+
+// ==========================================
+// PATCH REMOVE ITEM
+// ==========================================
+
+const originalRemoveItem =
+  localStorage.removeItem;
+
+localStorage.removeItem =
+function(key) {
+
+  originalRemoveItem.apply(
+    this,
+    [key]
+  );
+
+  if (
+    key.startsWith(
+      "fullmoon.pocketplanner."
+    )
+  ) {
+
+    queueCloudSync();
+
+  }
+
+};
