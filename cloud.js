@@ -20,10 +20,11 @@ import {
   getFirestore,
   doc,
   setDoc,
-  getDoc
+  getDoc,
+  collection,
+  getDocs
 } from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 
 
 // ==========================================
@@ -481,10 +482,12 @@ function getPlannerStorage() {
     const key =
       localStorage.key(i);
 
-    if (
+if (
   key.startsWith(
     "fullmoon.pocketplanner."
-  )
+  ) &&
+  key !==
+  "fullmoon.pocketplanner.backup"
 ) {
 
   const rawValue =
@@ -661,80 +664,71 @@ async function restorePlannerData(uid) {
 
     isRestoringFromCloud = true;
 
-    const plannerKeys = [
+    const plannersRef =
+  collection(
+    db,
+    "users",
+    uid,
+    "planners"
+  );
 
-      "focusgrid",
-      "templates"
+const snapshot =
+  await getDocs(plannersRef);
 
-      // add future planners here
+for (const plannerDoc of snapshot.docs) {
 
-    ];
+  const plannerKey =
+    plannerDoc.id;
 
-    for (const plannerKey of plannerKeys) {
+  const cloudValue =
+    plannerDoc.data();
 
-      const snap = await getDoc(
+  const localKey =
+    `fullmoon.pocketplanner.${plannerKey}`;
 
-        doc(
-          db,
-          "users",
-          uid,
-          "planners",
-          plannerKey
-        )
+  const rawLocal =
+    localStorage.getItem(localKey);
 
-      );
+  let localValue = null;
 
-      if (!snap.exists()) continue;
+  try {
 
-      const cloudValue =
-        snap.data();
+    localValue =
+      JSON.parse(rawLocal);
 
-      const localKey =
-        `fullmoon.pocketplanner.${plannerKey}`;
+  }
 
-      const rawLocal =
-        localStorage.getItem(localKey);
+  catch {}
 
-      let localValue = null;
+  let finalValue;
 
-      try {
+  if (!localValue) {
 
-        localValue =
-          JSON.parse(rawLocal);
+    finalValue = cloudValue;
 
-      }
+  }
 
-      catch {}
+  else {
 
-      let finalValue;
+    finalValue =
 
-      if (!localValue) {
+      localValue.updatedAt >
+      cloudValue.updatedAt
 
-        finalValue = cloudValue;
+        ? localValue
+        : cloudValue;
 
-      }
+  }
 
-      else {
+  localStorage.setItem(
 
-        finalValue =
+    localKey,
 
-          localValue.updatedAt >
-          cloudValue.updatedAt
+    JSON.stringify(finalValue)
 
-            ? localValue
-            : cloudValue;
+  );
 
-      }
-
-      localStorage.setItem(
-
-        localKey,
-
-        JSON.stringify(finalValue)
-
-      );
-
-    }
+}
 
     isRestoringFromCloud = false;
 

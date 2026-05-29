@@ -164,8 +164,35 @@ const categoryMeta = {
   }
 };
 
-let myTemplates = JSON.parse(localStorage.getItem("fullmoon.pocketplanner.templates")) || [];
+const savedTemplates =
+  JSON.parse(
+    localStorage.getItem(
+      "fullmoon.pocketplanner.templates"
+    )
+  );
+
+let myTemplates =
+  savedTemplates?.data || [];
 let currentView = "grid";
+
+/* ==========================================
+     Saved Templates Structure in localStorage:
+  ========================================== */
+
+function saveTemplates() {
+
+  localStorage.setItem(
+
+    "fullmoon.pocketplanner.templates",
+
+    JSON.stringify({
+      data: myTemplates,
+      updatedAt: Date.now()
+    })
+
+  );
+
+}
 
 /* ==========================================
      5. Service Worker Registration
@@ -612,7 +639,7 @@ function setupTemplateButtons() {
 
   if (!exists) {
     myTemplates.push(selectedTemplate);
-    localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
+    saveTemplates();
   }
 
   // get current active filter
@@ -801,7 +828,7 @@ function setupDeleteButtons() {
 
       // remove from state
       myTemplates = myTemplates.filter(t => t.id !== id);
-      localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
+      saveTemplates();
 
       // 🔥 RE-RENDER CURRENT PAGE
       const activePage = document.querySelector(".nav-item.active")?.dataset.page;
@@ -848,7 +875,7 @@ function setupReorderButtons() {
       [myTemplates[index - 1], myTemplates[index]] =
       [myTemplates[index], myTemplates[index - 1]];
 
-      localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
+      saveTemplates();
 
       // re-render SAME view
       document.getElementById("content").innerHTML = renderMySpace(currentView);
@@ -875,7 +902,7 @@ function setupReorderButtons() {
       [myTemplates[index + 1], myTemplates[index]] =
       [myTemplates[index], myTemplates[index + 1]];
 
-      localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
+      saveTemplates();
 
       // re-render SAME view
       document.getElementById("content").innerHTML = renderMySpace(currentView);
@@ -929,7 +956,7 @@ function setupEditButtons() {
         }
 
         template.name = newName;
-        localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
+        saveTemplates();
 
         const newSpan = document.createElement("span");
         newSpan.className = "template-name";
@@ -992,7 +1019,7 @@ function setupDrag() {
       myTemplates[fromIndex] = myTemplates[toIndex];
       myTemplates[toIndex] = temp;
 
-      localStorage.setItem("fullmoon.pocketplanner.templates", JSON.stringify(myTemplates));
+      saveTemplates();
 
       // re-render
       document.getElementById("content").innerHTML = renderMySpace(currentView);
