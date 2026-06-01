@@ -171,8 +171,21 @@ const savedTemplates =
     )
   );
 
-let myTemplates =
-  savedTemplates?.data || [];
+let myTemplates = [];
+
+const savedTemplates = JSON.parse(
+  localStorage.getItem(
+    "fullmoon.pocketplanner.templates"
+  )
+);
+
+console.log(savedTemplates);
+
+myTemplates = Array.isArray(savedTemplates?.data)
+  ? savedTemplates.data
+  : [];
+
+  console.log(myTemplates);
 let currentView = "grid";
 
 /* ==========================================
