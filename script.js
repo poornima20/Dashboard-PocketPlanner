@@ -665,6 +665,13 @@ setTimeout(() => {
   ========================================== */
 
 function renderMySpace(view = "grid") {
+
+
+
+  console.log("myTemplates =", myTemplates);
+  console.log("Array?", Array.isArray(myTemplates));
+  console.log("typeof =", typeof myTemplates);
+
   
     let html = `
     <div class="myspace-header">
