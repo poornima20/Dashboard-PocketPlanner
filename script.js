@@ -163,7 +163,6 @@ const categoryMeta = {
     desc: "Organize playlists and inspiration"
   }
 };
-
 const savedTemplates =
   JSON.parse(
     localStorage.getItem(
@@ -171,21 +170,13 @@ const savedTemplates =
     )
   );
 
-let myTemplates = [];
+let myTemplates =
+  Array.isArray(savedTemplates?.data)
+    ? savedTemplates.data
+    : [];
 
-const savedTemplates = JSON.parse(
-  localStorage.getItem(
-    "fullmoon.pocketplanner.templates"
-  )
-);
-
-console.log(savedTemplates);
-
-myTemplates = Array.isArray(savedTemplates?.data)
-  ? savedTemplates.data
-  : [];
-
-  console.log(myTemplates);
+console.log("savedTemplates", savedTemplates);
+console.log("myTemplates", myTemplates);
 let currentView = "grid";
 
 /* ==========================================
