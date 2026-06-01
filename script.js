@@ -1,6 +1,8 @@
 /* ==========================================
      0. Template Data
   ========================================== */
+
+  console.log("SCRIPT VERSION 2026-06-01-1");
 const templatesData = {
   dated: {
     "Daily Planner": [
