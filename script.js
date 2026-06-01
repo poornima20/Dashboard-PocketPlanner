@@ -670,13 +670,6 @@ setTimeout(() => {
 
 function renderMySpace(view = "grid") {
 
-
-alert(
-  "Array? " + Array.isArray(myTemplates) +
-  "\nType: " + typeof myTemplates +
-  "\nValue: " + JSON.stringify(myTemplates)
-);
-
   
     let html = `
     <div class="myspace-header">
