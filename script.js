@@ -177,8 +177,6 @@ let myTemplates =
     ? savedTemplates.data
     : [];
 
-console.log("savedTemplates", savedTemplates);
-console.log("myTemplates", myTemplates);
 let currentView = "grid";
 
 /* ==========================================
@@ -627,22 +625,6 @@ function setupTemplateButtons() {
 
   for (let section in templatesData) {
     for (let category in templatesData[section]) {
-
-      console.log(
-  "section:",
-  section,
-  "category:",
-  category,
-  "value:",
-  templatesData[section][category]
-);
-
-console.log(
-  "isArray:",
-  Array.isArray(
-    templatesData[section][category]
-  )
-);
       templatesData[section][category].forEach(t => {
         if (t.url === url) {
           selectedTemplate = {
@@ -738,10 +720,6 @@ alert(
 
 if (view === "grid") {
   html += `<div class="template-grid">`;
-
-  console.log("myTemplates =", myTemplates);
-console.log("constructor =", myTemplates?.constructor?.name);
-console.log("Array?", Array.isArray(myTemplates));
 
   myTemplates.forEach(template => {
     html += `
