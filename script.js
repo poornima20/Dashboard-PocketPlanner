@@ -709,6 +709,10 @@ function renderMySpace(view = "grid") {
 if (view === "grid") {
   html += `<div class="template-grid">`;
 
+  console.log("myTemplates =", myTemplates);
+console.log("constructor =", myTemplates?.constructor?.name);
+console.log("Array?", Array.isArray(myTemplates));
+
   myTemplates.forEach(template => {
     html += `
       <div class="template-card" draggable="true" data-id="${template.id}">
