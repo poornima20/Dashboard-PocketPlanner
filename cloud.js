@@ -599,6 +599,8 @@ function clearPlannerStorage() {
 // SAVE CLOUD DATA
 // ==========================================
 
+console.log("uploadPlannerData started");
+
 async function uploadPlannerData(uid) {
 
   try {
@@ -609,8 +611,8 @@ async function uploadPlannerData(uid) {
 
     isUploading = true;
 
-    const plannerData =
-      getPlannerStorage();
+    const plannerData = getPlannerStorage();
+    console.log("plannerData", plannerData);
 
     const entries =
       Object.entries(plannerData);
@@ -623,6 +625,7 @@ async function uploadPlannerData(uid) {
           ""
         );
 
+        console.log("Uploading:", plannerKey, value);
       await setDoc(
 
         doc(
@@ -778,7 +781,8 @@ window.addEventListener("beforeunload", async () => {
 // ==========================================
 // PATCH CLOUD STORAGE
 // ==========================================
-
+console.log("queueCloudSync fired");
+console.log("currentUser =", auth.currentUser);
 function queueCloudSync() {
 
   const user = auth.currentUser;
