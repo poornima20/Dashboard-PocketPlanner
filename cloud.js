@@ -379,6 +379,12 @@ onAuthStateChanged(auth, async (user) => {
   const plannerName =
     userSnap.data().plannerName;
 
+  await restorePlannerData(user.uid);
+
+  if (window.refreshPlannerState) {
+  window.refreshPlannerState();
+}
+
   // SAVE LOCALLY
   localStorage.setItem(
     "plannerName",

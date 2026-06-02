@@ -180,6 +180,55 @@ let myTemplates =
 let currentView = "grid";
 
 /* ==========================================
+    Reload templates from Storage
+  ========================================== */
+function reloadTemplatesFromStorage() {
+
+  const savedTemplates =
+    JSON.parse(
+      localStorage.getItem(
+        "fullmoon.pocketplanner.templates"
+      )
+    );
+
+  myTemplates =
+    Array.isArray(savedTemplates?.data)
+      ? savedTemplates.data
+      : [];
+
+}
+
+window.refreshPlannerState = function () {
+
+  reloadTemplatesFromStorage();
+
+  const activePage =
+    document.querySelector(".nav-item.active")
+      ?.dataset.page || "all";
+
+  const pageMap = {
+    all: () => renderMySpace(currentView),
+    dated: () => renderFilteredTemplates("dated"),
+    undated: () => renderFilteredTemplates("undated"),
+    templates: () => renderTemplates()
+  };
+
+  document.getElementById("content").innerHTML =
+    pageMap[activePage]();
+
+  setTimeout(() => {
+
+    lucide.createIcons();
+
+    setupAllCardActions();
+
+    setupViewToggle();
+
+  }, 0);
+
+};
+
+/* ==========================================
      Saved Templates Structure in localStorage:
   ========================================== */
 
