@@ -497,6 +497,9 @@ mobileMenuBtn.onclick = () => {
   if (page === "templates") {
     setupTemplateButtons();
     setupTemplateToggle();
+    setupTemplateCategories();
+    setupTemplateSticky();
+    lucide.createIcons();
   }
 
   if (page === "dated" || page === "undated") {
@@ -576,6 +579,70 @@ function renderTemplates(filter = "all") {
     </div>
   </div>
 `;
+
+/* ==========================================
+   TEMPLATE CATEGORY NAVIGATION
+========================================== */
+
+let navCategories = {};
+
+if (filter === "dated") {
+
+  navCategories = templatesData.dated;
+
+}
+else if (filter === "undated") {
+
+  navCategories = templatesData.undated;
+
+}
+else {
+
+  navCategories = {
+    ...templatesData.dated,
+    ...templatesData.undated
+  };
+
+}
+
+html += `
+<div class="template-nav-wrap">
+  <div class="template-categories">
+`;
+
+Object.keys(navCategories).forEach(category => {
+
+  const meta = categoryMeta[category] || {};
+
+  const sectionId =
+    category
+      .toLowerCase()
+      .replace(/\s+/g, "-");
+
+  const label =
+    category.replace(" Planner", "");
+
+  html += `
+    <button
+      class="cat-btn"
+      data-target="${sectionId}"
+    >
+      <i
+        data-lucide="${meta.icon || "folder"}"
+        class="cat-icon"
+      ></i>
+
+      <span>${label}</span>
+    </button>
+  `;
+});
+
+html += `
+  </div>
+</div>
+
+<div class="template-nav-placeholder"></div>
+`;
   for (let section in templatesData) {
 
     if (filter !== "all" && section !== filter) continue;
@@ -587,9 +654,9 @@ function renderTemplates(filter = "all") {
   const icon = meta.icon || "folder";
   const desc = meta.desc || "";
   
+const sectionId = category.toLowerCase().replace(/\s+/g, "-");
 
-  html += `
-    <div class="template-group">
+html += `<div class="template-group" id="${sectionId}">
 
       <div class="template-category">
       <div class="category-left">
@@ -634,6 +701,80 @@ function renderTemplates(filter = "all") {
 }
 
 /* ==========================================
+  Template Categories Scroll Logic
+  ========================================== */
+
+function setupTemplateCategories(){
+
+  document
+    .querySelectorAll(".cat-btn")
+    .forEach(btn=>{
+
+      btn.addEventListener("click",()=>{
+
+        const target =
+          btn.dataset.target;
+
+        const section =
+          document.getElementById(target);
+
+        if(!section) return;
+
+        const y =
+          section.getBoundingClientRect().top +
+          window.scrollY -
+          80;
+
+        window.scrollTo({
+          top:y,
+          behavior:"smooth"
+        });
+
+      });
+
+    });
+
+}
+
+/* ==========================================
+  Template Categories Sticky Logic
+  ========================================== */
+function setupTemplateSticky() {
+
+  const wrap =
+    document.querySelector(".template-nav-wrap");
+
+  if (!wrap) return;
+
+  const start =
+    wrap.getBoundingClientRect().top +
+    window.scrollY;
+
+  window.addEventListener("scroll", () => {
+
+    if (window.scrollY >= start) {
+
+      wrap.classList.add("fixed-nav");
+
+      wrap.style.width =
+        `${wrap.parentElement.clientWidth}px`;
+
+      wrap.style.left =
+        `${wrap.parentElement.getBoundingClientRect().left}px`;
+
+    } else {
+
+      wrap.classList.remove("fixed-nav");
+
+      wrap.style.width = "";
+      wrap.style.left = "";
+    }
+
+  });
+
+}
+
+/* ==========================================
      6. Render Templates : Inside TOggle 
   ========================================== */
 
@@ -655,6 +796,8 @@ function setupTemplateToggle() {
       // re-bind buttons again (important)
       setupTemplateButtons();
       setupTemplateToggle();
+      setupTemplateCategories();
+      setupTemplateSticky();
       lucide.createIcons(); // 🔥 ADD THIS
     });
   });
@@ -723,6 +866,8 @@ document.getElementById("content").innerHTML = renderTemplates(currentFilter);
 setTimeout(() => {
   setupTemplateButtons();
   setupTemplateToggle();
+  setupTemplateCategories();
+  setupTemplateSticky();
   lucide.createIcons();
 }, 0);
 
