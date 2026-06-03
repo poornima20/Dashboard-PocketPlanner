@@ -60,6 +60,7 @@ let isRestoringFromCloud = false;
 let syncTimeout;
 
 let isUploading = false;
+let pendingSync = false;
 
 
 // ==========================================
@@ -607,7 +608,13 @@ async function uploadPlannerData(uid) {
 
     if (isRestoringFromCloud) return;
 
-    if (isUploading) return;
+    if (isUploading) {
+
+      pendingSync = true;
+
+      return;
+
+    }
 
     isUploading = true;
 
@@ -647,6 +654,11 @@ async function uploadPlannerData(uid) {
     console.log("Cloud synced");
 
     isUploading = false;
+
+    if (pendingSync) {
+      pendingSync = false;
+      uploadPlannerData(uid);
+    }
 
   }
 
@@ -869,3 +881,37 @@ function(key) {
   }
 
 };
+
+
+// ==========================================
+// Notify cloud sync on planner changes
+// ==========================================
+
+window.addEventListener(
+  "message",
+  async (event) => {
+
+    if (
+      event.data?.type !==
+      "plannerChanged"
+    ) return;
+
+    console.log(
+      "plannerChanged received",
+      Date.now()
+    );
+
+    const user = auth.currentUser;
+
+    if (!user) return;
+
+    console.log(
+      "Planner changed → syncing"
+    );
+
+    await uploadPlannerData(
+      user.uid
+    );
+
+  }
+);
