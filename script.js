@@ -245,6 +245,24 @@ function saveTemplates() {
 
   );
 
+  notifyDashboardSync();
+
+}
+
+function notifyDashboardSync() {
+
+  if (window.parent !== window) {
+
+    window.parent.postMessage(
+      {
+        type: "plannerChanged",
+        planner: "fullmoon.pocketplanner.templates"
+      },
+      "*"
+    );
+
+  }
+
 }
 
 /* ==========================================
