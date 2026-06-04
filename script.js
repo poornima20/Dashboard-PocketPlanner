@@ -201,6 +201,7 @@ function reloadTemplatesFromStorage() {
 window.refreshPlannerState = function () {
 
   reloadTemplatesFromStorage();
+  updatePlannerCounter();
 
   const activePage =
     document.querySelector(".nav-item.active")
@@ -307,6 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const searchBox = document.getElementById("searchBox");
   const searchInput = document.getElementById("searchInput");
+  const syncCloudBtn =  document.getElementById("syncCloudBtn");
 
     
   /* ==========================================
@@ -434,6 +436,68 @@ if (fabHome) {
 }
 
 
+/* ==========================================
+   Sync Status
+========================================== */
+function showSyncStatus(text){
+
+  const btn =
+    document.getElementById("syncCloudBtn");
+
+  if(!btn) return;
+
+  btn.textContent = text;
+}
+
+syncCloudBtn?.addEventListener(
+  "click",
+  async () => {
+
+    try{
+
+      if (!window.syncTemplatesToFirestore) {
+
+        showSyncStatus("Login First");
+
+        setTimeout(() => {
+
+          showSyncStatus("Sync");
+
+        }, 2000);
+
+        return;
+      }
+
+      showSyncStatus("Syncing...");
+
+      await window.syncTemplatesToFirestore();
+
+      showSyncStatus("Synced to Cloud !");
+
+      setTimeout(() => {
+
+        showSyncStatus("Sync");
+
+      }, 2000);
+
+    }
+    catch(err){
+
+      console.error(err);
+
+      showSyncStatus("Failed to Sync / Login First");
+
+      setTimeout(() => {
+
+        showSyncStatus("Sync");
+
+      }, 2000);
+
+    }
+
+  }
+);
+
   /* ==========================================
     MObiel onclick toggle
   ========================================== */
@@ -559,6 +623,7 @@ navItems.forEach(item => {
     });
   });
   loadPage("all", "My Space");
+  updatePlannerCounter();
 
 });
 
@@ -854,6 +919,7 @@ function setupTemplateButtons() {
   if (!exists) {
     myTemplates.push(selectedTemplate);
     saveTemplates();
+    updatePlannerCounter();
   }
 
   // get current active filter
@@ -1046,6 +1112,7 @@ function setupDeleteButtons() {
       // remove from state
       myTemplates = myTemplates.filter(t => t.id !== id);
       saveTemplates();
+      updatePlannerCounter();
 
       // 🔥 RE-RENDER CURRENT PAGE
       const activePage = document.querySelector(".nav-item.active")?.dataset.page;
@@ -1471,3 +1538,31 @@ authTabs.forEach(tab => {
 });
 
 
+/* ==========================================
+   Footer Planner Counter
+========================================== */
+
+function updatePlannerCounter() {
+
+  let totalTemplates = 0;
+
+  Object.values(templatesData).forEach(section => {
+
+    Object.values(section).forEach(category => {
+
+      totalTemplates += category.length;
+
+    });
+
+  });
+
+  const addedCount = myTemplates.length;
+
+  const usageText =
+    document.getElementById("usageText");
+
+  if (!usageText) return;
+
+  usageText.textContent =
+    `${addedCount} / ${totalTemplates} planners added`;
+}

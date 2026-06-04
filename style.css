@@ -1931,48 +1931,31 @@ body.viewer-active .content {
 }
 
 .template-categories{
-
   display: flex;
   flex-wrap: wrap;
-
   gap: 8px;
-
   padding: 12px 0;
-
 }
 
 .template-categories .cat-btn{
-
   border: none;
-
   background: var(--section-color);
-
   color: var(--button-text-color);
-
   padding: 8px 14px;
-
   border-radius: 999px;
-
   cursor: pointer;
-
   transition: .2s ease;
-
   font-size: 12px;
-
   white-space: nowrap;
 }
 
 .template-categories .cat-btn:hover{
-
   color: white;
-
   background: rgba(255,255,255,.08);
 }
 
 .template-categories .cat-btn.active{
-
   color: white;
-
   background: rgba(255,255,255,.12);
 }
 
@@ -1980,19 +1963,12 @@ body.viewer-active .content {
    SCROLLED STATE
 ========================== */
 .fixed-nav{
-
   position: fixed;
-
   top: 0;
-
   width: inherit;
-
   z-index: 1000;
-
   background: var(--bg-color);
-
   border-bottom: 1px solid var(--divider);
-
   padding: 12px 0;
 }
 
@@ -2012,32 +1988,41 @@ body.sidebar-collapsed .fixed-nav{
 }
 
 .cat-btn{
-
   display:flex;
   align-items:center;
   gap:8px;
-
   border:none;
-
   background:var(--section-color);
-
   color:var(--button-text-color);
-
   padding:8px 14px;
-
   border-radius:999px;
-
   cursor:pointer;
-
   transition:.2s ease;
-
   font-size:12px;
 }
 
 .cat-icon{
-
   width:14px;
   height:14px;
-
   flex-shrink:0;
+}
+
+/* ==========================
+   Manual Sync Button 
+========================== */
+
+.sync-cloud-btn{
+  background:none;
+  border:none;
+  color:var(--accent-color);
+  cursor:pointer;
+  font-size:12px;
+  font-weight:500;
+  padding:0;
+  margin-left:8px;
+  transition:.2s ease;
+}
+
+.sync-cloud-btn:hover{
+  opacity:.8;
 }

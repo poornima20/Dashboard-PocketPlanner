@@ -909,9 +909,27 @@ window.addEventListener(
       "Planner changed → syncing"
     );
 
-    await uploadPlannerData(
-      user.uid
-    );
+    await uploadPlannerData(user.uid);
 
   }
 );
+
+
+/* ==========================================
+   Manual Sync Function
+========================================== */
+
+window.syncTemplatesToFirestore =
+async function () {
+
+  const user = auth.currentUser;
+
+  if (!user) {
+
+    throw new Error("Not logged in");
+
+  }
+
+  await uploadPlannerData(user.uid);
+
+};
