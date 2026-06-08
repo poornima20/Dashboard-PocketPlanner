@@ -2,7 +2,7 @@
      0. Template Data
   ========================================== */
 
-console.log("SCRIPT VERSION 0.1 - 01 June 2026");
+console.log("SCRIPT VERSION 0.3 - 08 June 2026");
 const templatesData = {
   dated: {
     "Daily Planner": [
