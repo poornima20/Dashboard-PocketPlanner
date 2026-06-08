@@ -1064,30 +1064,40 @@ if (view === "list") {
 
 
 function renderFilteredTemplates(type) {
+
+  const filtered =
+    myTemplates.filter(t => t.type === type);
+
   let html = `
-    <div class="craft-header">
-      <div class="craft-tag">
-        ${type === "dated" ? "Dated Planner" : "Undated Planner"}
+    <div class="craft-grid">
+
+      <div class="planner-indicator">
+        ${type === "dated"
+          ? "Dated Planner"
+          : "Undated Planner"}
       </div>
-    </div>
+  `;
+
+  if(filtered.length === 0){
+    html += `
+      <div class="empty-message">
+        No planners added yet
+      </div>
     `;
-
-  const filtered = myTemplates.filter(t => t.type === type);
-
-  if (filtered.length === 0) {
-    return html + `<div class="empty-message"> No planners added yet </div>`;
   }
 
-  html += `<div class="craft-grid">`;
-
   filtered.forEach(template => {
+
     html += `
       <div class="craft-card" data-id="${template.id || ''}">
-
-          <iframe class="craft-iframe" src="${template.url}" loading="lazy"></iframe>
-
+        <iframe
+          class="craft-iframe"
+          src="${template.url}"
+          loading="lazy">
+        </iframe>
       </div>
     `;
+
   });
 
   html += `</div>`;
@@ -1566,3 +1576,5 @@ function updatePlannerCounter() {
   usageText.textContent =
     `${addedCount} / ${totalTemplates} planners added`;
 }
+
+

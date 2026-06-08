@@ -1217,78 +1217,34 @@ body.viewer-active .content {
   margin: 12px;
 }
 
-/* ==========================================
-   FLOATING TAG
-========================================== */
-
-.craft-header {
-  position: sticky;
-
-  top: 18px;
-  left: 0;
-
-  z-index: 500;
-
-  pointer-events: none;
+.content.planner-mode{
+  margin:0;
+  padding-top:20px;
 }
 
-
-/* TAG */
-.craft-tag {
-  position: relative;
-
-  display: inline-flex;
-  align-items: center;
-
-  height: 30px;
-  padding: 0 16px 0 12px;
-
-  background: #000;
-  color: #fff;
-
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.2px;
-
-  border-radius: 4px 0 0 4px;
-  left: 10px;
+.craft-grid{
+  position:relative;
 }
 
-/* TRIANGLE */
-.craft-tag::after {
-  content: "";
+.planner-indicator{
+  position:fixed;
 
-  position: absolute;
-  top: 0;
-  right: -14.3px;
+  bottom:18px;
 
-  width: 0;
-  height: 0;
+  right:30px;
 
-  border-top: 15px solid transparent;
-  border-bottom: 15px solid transparent;
-  border-left: 15px solid #000;
+  color:rgba(0, 0, 0, 0.50);
+
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+
+  pointer-events:none;
+
+  z-index:50;
 }
 
-/* MOBILE */
-@media (max-width: 768px) {
-
-
-  .craft-tag {
-    height: 34px;
-    font-size: 11px;
-
-    padding: 0 16px 0 12px;
-  }
-
-  .craft-tag::after {
-    right: -16px;
-
-    border-top: 17px solid transparent;
-    border-bottom: 17px solid transparent;
-    border-left: 17px solid #000;
-  }
-}
 
 /* ==========================================
    IFRAME (FULL WIDTH STACKED)
