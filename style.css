@@ -1934,6 +1934,11 @@ body.sidebar-collapsed .fixed-nav{
   left: 56px;
 }
 
+/* Hide footer when sidebar collapsed */
+.sidebar:not(.expanded) .sidebar-footer{
+  display: none;
+}
+
 .template-nav-placeholder{
   display:none;
   height:60px;
