@@ -12,7 +12,7 @@ const VALID_PLANNERS = [
   "10minute",
   "focusgrid",
   "mediahistory",
-  "monthlygrid",
+  "monthlygrid", 
   "studylog",
   "tasklog",
   "templates",
@@ -119,11 +119,11 @@ const templatesData = {
 
   undated: {
     Goals: [
-      {
-        name: "Portfolio",
-        image: "./Icons/cornellnotes.png",
-        url: "https://poornima20.github.io/Fullmoon/",
-      },
+      // {
+      //   name: "Portfolio",
+      //   image: "./Icons/cornellnotes.png",
+      //   url: "https://poornima20.github.io/Fullmoon/",
+      // },
     ],
 
     Notes: [
