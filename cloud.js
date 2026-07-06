@@ -2,8 +2,7 @@
 // FIREBASE IMPORTS
 // ==========================================
 
-import { initializeApp } from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
   getAuth,
@@ -12,9 +11,8 @@ import {
   signOut,
   setPersistence,
   browserLocalPersistence,
-  onAuthStateChanged
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  onAuthStateChanged,
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
   getFirestore,
@@ -22,10 +20,9 @@ import {
   setDoc,
   getDoc,
   collection,
-  getDocs
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+  getDocs,
+  deleteDoc,
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // ==========================================
 // FIREBASE CONFIG
@@ -37,9 +34,8 @@ const firebaseConfig = {
   projectId: "pocket-planner-eeb28",
   storageBucket: "pocket-planner-eeb28.firebasestorage.app",
   messagingSenderId: "817631735021",
-  appId: "1:817631735021:web:777a8c8a71133e1b24b0e4"
+  appId: "1:817631735021:web:777a8c8a71133e1b24b0e4",
 };
-
 
 // ==========================================
 // INITIALIZE FIREBASE
@@ -62,60 +58,41 @@ let syncTimeout;
 let isUploading = false;
 let pendingSync = false;
 
-
 // ==========================================
 // KEEP LOGIN SESSION
 // ==========================================
 
-await setPersistence(
-  auth,
-  browserLocalPersistence
-);
+await setPersistence(auth, browserLocalPersistence);
 
 console.log("Firebase Connected");
-
-
-
-
-
 
 // ==========================================
 // ELEMENTS
 // ==========================================
 
-const signupBtn =
-document.getElementById("signupBtn");
+const signupBtn = document.getElementById("signupBtn");
 
-const loginBtn =
-document.getElementById("loginBtn");
+const loginBtn = document.getElementById("loginBtn");
 
-const cloudBtn =
-document.getElementById("cloudAccountBtn");
+const cloudBtn = document.getElementById("cloudAccountBtn");
 
-const confirmModal =
-document.getElementById("confirmModal");
+const confirmModal = document.getElementById("confirmModal");
 
-const confirmTitle =
-document.getElementById("confirmTitle");
+const confirmTitle = document.getElementById("confirmTitle");
 
-const confirmText =
-document.getElementById("confirmText");
+const confirmText = document.getElementById("confirmText");
 
-const confirmOkBtn =
-document.getElementById("confirmOkBtn");
+const confirmOkBtn = document.getElementById("confirmOkBtn");
 
-const confirmCancelBtn =
-document.getElementById("confirmCancelBtn");
+const confirmCancelBtn = document.getElementById("confirmCancelBtn");
 
 // ==========================================
 // ELEMENTS - toast and confirmation
 // ==========================================
 
-const toast =
-document.getElementById("toast");
+const toast = document.getElementById("toast");
 
 function showToast(message) {
-
   toast.innerText = message;
 
   toast.classList.add("show");
@@ -123,19 +100,14 @@ function showToast(message) {
   setTimeout(() => {
     toast.classList.remove("show");
   }, 2400);
-
 }
 
-
 function showConfirm({
-
   title = "Are you sure?",
   text = "",
   confirmButtonText = "Confirm",
-  onConfirm = () => {}
-
+  onConfirm = () => {},
 }) {
-
   confirmTitle.innerText = title;
 
   confirmText.innerText = text;
@@ -146,43 +118,52 @@ function showConfirm({
 
   // CANCEL
   confirmCancelBtn.onclick = () => {
-
     confirmModal.classList.remove("active");
-
   };
 
   // CONFIRM
   confirmOkBtn.onclick = async () => {
-
     confirmModal.classList.remove("active");
 
     await onConfirm();
-
   };
-
 }
 
+/* ===============================
+   CLEAN OLD FIRESTORE IDS
+================================ */
+
+async function cleanBadPlannerDocuments(uid) {
+  const snap = await getDocs(collection(db, "users", uid, "planners"));
+
+  const deletes = [];
+
+  snap.forEach((docSnap) => {
+    if (docSnap.id.includes(".")) {
+      console.log("Deleting old planner:", docSnap.id);
+
+      deletes.push(deleteDoc(docSnap.ref));
+    }
+  });
+
+  await Promise.all(deletes);
+
+  console.log("Firestore planner cleanup done");
+}
 
 // ==========================================
 // SIGNUP
 // ==========================================
 
 signupBtn?.addEventListener("click", async () => {
-
-  const plannerName =
-    document.getElementById("signupPlannerName")
-    .value
-    .trim()
+  const plannerName = document
+    .getElementById("signupPlannerName")
+    .value.trim()
     .toLowerCase();
 
-  const email =
-    document.getElementById("signupEmail")
-    .value
-    .trim();
+  const email = document.getElementById("signupEmail").value.trim();
 
-  const password =
-    document.getElementById("signupPassword")
-    .value;
+  const password = document.getElementById("signupPassword").value;
 
   if (!plannerName || !email || !password) {
     showToast("Fill all fields");
@@ -190,13 +171,10 @@ signupBtn?.addEventListener("click", async () => {
   }
 
   try {
-
     // CHECK UNIQUE NAME
-    const plannerRef =
-      doc(db, "plannerNames", plannerName);
+    const plannerRef = doc(db, "plannerNames", plannerName);
 
-    const plannerSnap =
-      await getDoc(plannerRef);
+    const plannerSnap = await getDoc(plannerRef);
 
     if (plannerSnap.exists()) {
       showToast("Planner name already taken");
@@ -204,81 +182,55 @@ signupBtn?.addEventListener("click", async () => {
     }
 
     // CREATE ACCOUNT
-    const userCred =
-      await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+    const userCred = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
 
     const uid = userCred.user.uid;
 
     // SAVE LOOKUP
-    await setDoc(
-      doc(db, "plannerNames", plannerName),
-      {
-        uid,
-        email
-      }
-    );
+    await setDoc(doc(db, "plannerNames", plannerName), {
+      uid,
+      email,
+    });
 
     // SAVE USER
-    await setDoc(
-      doc(db, "users", uid),
-      {
-        plannerName,
-        email
-      }
-    );
+    await setDoc(doc(db, "users", uid), {
+      plannerName,
+      email,
+    });
 
-    localStorage.setItem(
-      "plannerName",
-      plannerName
-    );
+    localStorage.setItem("plannerName", plannerName);
 
     signupBtn.innerText = "Account Created ✓";
 
     signupBtn.disabled = true;
 
     setTimeout(() => {
+      // switch to login tab
+      document.querySelector('[data-tab="login"]').click();
 
-    // switch to login tab
-    document.querySelector('[data-tab="login"]')
-        .click();
+      signupBtn.innerText = "Create Account";
 
-    signupBtn.innerText = "Create Account";
-
-    signupBtn.disabled = false;
-    document
-  .getElementById("authModal")
-  .classList.remove("active");
-
+      signupBtn.disabled = false;
+      document.getElementById("authModal").classList.remove("active");
     }, 1200);
-
-  }
-
-  catch(err) {
+  } catch (err) {
     console.error(err);
     showToast(err.message);
   }
-
 });
-
 
 // ==========================================
 // LOGIN
 // ==========================================
 
 loginBtn?.addEventListener("click", async () => {
+  const email = document.getElementById("loginEmail").value.trim();
 
-  const email =
-    document.getElementById("loginEmail")
-    .value
-    .trim();
-
-  const password =
-    document.getElementById("loginPassword")
-    .value;
+  const password = document.getElementById("loginPassword").value;
 
   if (!email || !password) {
     showToast("Fill all fields");
@@ -286,82 +238,59 @@ loginBtn?.addEventListener("click", async () => {
   }
 
   try {
-
-    const userCred =
-      await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+    const userCred = await signInWithEmailAndPassword(auth, email, password);
 
     const uid = userCred.user.uid;
 
     // GET USER DATA
-    const userSnap =
-      await getDoc(doc(db, "users", uid));
+    const userSnap = await getDoc(doc(db, "users", uid));
 
-    const plannerName =
-      userSnap.data().plannerName;
+    const plannerName = userSnap.data().plannerName;
 
-    localStorage.setItem(
-      "plannerName",
-      plannerName
-    );
+    localStorage.setItem("plannerName", plannerName);
 
     // ==========================================
-// CHECK LOCAL DATA
-// ==========================================
+    // CHECK LOCAL DATA
+    // ==========================================
 
-const localPlannerData =
-  getPlannerStorage();
+    const localPlannerData = getPlannerStorage();
 
+    // ==========================================
+    // RESTORE CLOUD
+    // ==========================================
 
-// ==========================================
-// RESTORE CLOUD
-// ==========================================
+    await restorePlannerData(uid);
 
-await restorePlannerData(uid);
+    showToast(`Welcome @${plannerName}`);
 
-showToast(`Welcome @${plannerName}`);
+    // refresh UI after restore
+    setTimeout(() => {
+      window.location.href =
+        window.location.pathname + "?refresh=" + Date.now();
+    }, 1200);
 
-// refresh UI after restore
-setTimeout(() => {
-
-  window.location.href =
-    window.location.pathname +
-    "?refresh=" + Date.now();
-
-}, 1200);
-
-
-// CLOSE AUTH MODAL
-document
-  .getElementById("authModal")
-  .classList.remove("active");
-
-  }
-
-  catch(err) {
+    // CLOSE AUTH MODAL
+    document.getElementById("authModal").classList.remove("active");
+  } catch (err) {
     console.error(err);
     showToast("Wrong email or password");
   }
-
 });
-
 
 // ==========================================
 // AUTH STATE
 // ==========================================
 
 onAuthStateChanged(auth, async (user) => {
-
   console.log("AUTH USER:", user);
+  if (user) {
+    await cleanBadPlannerDocuments(user.uid);
+  }
 
   if (!cloudBtn) return;
 
   // LOGGED OUT
   if (!user) {
-
     cloudBtn.innerHTML = `
       <i data-lucide="cloud"></i>
       <span>Cloud Account</span>
@@ -374,26 +303,21 @@ onAuthStateChanged(auth, async (user) => {
   }
 
   // GET USER DATA
-  const userSnap =
-    await getDoc(doc(db, "users", user.uid));
+  const userSnap = await getDoc(doc(db, "users", user.uid));
 
-  const plannerName =
-    userSnap.data().plannerName;
+  const plannerName = userSnap.data().plannerName;
 
   await restorePlannerData(user.uid);
 
   if (window.refreshPlannerState) {
-  window.refreshPlannerState();
-}
+    window.refreshPlannerState();
+  }
 
   // SAVE LOCALLY
-  localStorage.setItem(
-    "plannerName",
-    plannerName
-  );
+  localStorage.setItem("plannerName", plannerName);
 
   // CHANGE SIDEBAR UI
- cloudBtn.innerHTML = `
+  cloudBtn.innerHTML = `
   <div class="cloud-user">
 
     <div class="cloud-user-info">
@@ -412,188 +336,123 @@ onAuthStateChanged(auth, async (user) => {
   lucide.createIcons();
 
   // LOGOUT CLICK
-const logoutBtn =
-document.getElementById("logoutBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
 
-logoutBtn.onclick = (e) => {
+  logoutBtn.onclick = (e) => {
+    e.stopPropagation();
 
-  e.stopPropagation();
+    showConfirm({
+      title: "Logout?",
 
-  showConfirm({
+      text: "You will need to login again to access your cloud planners.",
 
-    title: "Logout?",
+      confirmButtonText: "Logout",
 
-    text:
-      "You will need to login again to access your cloud planners.",
+      onConfirm: async () => {
+        try {
+          createEmergencyBackup();
+          showToast("Syncing cloud...");
 
-    confirmButtonText: "Logout",
+          // wait for upload
+          await uploadPlannerData(user.uid);
 
-onConfirm: async () => {
+          // small safety delay
+          await new Promise((resolve) => setTimeout(resolve, 500));
 
-  try {
+          // clear local ONLY after successful upload
+          clearPlannerStorage();
+          sessionStorage.clear();
 
-    createEmergencyBackup();
-    showToast("Syncing cloud...");
+          localStorage.removeItem("plannerName");
 
-    // wait for upload
-    await uploadPlannerData(user.uid);
+          await signOut(auth);
 
-    // small safety delay
-    await new Promise(resolve =>
-      setTimeout(resolve, 500)
-    );
+          showToast("Logged out");
+        } catch (err) {
+          console.error(err);
 
-    // clear local ONLY after successful upload
-    clearPlannerStorage();
-    sessionStorage.clear();
-
-    localStorage.removeItem("plannerName");
-
-    await signOut(auth);
-
-    showToast("Logged out");
-
-  }
-
-  catch(err){
-
-    console.error(err);
-
-    showToast("Cloud sync failed");
-
-  }
-
-}
-
-  });
-
-};
-
+          showToast("Cloud sync failed");
+        }
+      },
+    });
+  };
 });
-
 
 // ==========================================
 // GET ALL PLANNER STORAGE
 // ==========================================
 
 function getPlannerStorage() {
-
   const data = {};
 
-  for (
-    let i = 0;
-    i < localStorage.length;
-    i++
-  ) {
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
 
-    const key =
-      localStorage.key(i);
+    if (
+      key.startsWith("fullmoon.pocketplanner.") &&
+      key !== "fullmoon.pocketplanner.backup"
+    ) {
+      const rawValue = localStorage.getItem(key);
 
-if (
-  key.startsWith(
-    "fullmoon.pocketplanner."
-  ) &&
-  key !==
-  "fullmoon.pocketplanner.backup"
-) {
+      try {
+        data[key] = JSON.parse(rawValue);
+      } catch {
+        data[key] = {
+          data: rawValue,
 
-  const rawValue =
-    localStorage.getItem(key);
-
-  try {
-
-    data[key] =
-      JSON.parse(rawValue);
-
-  }
-
-  catch {
-
-    data[key] = {
-
-      data: rawValue,
-
-      updatedAt: 0
-
-    };
-
-  }
-
-}
-
+          updatedAt: 0,
+        };
+      }
+    }
   }
 
   return data;
-
 }
-
 
 // ==========================================
 // EMERGENCY BACKUP
 // ==========================================
 
 function createEmergencyBackup() {
-
   try {
-
     const backup = {
       createdAt: Date.now(),
-      storage: getPlannerStorage()
+      storage: getPlannerStorage(),
     };
 
     originalSetItem.call(
       localStorage,
       "fullmoon.pocketplanner.backup",
-      JSON.stringify(backup)
+      JSON.stringify(backup),
     );
 
-    console.log(
-      "Emergency backup created"
-    );
-
+    console.log("Emergency backup created");
+  } catch (err) {
+    console.error("Backup failed", err);
   }
-
-  catch(err){
-
-    console.error(
-      "Backup failed",
-      err
-    );
-
-  }
-
 }
-
 
 // ==========================================
 // CLEAR ALL PLANNER STORAGE
 // ==========================================
 
-
 function clearPlannerStorage() {
-
   const keysToRemove = [];
 
   for (let i = 0; i < localStorage.length; i++) {
-
     const key = localStorage.key(i);
 
     if (
-  key.startsWith(
-    "fullmoon.pocketplanner."
-  ) &&
-  key !==
-  "fullmoon.pocketplanner.backup"
-) {
+      key.startsWith("fullmoon.pocketplanner.") &&
+      key !== "fullmoon.pocketplanner.backup"
+    ) {
       keysToRemove.push(key);
     }
-
   }
 
-  keysToRemove.forEach(key => {
+  keysToRemove.forEach((key) => {
     localStorage.removeItem(key);
   });
-
 }
 
 // ==========================================
@@ -603,17 +462,13 @@ function clearPlannerStorage() {
 console.log("uploadPlannerData started");
 
 async function uploadPlannerData(uid) {
-
   try {
-
     if (isRestoringFromCloud) return;
 
     if (isUploading) {
-
       pendingSync = true;
 
       return;
-
     }
 
     isUploading = true;
@@ -621,34 +476,19 @@ async function uploadPlannerData(uid) {
     const plannerData = getPlannerStorage();
     console.log("plannerData", plannerData);
 
-    const entries =
-      Object.entries(plannerData);
+    const entries = Object.entries(plannerData);
 
     for (const [key, value] of entries) {
+      const plannerKey = key.replace("fullmoon.pocketplanner.", "");
 
-      const plannerKey =
-        key.replace(
-          "fullmoon.pocketplanner.",
-          ""
-        );
-
-        console.log("Uploading:", plannerKey, value);
+      console.log("Uploading:", plannerKey, value);
       await setDoc(
-
-        doc(
-          db,
-          "users",
-          uid,
-          "planners",
-          plannerKey
-        ),
+        doc(db, "users", uid, "planners", plannerKey),
 
         value,
 
-        { merge: true }
-
+        { merge: true },
       );
-
     }
 
     console.log("Cloud synced");
@@ -659,125 +499,76 @@ async function uploadPlannerData(uid) {
       pendingSync = false;
       uploadPlannerData(uid);
     }
-
-  }
-
-  catch(err){
-
+  } catch (err) {
     isUploading = false;
 
     console.error(err);
-
   }
-
 }
-
 
 // ==========================================
 // RESTORE CLOUD DATA
 // ==========================================
 
 async function restorePlannerData(uid) {
-
   try {
-
     createEmergencyBackup();
 
     isRestoringFromCloud = true;
 
-    const plannersRef =
-  collection(
-    db,
-    "users",
-    uid,
-    "planners"
-  );
+    const plannersRef = collection(db, "users", uid, "planners");
 
-const snapshot =
-  await getDocs(plannersRef);
+    const snapshot = await getDocs(plannersRef);
 
-for (const plannerDoc of snapshot.docs) {
+    for (const plannerDoc of snapshot.docs) {
+      const plannerKey = plannerDoc.id;
 
-  const plannerKey =
-    plannerDoc.id;
+      const cloudValue = plannerDoc.data();
 
-  const cloudValue =
-    plannerDoc.data();
+      const localKey = `fullmoon.pocketplanner.${plannerKey}`;
 
-  const localKey =
-    `fullmoon.pocketplanner.${plannerKey}`;
+      const rawLocal = localStorage.getItem(localKey);
 
-  const rawLocal =
-    localStorage.getItem(localKey);
+      let localValue = null;
 
-  let localValue = null;
+      try {
+        localValue = JSON.parse(rawLocal);
+      } catch {}
 
-  try {
+      let finalValue;
 
-    localValue =
-      JSON.parse(rawLocal);
+      if (!localValue) {
+        finalValue = cloudValue;
+      } else {
+        finalValue =
+          localValue.updatedAt > cloudValue.updatedAt ? localValue : cloudValue;
+      }
 
-  }
+      localStorage.setItem(
+        localKey,
 
-  catch {}
-
-  let finalValue;
-
-  if (!localValue) {
-
-    finalValue = cloudValue;
-
-  }
-
-  else {
-
-    finalValue =
-
-      localValue.updatedAt >
-      cloudValue.updatedAt
-
-        ? localValue
-        : cloudValue;
-
-  }
-
-  localStorage.setItem(
-
-    localKey,
-
-    JSON.stringify(finalValue)
-
-  );
-
-}
+        JSON.stringify(finalValue),
+      );
+    }
 
     isRestoringFromCloud = false;
 
-    console.log(
-      "Cloud restored safely"
-    );
+    console.log("Cloud restored safely");
 
     return true;
-
-  }
-
-  catch(err){
-
+  } catch (err) {
     isRestoringFromCloud = false;
 
     console.error(err);
 
     return false;
-
   }
-
 }
 
 // ==========================================
 // Auto Snyc on unload
 // ==========================================
 window.addEventListener("beforeunload", async () => {
-
   const user = auth.currentUser;
 
   if (!user) return;
@@ -785,10 +576,7 @@ window.addEventListener("beforeunload", async () => {
   createEmergencyBackup();
 
   await uploadPlannerData(user.uid);
-
 });
-
-
 
 // ==========================================
 // PATCH CLOUD STORAGE
@@ -796,7 +584,6 @@ window.addEventListener("beforeunload", async () => {
 console.log("queueCloudSync fired");
 console.log("currentUser =", auth.currentUser);
 function queueCloudSync() {
-
   const user = auth.currentUser;
 
   if (!user) return;
@@ -806,130 +593,72 @@ function queueCloudSync() {
   clearTimeout(syncTimeout);
 
   syncTimeout = setTimeout(async () => {
-
     try {
-
       await uploadPlannerData(user.uid);
-
+    } catch (err) {
+      console.error("Auto sync failed", err);
     }
-
-    catch(err){
-
-      console.error(
-        "Auto sync failed",
-        err
-      );
-
-    }
-
   }, 1500);
-
 }
 
 // ==========================================
 // PATCH LOCALSTORAGE
 // ==========================================
 
-const originalSetItem =
-  localStorage.setItem;
+const originalSetItem = localStorage.setItem;
 
-localStorage.setItem = function(key, value) {
-
+localStorage.setItem = function (key, value) {
   // run original localStorage
-  originalSetItem.apply(
-    this,
-    [key, value]
-  );
+  originalSetItem.apply(this, [key, value]);
 
   // only sync planner keys
-  if (
-    key.startsWith(
-      "fullmoon.pocketplanner."
-    )
-  ) {
-
+  if (key.startsWith("fullmoon.pocketplanner.")) {
     queueCloudSync();
-
   }
-
 };
-
 
 // ==========================================
 // PATCH REMOVE ITEM
 // ==========================================
 
-const originalRemoveItem =
-  localStorage.removeItem;
+const originalRemoveItem = localStorage.removeItem;
 
-localStorage.removeItem =
-function(key) {
+localStorage.removeItem = function (key) {
+  originalRemoveItem.apply(this, [key]);
 
-  originalRemoveItem.apply(
-    this,
-    [key]
-  );
-
-  if (
-    key.startsWith(
-      "fullmoon.pocketplanner."
-    )
-  ) {
-
+  if (key.startsWith("fullmoon.pocketplanner.")) {
     queueCloudSync();
-
   }
-
 };
-
 
 // ==========================================
 // Notify cloud sync on planner changes
 // ==========================================
 
-window.addEventListener(
-  "message",
-  async (event) => {
+window.addEventListener("message", async (event) => {
+  if (event.data?.type !== "plannerChanged") return;
 
-    if (
-      event.data?.type !==
-      "plannerChanged"
-    ) return;
+  console.log("plannerChanged received", Date.now());
 
-    console.log(
-      "plannerChanged received",
-      Date.now()
-    );
+  const user = auth.currentUser;
 
-    const user = auth.currentUser;
+  if (!user) return;
 
-    if (!user) return;
+  console.log("Planner changed → syncing");
 
-    console.log(
-      "Planner changed → syncing"
-    );
-
-    await uploadPlannerData(user.uid);
-
-  }
-);
-
+  await uploadPlannerData(user.uid);
+});
 
 /* ==========================================
    Manual Sync Function
 ========================================== */
 
-window.syncTemplatesToFirestore =
-async function () {
-
+window.syncTemplatesToFirestore = async function () {
   const user = auth.currentUser;
 
   if (!user) {
-
     throw new Error("Not logged in");
-
   }
 
   await uploadPlannerData(user.uid);
-
 };

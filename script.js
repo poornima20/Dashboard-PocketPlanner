@@ -2,180 +2,207 @@
      0. Template Data
   ========================================== */
 
-console.log("SCRIPT VERSION 0.3 - 08 June 2026");
+console.log("SCRIPT VERSION 1.0 - 06 July 2026");
+
+/* ==========================================
+   CLEAN INVALID PLANNER IDS
+========================================== */
+
+const VALID_PLANNERS = [
+  "10minute",
+  "focusgrid",
+  "mediahistory",
+  "monthlygrid",
+  "studylog",
+  "tasklog",
+  "templates",
+  "waterlog",
+  "weeklog",
+  "weeklyspread",
+  "yearlylog",
+  "yearoverview",
+  "cornellnotes",
+  "spendlog",
+];
+
+function cleanPocketPlannerLocalStorage() {
+  Object.keys(localStorage).forEach((key) => {
+    if (!key.startsWith("fullmoon.pocketplanner.")) return;
+
+    const plannerName = key.replace("fullmoon.pocketplanner.", "");
+
+    if (!VALID_PLANNERS.includes(plannerName)) {
+      console.log("Removing old local key:", key);
+
+      localStorage.removeItem(key);
+    }
+  });
+}
+
 const templatesData = {
   dated: {
     "Daily Planner": [
       {
         name: "Focus Grid",
         image: "./Icons/focusgrid.png",
-        url: "https://poornima20.github.io/PocketPlanner-DailyPlanner-FocusGrid/"
+        url: "https://poornima20.github.io/PocketPlanner-DailyPlanner-FocusGrid/",
       },
       {
         name: "10-Minute Planner",
         image: "./Icons/10minuteplanner.png",
-        url: "https://poornima20.github.io/PocketPlanner-DailyPlanner-10MinutePlanner/"
-      }
+        url: "https://poornima20.github.io/PocketPlanner-DailyPlanner-10MinutePlanner/",
+      },
     ],
 
     "Weekly Planner": [
       {
         name: "Week Log",
         image: "./Icons/weeklog.png",
-        url: "https://poornima20.github.io/PocketPlanner-WeeklyPlaner-WeekLog/"
+        url: "https://poornima20.github.io/PocketPlanner-WeeklyPlaner-WeekLog/",
       },
       {
         name: "Weekly Spread",
         image: "./Icons/weeklyspread.png",
-        url: "https://poornima20.github.io/PocketPlanner-WeeklyPlanner-WeeklySpread/"
-      }
+        url: "https://poornima20.github.io/PocketPlanner-WeeklyPlanner-WeeklySpread/",
+      },
     ],
 
     "Monthly Planner": [
       {
         name: "Task Log",
         image: "./Icons/tasklog.png",
-        url: "https://poornima20.github.io/PocketPlanner-MonthlyPlanner-TaskLog/"
+        url: "https://poornima20.github.io/PocketPlanner-MonthlyPlanner-TaskLog/",
       },
       {
         name: "Monthly Grid",
         image: "./Icons/monthlygrid.png",
-        url: "https://poornima20.github.io/PocketPlanner-MonthlyPlanner-MonthlyGrid/"
-      }
+        url: "https://poornima20.github.io/PocketPlanner-MonthlyPlanner-MonthlyGrid/",
+      },
     ],
 
     "Yearly Planner": [
       {
         name: "Time Progress",
         image: "./Icons/timeprogress.png",
-        url: "https://poornima20.github.io/PocketPlanner-YearlyPlanner-TimeProgress/"
+        url: "https://poornima20.github.io/PocketPlanner-YearlyPlanner-TimeProgress/",
       },
       {
         name: "Year Overview",
         image: "./Icons/yearoverview.png",
-        url: "https://poornima20.github.io/PocketPlanner-MonthlyPlanner-YearOverview/"
+        url: "https://poornima20.github.io/PocketPlanner-MonthlyPlanner-YearOverview/",
       },
       {
         name: "Yearly Log",
         image: "./Icons/yearlylog.png",
-        url: "https://poornima20.github.io/PocketPlanner-YearlyPlanner-YearlyLog/"
-      }
+        url: "https://poornima20.github.io/PocketPlanner-YearlyPlanner-YearlyLog/",
+      },
     ],
 
-    "Tracker": [
-      {
-        name: "Project Timeline",
-        image: "./Icons/projecttimeline.png",
-        url: "https://poornima20.github.io/PocketPlanner-Tracker-ProjectTimeline/"
-      },
+    Tracker: [
       {
         name: "Study Log",
         image: "./Icons/studylog.png",
-        url: "https://poornima20.github.io/PocketPlanner-Tracker-StudyLog/"
+        url: "https://poornima20.github.io/PocketPlanner-Tracker-StudyLog/",
       },
       {
         name: "Spend Log",
         image: "./Icons/spendlog.png",
-        url: "https://poornima20.github.io/PocketPlanner-Tracker-SpendLog/"
+        url: "https://poornima20.github.io/PocketPlanner-Tracker-SpendLog/",
       },
       {
         name: "Water Log",
         image: "./Icons/waterlog.png",
-        url: "https://poornima20.github.io/PocketPlanner-Tracker-WaterLog/"
-      }
-    ]
+        url: "https://poornima20.github.io/PocketPlanner-Tracker-WaterLog/",
+      },
+    ],
   },
 
   undated: {
-    "Goals": [
+    Goals: [
       {
         name: "Portfolio",
         image: "./Icons/cornellnotes.png",
-        url: "https://poornima20.github.io/Fullmoon/"
-      }
+        url: "https://poornima20.github.io/Fullmoon/",
+      },
     ],
 
-    "Notes": [
+    Notes: [
       {
         name: "Cornell Notes",
         image: "./Icons/cornellnotes.png",
-        url: "https://poornima20.github.io/PocketPlanner-Notes-Cornell-Notes//"
-      }
+        url: "https://poornima20.github.io/PocketPlanner-Notes-Cornell-Notes//",
+      },
     ],
 
-    "Entertainment": [
+    Entertainment: [
       {
         name: "Bookshelf",
         image: "./Icons/bookshelf.png",
-        url: "https://poornima20.github.io/PocketPlanner-Entertainment-Bookshelf/"
+        url: "https://poornima20.github.io/PocketPlanner-Entertainment-Bookshelf/",
       },
 
       {
         name: "Media History",
         image: "./Icons/mediahistory.png",
-        url: "https://poornima20.github.io/PocketPlanner-Entertainment-MediaHistory/"
-      }
+        url: "https://poornima20.github.io/PocketPlanner-Entertainment-MediaHistory/",
+      },
     ],
 
-    "Music": [
+    Music: [
       {
         name: "Arirang",
         image: "./Icons/arirang.png",
-        url: "https://poornima20.github.io/PocketPlanner-Music-Arirang/"
-      }
-    ]
-  }
+        url: "https://poornima20.github.io/PocketPlanner-Music-Arirang/",
+      },
+    ],
+  },
 };
 
 const categoryMeta = {
   "Daily Planner": {
     icon: "calendar-days",
-    desc: "Plan your day with clarity and focus"
+    desc: "Plan your day with clarity and focus",
   },
   "Weekly Planner": {
     icon: "calendar",
-    desc: "Organize your entire week efficiently"
+    desc: "Organize your entire week efficiently",
   },
   "Monthly Planner": {
     icon: "calendar-range",
-    desc: "Track long-term goals and events"
+    desc: "Track long-term goals and events",
   },
   "Yearly Planner": {
     icon: "calendar-clock",
-    desc: "Visualize your year at a glance"
+    desc: "Visualize your year at a glance",
   },
-  "Tracker": {
+  Tracker: {
     icon: "activity",
-    desc: "Track habits, mood, and progress"
+    desc: "Track habits, mood, and progress",
   },
-  "Goals": {
+  Goals: {
     icon: "target",
-    desc: "Define and crush your goals"
+    desc: "Define and crush your goals",
   },
-  "Notes": {
+  Notes: {
     icon: "notebook",
-    desc: "Capture thoughts and ideas quickly"
+    desc: "Capture thoughts and ideas quickly",
   },
-  "Entertainment": {
+  Entertainment: {
     icon: "film",
-    desc: "Track shows, movies, and fun stuff"
+    desc: "Track shows, movies, and fun stuff",
   },
-  "Music": {
+  Music: {
     icon: "music",
-    desc: "Organize playlists and inspiration"
-  }
+    desc: "Organize playlists and inspiration",
+  },
 };
-const savedTemplates =
-  JSON.parse(
-    localStorage.getItem(
-      "fullmoon.pocketplanner.templates"
-    )
-  );
+const savedTemplates = JSON.parse(
+  localStorage.getItem("fullmoon.pocketplanner.templates"),
+);
 
-let myTemplates =
-  Array.isArray(savedTemplates?.data)
-    ? savedTemplates.data
-    : [];
+let myTemplates = Array.isArray(savedTemplates?.data)
+  ? savedTemplates.data
+  : [];
 
 let currentView = "grid";
 
@@ -183,50 +210,36 @@ let currentView = "grid";
     Reload templates from Storage
   ========================================== */
 function reloadTemplatesFromStorage() {
+  const savedTemplates = JSON.parse(
+    localStorage.getItem("fullmoon.pocketplanner.templates"),
+  );
 
-  const savedTemplates =
-    JSON.parse(
-      localStorage.getItem(
-        "fullmoon.pocketplanner.templates"
-      )
-    );
-
-  myTemplates =
-    Array.isArray(savedTemplates?.data)
-      ? savedTemplates.data
-      : [];
-
+  myTemplates = Array.isArray(savedTemplates?.data) ? savedTemplates.data : [];
 }
 
 window.refreshPlannerState = function () {
-
   reloadTemplatesFromStorage();
   updatePlannerCounter();
 
   const activePage =
-    document.querySelector(".nav-item.active")
-      ?.dataset.page || "all";
+    document.querySelector(".nav-item.active")?.dataset.page || "all";
 
   const pageMap = {
     all: () => renderMySpace(currentView),
     dated: () => renderFilteredTemplates("dated"),
     undated: () => renderFilteredTemplates("undated"),
-    templates: () => renderTemplates()
+    templates: () => renderTemplates(),
   };
 
-  document.getElementById("content").innerHTML =
-    pageMap[activePage]();
+  document.getElementById("content").innerHTML = pageMap[activePage]();
 
   setTimeout(() => {
-
     lucide.createIcons();
 
     setupAllCardActions();
 
     setupViewToggle();
-
   }, 0);
-
 };
 
 /* ==========================================
@@ -234,60 +247,48 @@ window.refreshPlannerState = function () {
   ========================================== */
 
 function saveTemplates() {
-
   localStorage.setItem(
-
     "fullmoon.pocketplanner.templates",
 
     JSON.stringify({
       data: myTemplates,
-      updatedAt: Date.now()
-    })
-
+      updatedAt: Date.now(),
+    }),
   );
 
   notifyDashboardSync();
-
 }
 
 function notifyDashboardSync() {
-
   if (window.parent !== window) {
-
     window.parent.postMessage(
       {
         type: "plannerChanged",
-        planner: "fullmoon.pocketplanner.templates"
+        planner: "fullmoon.pocketplanner.templates",
       },
-      "*"
+      "*",
     );
-
   }
-
 }
 
 /* ==========================================
      5. Service Worker Registration
   ========================================== */
 if ("serviceWorker" in navigator) {
-
   // ❌ Disable SW on localhost
-  if (
-    location.hostname === "localhost" ||
-    location.hostname === "127.0.0.1"
-  ) {
+  if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
     console.log("SW disabled on localhost");
 
     // also remove any existing SW
-    navigator.serviceWorker.getRegistrations().then(regs => {
-      regs.forEach(reg => reg.unregister());
+    navigator.serviceWorker.getRegistrations().then((regs) => {
+      regs.forEach((reg) => reg.unregister());
     });
-
   } else {
     // ✅ Enable only in production
-    navigator.serviceWorker.register("sw.js")
+    navigator.serviceWorker
+      .register("sw.js")
       .then(() => console.log("SW registered"))
-      .catch(err => console.log("SW error", err));
+      .catch((err) => console.log("SW error", err));
   }
 }
 
@@ -296,6 +297,8 @@ if ("serviceWorker" in navigator) {
   ========================================== */
 
 document.addEventListener("DOMContentLoaded", () => {
+  // one time old planner local cleanup
+  cleanPocketPlannerLocalStorage();
 
   lucide.createIcons();
 
@@ -308,161 +311,103 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const searchBox = document.getElementById("searchBox");
   const searchInput = document.getElementById("searchInput");
-  const syncCloudBtn =  document.getElementById("syncCloudBtn");
+  const syncCloudBtn = document.getElementById("syncCloudBtn");
 
-    
   /* ==========================================
      1. SIDEBAR TOGGLE
   ========================================== */
-toggle.onclick = () => {
+  toggle.onclick = () => {
+    const expanded = sidebar.classList.toggle("expanded");
 
-  const expanded =
-    sidebar.classList.toggle("expanded");
+    // desktop/tablet body states
+    document.body.classList.toggle("sidebar-expanded", expanded);
 
-  // desktop/tablet body states
-  document.body.classList.toggle(
-    "sidebar-expanded",
-    expanded
-  );
+    document.body.classList.toggle("sidebar-collapsed", !expanded);
 
-  document.body.classList.toggle(
-    "sidebar-collapsed",
-    !expanded
-  );
+    // mobile overlay
+    if (window.innerWidth <= 768) {
+      overlay.classList.toggle("active", expanded);
+    }
+  };
 
-  // mobile overlay
-  if(window.innerWidth <= 768){
+  window.addEventListener("resize", () => {
+    const width = window.innerWidth;
 
-    overlay.classList.toggle(
-      "active",
-      expanded
-    );
+    // desktop
+    if (width > 1024) {
+      sidebar.classList.add("expanded");
 
-  }
+      document.body.classList.add("sidebar-expanded");
 
-};
-
-window.addEventListener("resize", () => {
-
-  const width = window.innerWidth;
-
-  // desktop
-  if(width > 1024){
-
-    sidebar.classList.add("expanded");
-
-    document.body.classList.add(
-      "sidebar-expanded"
-    );
-
-    document.body.classList.remove(
-      "sidebar-collapsed"
-    );
-
-  }
-
-  // tablet
-  else if(width > 768){
-
-    document.body.classList.remove(
-      "sidebar-expanded"
-    );
-
-    if(!sidebar.classList.contains("expanded")){
-
-      document.body.classList.add(
-        "sidebar-collapsed"
-      );
-
+      document.body.classList.remove("sidebar-collapsed");
     }
 
-  }
+    // tablet
+    else if (width > 768) {
+      document.body.classList.remove("sidebar-expanded");
 
-  // mobile
-  else{
+      if (!sidebar.classList.contains("expanded")) {
+        document.body.classList.add("sidebar-collapsed");
+      }
+    }
 
-    document.body.classList.remove(
-      "sidebar-expanded",
-      "sidebar-collapsed"
-    );
+    // mobile
+    else {
+      document.body.classList.remove("sidebar-expanded", "sidebar-collapsed");
+    }
 
-  }
+    // remove overlay outside mobile
+    if (width > 768) {
+      overlay.classList.remove("active");
+    }
+  });
 
-  // remove overlay outside mobile
-  if(width > 768){
+  (function initSidebar() {
+    // desktop default expanded
+    if (window.innerWidth > 1024) {
+      sidebar.classList.add("expanded");
 
-    overlay.classList.remove("active");
+      document.body.classList.add("sidebar-expanded");
+    }
 
-  }
+    // tablet default collapsed
+    else if (window.innerWidth > 768) {
+      sidebar.classList.remove("expanded");
 
-});
-
-(function initSidebar(){
-
-  // desktop default expanded
-  if(window.innerWidth > 1024){
-
-    sidebar.classList.add("expanded");
-
-    document.body.classList.add(
-      "sidebar-expanded"
-    );
-
-  }
-
-  // tablet default collapsed
-  else if(window.innerWidth > 768){
-
-    sidebar.classList.remove("expanded");
-
-    document.body.classList.add(
-      "sidebar-collapsed"
-    );
-
-  }
-
-})();
+      document.body.classList.add("sidebar-collapsed");
+    }
+  })();
 
   /* ==========================================
     FAB home toggle 
   ========================================== */
-const fabHome = document.getElementById("fabHome");
+  const fabHome = document.getElementById("fabHome");
 
-if (fabHome) {
-  fabHome.onclick = () => {
-    // go back to My Space
-    loadPage("all", "My Space");
-  };
-}
+  if (fabHome) {
+    fabHome.onclick = () => {
+      // go back to My Space
+      loadPage("all", "My Space");
+    };
+  }
 
-
-/* ==========================================
+  /* ==========================================
    Sync Status
 ========================================== */
-function showSyncStatus(text){
+  function showSyncStatus(text) {
+    const btn = document.getElementById("syncCloudBtn");
 
-  const btn =
-    document.getElementById("syncCloudBtn");
+    if (!btn) return;
 
-  if(!btn) return;
+    btn.textContent = text;
+  }
 
-  btn.textContent = text;
-}
-
-syncCloudBtn?.addEventListener(
-  "click",
-  async () => {
-
-    try{
-
+  syncCloudBtn?.addEventListener("click", async () => {
+    try {
       if (!window.syncTemplatesToFirestore) {
-
         showSyncStatus("Login First");
 
         setTimeout(() => {
-
           showSyncStatus("Sync");
-
         }, 2000);
 
         return;
@@ -475,51 +420,35 @@ syncCloudBtn?.addEventListener(
       showSyncStatus("Synced to Cloud !");
 
       setTimeout(() => {
-
         showSyncStatus("Sync");
-
       }, 2000);
-
-    }
-    catch(err){
-
+    } catch (err) {
       console.error(err);
 
       showSyncStatus("Failed to Sync / Login First");
 
       setTimeout(() => {
-
         showSyncStatus("Sync");
-
       }, 2000);
-
     }
-
-  }
-);
+  });
 
   /* ==========================================
     MObiel onclick toggle
   ========================================== */
 
-const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+  const mobileMenuBtn = document.getElementById("mobileMenuBtn");
 
-mobileMenuBtn.onclick = () => {
+  mobileMenuBtn.onclick = () => {
+    sidebar.classList.toggle("expanded");
 
-  sidebar.classList.toggle("expanded");
-
-  overlay.classList.toggle(
-    "active",
-    sidebar.classList.contains("expanded")
-  );
-
-};
+    overlay.classList.toggle("active", sidebar.classList.contains("expanded"));
+  };
 
   /* ==========================================
      2. PAGE + ACTIVE STATE (CORE FUNCTION)
   ========================================== */
   function loadPage(page, label) {
-
     document.body.classList.remove("viewer-active");
     content.classList.remove("planner-mode");
 
@@ -529,76 +458,72 @@ mobileMenuBtn.onclick = () => {
     topbar.classList.remove("viewer-mode");
     viewerTopbar.innerHTML = "";
 
-  // ---- PAGE MAP ----
-  const pages = {
-    all: renderMySpace,
-    dated: () => renderFilteredTemplates("dated"),
-    undated: () => renderFilteredTemplates("undated"),
-    templates: renderTemplates   
-  };
+    // ---- PAGE MAP ----
+    const pages = {
+      all: renderMySpace,
+      dated: () => renderFilteredTemplates("dated"),
+      undated: () => renderFilteredTemplates("undated"),
+      templates: renderTemplates,
+    };
 
-  // ---- RENDER ----
-  if (pages[page]) {
-    content.innerHTML = pages[page]();
-  } else {
-    content.innerHTML = `<h2>${label}</h2>`;
-  }
+    // ---- RENDER ----
+    if (pages[page]) {
+      content.innerHTML = pages[page]();
+    } else {
+      content.innerHTML = `<h2>${label}</h2>`;
+    }
 
-
- // 🔥 clear all first
-    navItems.forEach(item => item.classList.remove("active"));
+    // 🔥 clear all first
+    navItems.forEach((item) => item.classList.remove("active"));
 
     // 🔥 set only one
     const activeItem = document.querySelector(`.nav-item[data-page="${page}"]`);
     if (activeItem) activeItem.classList.add("active");
 
-  // ---- CLOSE SEARCH ----
-  searchBox.classList.remove("active");
+    // ---- CLOSE SEARCH ----
+    searchBox.classList.remove("active");
 
-  // ---- AFTER RENDER (IMPORTANT) ----
-  setTimeout(() => {
+    // ---- AFTER RENDER (IMPORTANT) ----
+    setTimeout(() => {
+      if (page === "templates") {
+        setupTemplateButtons();
+        setupTemplateToggle();
+        setupTemplateCategories();
+        setupTemplateSticky();
+        lucide.createIcons();
+      }
 
-  if (page === "templates") {
-    setupTemplateButtons();
-    setupTemplateToggle();
-    setupTemplateCategories();
-    setupTemplateSticky();
-    lucide.createIcons();
+      if (page === "dated" || page === "undated") {
+        content.classList.add("planner-mode");
+      }
+
+      if (page === "all" || page === "dated" || page === "undated") {
+        setupAllCardActions();
+        setupViewToggle();
+      }
+
+      lucide.createIcons();
+    }, 0);
   }
-
-  if (page === "dated" || page === "undated") {
-  content.classList.add("planner-mode");
-}
-
-if (page === "all" || page === "dated" || page === "undated") {
-    setupAllCardActions();
-    setupViewToggle();
-  }
-
-  lucide.createIcons();
-
-}, 0);
-}
 
   /* ==========================================
      3. NAV CLICK
   ========================================== */
-navItems.forEach(item => {
-  item.addEventListener("click", () => {
+  navItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      // 1️⃣ Navigate
+      loadPage(item.dataset.page, item.innerText);
 
-    // 1️⃣ Navigate
-    loadPage(item.dataset.page, item.innerText);
+      // 2️⃣ Close sidebar ONLY on mobile
+      if (window.innerWidth <= 768) {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.getElementById("overlay");
 
-    // 2️⃣ Close sidebar ONLY on mobile
-    if (window.innerWidth <= 768) {
-      const sidebar = document.getElementById("sidebar");
-      const overlay = document.getElementById("overlay");
-
-      sidebar.classList.remove("expanded");
-      overlay.classList.remove("active");
-    }
+        sidebar.classList.remove("expanded");
+        overlay.classList.remove("active");
+      }
+    });
   });
-});
 
   /* ==========================================
      4. SEARCH DROPDOWN
@@ -617,17 +542,14 @@ navItems.forEach(item => {
   });
 
   // Click result
-  resultItems.forEach(item => {
+  resultItems.forEach((item) => {
     item.addEventListener("click", () => {
       loadPage(item.dataset.page, item.innerText);
     });
   });
   loadPage("all", "My Space");
   updatePlannerCounter();
-
 });
-
-
 
 /* ==========================================
      6. Render Templates (called from index.html)
@@ -645,49 +567,36 @@ function renderTemplates(filter = "all") {
   </div>
 `;
 
-/* ==========================================
+  /* ==========================================
    TEMPLATE CATEGORY NAVIGATION
 ========================================== */
 
-let navCategories = {};
+  let navCategories = {};
 
-if (filter === "dated") {
+  if (filter === "dated") {
+    navCategories = templatesData.dated;
+  } else if (filter === "undated") {
+    navCategories = templatesData.undated;
+  } else {
+    navCategories = {
+      ...templatesData.dated,
+      ...templatesData.undated,
+    };
+  }
 
-  navCategories = templatesData.dated;
-
-}
-else if (filter === "undated") {
-
-  navCategories = templatesData.undated;
-
-}
-else {
-
-  navCategories = {
-    ...templatesData.dated,
-    ...templatesData.undated
-  };
-
-}
-
-html += `
+  html += `
 <div class="template-nav-wrap">
   <div class="template-categories">
 `;
 
-Object.keys(navCategories).forEach(category => {
+  Object.keys(navCategories).forEach((category) => {
+    const meta = categoryMeta[category] || {};
 
-  const meta = categoryMeta[category] || {};
+    const sectionId = category.toLowerCase().replace(/\s+/g, "-");
 
-  const sectionId =
-    category
-      .toLowerCase()
-      .replace(/\s+/g, "-");
+    const label = category.replace(" Planner", "");
 
-  const label =
-    category.replace(" Planner", "");
-
-  html += `
+    html += `
     <button
       class="cat-btn"
       data-target="${sectionId}"
@@ -700,28 +609,27 @@ Object.keys(navCategories).forEach(category => {
       <span>${label}</span>
     </button>
   `;
-});
+  });
 
-html += `
+  html += `
   </div>
 </div>
 
 <div class="template-nav-placeholder"></div>
 `;
   for (let section in templatesData) {
-
     if (filter !== "all" && section !== filter) continue;
 
     const categories = templatesData[section];
 
-    for (let category in categories) {   
-  const meta = categoryMeta[category] || {};
-  const icon = meta.icon || "folder";
-  const desc = meta.desc || "";
-  
-const sectionId = category.toLowerCase().replace(/\s+/g, "-");
+    for (let category in categories) {
+      const meta = categoryMeta[category] || {};
+      const icon = meta.icon || "folder";
+      const desc = meta.desc || "";
 
-html += `<div class="template-group" id="${sectionId}">
+      const sectionId = category.toLowerCase().replace(/\s+/g, "-");
+
+      html += `<div class="template-group" id="${sectionId}">
 
       <div class="template-category">
       <div class="category-left">
@@ -737,8 +645,8 @@ html += `<div class="template-group" id="${sectionId}">
       <div class="template-grid">
   `;
 
-  categories[category].forEach(template => {
-    html += `
+      categories[category].forEach((template) => {
+        html += `
       <div class="template-card">
         <img src="${template.image}" />
         
@@ -751,13 +659,13 @@ html += `<div class="template-group" id="${sectionId}">
         </div>
       </div>
     `;
-  });
+      });
 
-  html += `
+      html += `
       </div> <!-- grid -->
     </div> <!-- group -->
   `;
-}
+    }
 
     html += `</div>`;
   }
@@ -769,74 +677,49 @@ html += `<div class="template-group" id="${sectionId}">
   Template Categories Scroll Logic
   ========================================== */
 
-function setupTemplateCategories(){
+function setupTemplateCategories() {
+  document.querySelectorAll(".cat-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const target = btn.dataset.target;
 
-  document
-    .querySelectorAll(".cat-btn")
-    .forEach(btn=>{
+      const section = document.getElementById(target);
 
-      btn.addEventListener("click",()=>{
+      if (!section) return;
 
-        const target =
-          btn.dataset.target;
+      const y = section.getBoundingClientRect().top + window.scrollY - 80;
 
-        const section =
-          document.getElementById(target);
-
-        if(!section) return;
-
-        const y =
-          section.getBoundingClientRect().top +
-          window.scrollY -
-          80;
-
-        window.scrollTo({
-          top:y,
-          behavior:"smooth"
-        });
-
+      window.scrollTo({
+        top: y,
+        behavior: "smooth",
       });
-
     });
-
+  });
 }
 
 /* ==========================================
   Template Categories Sticky Logic
   ========================================== */
 function setupTemplateSticky() {
-
-  const wrap =
-    document.querySelector(".template-nav-wrap");
+  const wrap = document.querySelector(".template-nav-wrap");
 
   if (!wrap) return;
 
-  const start =
-    wrap.getBoundingClientRect().top +
-    window.scrollY;
+  const start = wrap.getBoundingClientRect().top + window.scrollY;
 
   window.addEventListener("scroll", () => {
-
     if (window.scrollY >= start) {
-
       wrap.classList.add("fixed-nav");
 
-      wrap.style.width =
-        `${wrap.parentElement.clientWidth}px`;
+      wrap.style.width = `${wrap.parentElement.clientWidth}px`;
 
-      wrap.style.left =
-        `${wrap.parentElement.getBoundingClientRect().left}px`;
-
+      wrap.style.left = `${wrap.parentElement.getBoundingClientRect().left}px`;
     } else {
-
       wrap.classList.remove("fixed-nav");
 
       wrap.style.width = "";
       wrap.style.left = "";
     }
-
   });
-
 }
 
 /* ==========================================
@@ -846,11 +729,10 @@ function setupTemplateSticky() {
 function setupTemplateToggle() {
   const buttons = document.querySelectorAll(".toggle-btn");
 
-  buttons.forEach(btn => {
+  buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
-
       // active state
-      buttons.forEach(b => b.classList.remove("active"));
+      buttons.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
 
       const filter = btn.dataset.filter;
@@ -874,12 +756,11 @@ function setupTemplateToggle() {
 function setupTemplateButtons() {
   const buttons = document.querySelectorAll(".add-btn");
 
-  buttons.forEach(btn => {
-
+  buttons.forEach((btn) => {
     const url = btn.dataset.url;
 
     // 🔥 Set initial state (VERY IMPORTANT)
-    const exists = myTemplates.some(t => t.url === url);
+    const exists = myTemplates.some((t) => t.url === url);
 
     if (exists) {
       btn.classList.add("added");
@@ -891,65 +772,61 @@ function setupTemplateButtons() {
 
     // 🔥 Click handler
     btn.addEventListener("click", () => {
+      if (btn.classList.contains("added")) return;
 
-  if (btn.classList.contains("added")) return;
+      const url = btn.dataset.url;
 
-  const url = btn.dataset.url;
+      let selectedTemplate = null;
 
-  let selectedTemplate = null;
-
-  for (let section in templatesData) {
-    for (let category in templatesData[section]) {
-      templatesData[section][category].forEach(t => {
-        if (t.url === url) {
-          selectedTemplate = {
-            id: Date.now(),
-            ...t,
-            type: section
-          };
+      for (let section in templatesData) {
+        for (let category in templatesData[section]) {
+          templatesData[section][category].forEach((t) => {
+            if (t.url === url) {
+              selectedTemplate = {
+                id: Date.now(),
+                ...t,
+                type: section,
+              };
+            }
+          });
         }
-      });
-    }
-  }
+      }
 
-  if (!selectedTemplate) return;
+      if (!selectedTemplate) return;
 
-  const exists = myTemplates.some(t => t.url === url);
+      const exists = myTemplates.some((t) => t.url === url);
 
-  if (!exists) {
-    myTemplates.push(selectedTemplate);
-    saveTemplates();
-    updatePlannerCounter();
-  }
+      if (!exists) {
+        myTemplates.push(selectedTemplate);
+        saveTemplates();
+        updatePlannerCounter();
+      }
 
-  // get current active filter
-const activeBtn = document.querySelector(".toggle-btn.active");
-const currentFilter = activeBtn ? activeBtn.dataset.filter : "all";
+      // get current active filter
+      const activeBtn = document.querySelector(".toggle-btn.active");
+      const currentFilter = activeBtn ? activeBtn.dataset.filter : "all";
 
-// re-render with SAME filter
-document.getElementById("content").innerHTML = renderTemplates(currentFilter);
+      // re-render with SAME filter
+      document.getElementById("content").innerHTML =
+        renderTemplates(currentFilter);
 
-setTimeout(() => {
-  setupTemplateButtons();
-  setupTemplateToggle();
-  setupTemplateCategories();
-  setupTemplateSticky();
-  lucide.createIcons();
-}, 0);
-
-});
+      setTimeout(() => {
+        setupTemplateButtons();
+        setupTemplateToggle();
+        setupTemplateCategories();
+        setupTemplateSticky();
+        lucide.createIcons();
+      }, 0);
+    });
   });
 }
-
 
 /* ==========================================
      6. Render MySpace (called from index.html)
   ========================================== */
 
 function renderMySpace(view = "grid") {
-
-  
-    let html = `
+  let html = `
     <div class="myspace-header">
 
       <h2 class="menu-title">My Space</h2>
@@ -969,16 +846,17 @@ function renderMySpace(view = "grid") {
     </div>
     `;
 
-
-
   if (myTemplates.length === 0) {
-    return html + `<div class="empty-message"> No planners added yet . Go to 'Templates' to add Planner</div>`;
+    return (
+      html +
+      `<div class="empty-message"> No planners added yet . Go to 'Templates' to add Planner</div>`
+    );
   }
 
   html += `<div class="myspace-container ${view}-view">`;
 
-      if (view === "list") {
-        html += `
+  if (view === "list") {
+    html += `
           <div class="list-header">
             <span>#</span>
             <span>Name</span>
@@ -987,13 +865,13 @@ function renderMySpace(view = "grid") {
             <span>Delete</span>
           </div>
         `;
-      }
+  }
 
-if (view === "grid") {
-  html += `<div class="template-grid">`;
+  if (view === "grid") {
+    html += `<div class="template-grid">`;
 
-  myTemplates.forEach(template => {
-    html += `
+    myTemplates.forEach((template) => {
+      html += `
       <div class="template-card" draggable="true" data-id="${template.id}">
         <img src="${template.image}" />
 
@@ -1011,16 +889,16 @@ if (view === "grid") {
         </div>
       </div>
     `;
-  });
+    });
 
-  html += `</div>`;
-}
+    html += `</div>`;
+  }
 
-if (view === "list") {
-  html += `<div class="list-container">`;
+  if (view === "list") {
+    html += `<div class="list-container">`;
 
-  myTemplates.forEach((template, index) => {
-    html += `
+    myTemplates.forEach((template, index) => {
+      html += `
       <div class="list-row" data-id="${template.id}">
 
         <div class="serial-col">${index + 1}</div>
@@ -1051,10 +929,10 @@ if (view === "list") {
 
       </div>
     `;
-  });
+    });
 
-  html += `</div>`;
-}
+    html += `</div>`;
+  }
   return html;
 }
 
@@ -1062,23 +940,18 @@ if (view === "list") {
      6. Dated and Undated Pages (called from index.html)
   ========================================== */
 
-
 function renderFilteredTemplates(type) {
-
-  const filtered =
-    myTemplates.filter(t => t.type === type);
+  const filtered = myTemplates.filter((t) => t.type === type);
 
   let html = `
     <div class="craft-grid">
 
       <div class="planner-indicator">
-        ${type === "dated"
-          ? "Dated Planner"
-          : "Undated Planner"}
+        ${type === "dated" ? "Dated Planner" : "Undated Planner"}
       </div>
   `;
 
-  if(filtered.length === 0){
+  if (filtered.length === 0) {
     html += `
       <div class="empty-message">
         No planners added yet
@@ -1086,10 +959,9 @@ function renderFilteredTemplates(type) {
     `;
   }
 
-  filtered.forEach(template => {
-
+  filtered.forEach((template) => {
     html += `
-      <div class="craft-card" data-id="${template.id || ''}">
+      <div class="craft-card" data-id="${template.id || ""}">
         <iframe
           class="craft-iframe"
           src="${template.url}"
@@ -1097,7 +969,6 @@ function renderFilteredTemplates(type) {
         </iframe>
       </div>
     `;
-
   });
 
   html += `</div>`;
@@ -1105,47 +976,44 @@ function renderFilteredTemplates(type) {
   return html;
 }
 
-
 /* ==========================================
      6. delete button logic in MySpace (called from index.html)
   ========================================== */
 
 function setupDeleteButtons() {
-  document.querySelectorAll(".delete-btn").forEach(btn => {
+  document.querySelectorAll(".delete-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-
       const btn = e.currentTarget;
       const card = btn.closest(".template-card, .list-row");
       const id = Number(card.dataset.id);
       if (!id) return;
 
       // remove from state
-      myTemplates = myTemplates.filter(t => t.id !== id);
+      myTemplates = myTemplates.filter((t) => t.id !== id);
       saveTemplates();
       updatePlannerCounter();
 
       // 🔥 RE-RENDER CURRENT PAGE
-      const activePage = document.querySelector(".nav-item.active")?.dataset.page;
+      const activePage =
+        document.querySelector(".nav-item.active")?.dataset.page;
 
       if (activePage === "dated") {
-        document.getElementById("content").innerHTML = renderFilteredTemplates("dated");
-      } 
-      else if (activePage === "undated") {
-        document.getElementById("content").innerHTML = renderFilteredTemplates("undated");
-      } 
-      else {
-        document.getElementById("content").innerHTML = renderMySpace(currentView);
+        document.getElementById("content").innerHTML =
+          renderFilteredTemplates("dated");
+      } else if (activePage === "undated") {
+        document.getElementById("content").innerHTML =
+          renderFilteredTemplates("undated");
+      } else {
+        document.getElementById("content").innerHTML =
+          renderMySpace(currentView);
       }
 
-
       setTimeout(() => {
-      lucide.createIcons();
+        lucide.createIcons();
 
-      setupAllCardActions();
-      setupViewToggle(); // 🔥 THIS FIXES YOUR ISSUE
-
-    }, 0);
-
+        setupAllCardActions();
+        setupViewToggle(); // 🔥 THIS FIXES YOUR ISSUE
+      }, 0);
     });
   });
 }
@@ -1155,19 +1023,20 @@ function setupDeleteButtons() {
   ========================================== */
 
 function setupReorderButtons() {
-
-  document.querySelectorAll(".move-up").forEach(btn => {
+  document.querySelectorAll(".move-up").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
 
       const id = Number(btn.dataset.id);
-      const index = myTemplates.findIndex(t => t.id === id);
+      const index = myTemplates.findIndex((t) => t.id === id);
 
       if (index <= 0) return;
 
       // swap with previous
-      [myTemplates[index - 1], myTemplates[index]] =
-      [myTemplates[index], myTemplates[index - 1]];
+      [myTemplates[index - 1], myTemplates[index]] = [
+        myTemplates[index],
+        myTemplates[index - 1],
+      ];
 
       saveTemplates();
 
@@ -1182,19 +1051,20 @@ function setupReorderButtons() {
     });
   });
 
-
-  document.querySelectorAll(".move-down").forEach(btn => {
+  document.querySelectorAll(".move-down").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
 
       const id = Number(btn.dataset.id);
-      const index = myTemplates.findIndex(t => t.id === id);
+      const index = myTemplates.findIndex((t) => t.id === id);
 
       if (index >= myTemplates.length - 1) return;
 
       // swap with next
-      [myTemplates[index + 1], myTemplates[index]] =
-      [myTemplates[index], myTemplates[index + 1]];
+      [myTemplates[index + 1], myTemplates[index]] = [
+        myTemplates[index],
+        myTemplates[index + 1],
+      ];
 
       saveTemplates();
 
@@ -1208,20 +1078,18 @@ function setupReorderButtons() {
       }, 0);
     });
   });
-
 }
 /* ==========================================
      6. edit button logic in MySpace (called from index.html)
   ========================================== */
 function setupEditButtons() {
-  document.querySelectorAll(".edit-btn").forEach(btn => {
+  document.querySelectorAll(".edit-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-
       const card = e.currentTarget.closest(".template-card, .list-row");
       const id = Number(card.dataset.id);
       if (!id) return;
 
-      const template = myTemplates.find(t => t.id === id);
+      const template = myTemplates.find((t) => t.id === id);
       if (!template) return;
 
       const nameEl = card.querySelector(".template-name");
@@ -1275,23 +1143,20 @@ function setupEditButtons() {
         if (e.key === "Enter") save();
         if (e.key === "Escape") cancel();
       });
-
     });
   });
 }
-
 
 /* ==========================================
      6. drag and drop logic in MySpace (called from index.html)
   ========================================== */
 
-  let draggedId = null;
+let draggedId = null;
 
 function setupDrag() {
   const cards = document.querySelectorAll(".template-card");
 
-  cards.forEach(card => {
-
+  cards.forEach((card) => {
     card.addEventListener("dragstart", () => {
       draggedId = Number(card.dataset.id);
     });
@@ -1305,8 +1170,8 @@ function setupDrag() {
 
       const targetId = Number(card.dataset.id);
 
-      const fromIndex = myTemplates.findIndex(t => t.id === draggedId);
-      const toIndex = myTemplates.findIndex(t => t.id === targetId);
+      const fromIndex = myTemplates.findIndex((t) => t.id === draggedId);
+      const toIndex = myTemplates.findIndex((t) => t.id === targetId);
 
       // swap
       const temp = myTemplates[fromIndex];
@@ -1318,12 +1183,11 @@ function setupDrag() {
       // re-render
       document.getElementById("content").innerHTML = renderMySpace(currentView);
       setTimeout(() => {
-      lucide.createIcons();
+        lucide.createIcons();
 
-      setupAllCardActions();
-      setupViewToggle(); // 🔥 THIS FIXES YOUR ISSUE
-
-    }, 0);
+        setupAllCardActions();
+        setupViewToggle(); // 🔥 THIS FIXES YOUR ISSUE
+      }, 0);
     });
   });
 }
@@ -1335,9 +1199,8 @@ function setupDrag() {
 function setupViewToggle() {
   const buttons = document.querySelectorAll(".view-btn");
 
-  buttons.forEach(btn => {
+  buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
-
       currentView = btn.dataset.view; // 🔥 STORE VIEW
 
       document.getElementById("content").innerHTML = renderMySpace(currentView);
@@ -1362,28 +1225,21 @@ function setupAllCardActions() {
   setupCardOpen(); // 🔥 ADD THIS
 }
 
-
-
 /* ==========================================
      Main workspace viewer function (called from index.html)
   ========================================== */
 
- let currentIndex = 0;
+let currentIndex = 0;
 let currentList = [];
 
 function openViewer(index, list) {
-
   document.body.classList.add("viewer-active");
-   const sidebar = document.getElementById("sidebar");
+  const sidebar = document.getElementById("sidebar");
   sidebar.classList.remove("expanded");
 
-  document.body.classList.remove(
-    "sidebar-expanded"
-  );
+  document.body.classList.remove("sidebar-expanded");
 
-  document.body.classList.add(
-    "sidebar-collapsed"
-  );
+  document.body.classList.add("sidebar-collapsed");
 
   currentIndex = index;
   currentList = list;
@@ -1439,45 +1295,42 @@ function prevTemplate() {
   ========================================== */
 
 function setupCardOpen() {
-
   const items = document.querySelectorAll(".template-card, .list-row");
 
-  items.forEach(item => {
+  items.forEach((item) => {
     item.addEventListener("click", (e) => {
-
       // ❌ ignore clicks on buttons
       if (
         e.target.closest(".edit-btn") ||
         e.target.closest(".delete-btn") ||
         e.target.closest(".move-up") ||
         e.target.closest(".move-down")
-      ) return;
+      )
+        return;
 
       const id = Number(item.dataset.id);
       if (!id) return;
 
-      const activePage = document.querySelector(".nav-item.active")?.dataset.page;
+      const activePage =
+        document.querySelector(".nav-item.active")?.dataset.page;
 
       let list = [];
 
       if (activePage === "dated") {
-        list = myTemplates.filter(t => t.type === "dated");
-      } 
-      else if (activePage === "undated") {
-        list = myTemplates.filter(t => t.type === "undated");
-      } 
-      else {
+        list = myTemplates.filter((t) => t.type === "dated");
+      } else if (activePage === "undated") {
+        list = myTemplates.filter((t) => t.type === "undated");
+      } else {
         list = myTemplates;
       }
 
-      const index = list.findIndex(t => t.id === id);
+      const index = list.findIndex((t) => t.id === id);
       if (index === -1) return;
 
       openViewer(index, list);
     });
   });
 }
-
 
 /* ==========================================
    CLOUD ACCOUNT MODAL
@@ -1492,14 +1345,10 @@ const authForms = document.querySelectorAll(".auth-form");
 
 /* OPEN */
 cloudBtn.onclick = () => {
-
   // DON'T OPEN IF LOGGED IN
-  if (
-    cloudBtn.classList.contains("logged-in")
-  ) return;
+  if (cloudBtn.classList.contains("logged-in")) return;
 
   authModal.classList.add("active");
-
 };
 
 /* CLOSE */
@@ -1509,72 +1358,50 @@ closeAuth.onclick = () => {
 
 /* OUTSIDE CLICK */
 authModal.addEventListener("click", (e) => {
-
   if (e.target === authModal) {
     authModal.classList.remove("active");
   }
-
 });
 
 /* TAB SWITCH */
-authTabs.forEach(tab => {
-
+authTabs.forEach((tab) => {
   tab.addEventListener("click", () => {
-
     const selected = tab.dataset.tab;
 
-    authTabs.forEach(t =>
-      t.classList.remove("active")
-    );
+    authTabs.forEach((t) => t.classList.remove("active"));
 
-    authForms.forEach(f =>
-      f.classList.remove("active")
-    );
+    authForms.forEach((f) => f.classList.remove("active"));
 
     tab.classList.add("active");
 
     if (selected === "login") {
-      document.getElementById("loginForm")
-        .classList.add("active");
+      document.getElementById("loginForm").classList.add("active");
     }
 
     if (selected === "signup") {
-      document.getElementById("signupForm")
-        .classList.add("active");
+      document.getElementById("signupForm").classList.add("active");
     }
-
   });
-
 });
-
 
 /* ==========================================
    Footer Planner Counter
 ========================================== */
 
 function updatePlannerCounter() {
-
   let totalTemplates = 0;
 
-  Object.values(templatesData).forEach(section => {
-
-    Object.values(section).forEach(category => {
-
+  Object.values(templatesData).forEach((section) => {
+    Object.values(section).forEach((category) => {
       totalTemplates += category.length;
-
     });
-
   });
 
   const addedCount = myTemplates.length;
 
-  const usageText =
-    document.getElementById("usageText");
+  const usageText = document.getElementById("usageText");
 
   if (!usageText) return;
 
-  usageText.textContent =
-    `${addedCount} / ${totalTemplates} planners added`;
+  usageText.textContent = `${addedCount} / ${totalTemplates} planners added`;
 }
-
-
