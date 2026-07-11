@@ -12,7 +12,7 @@ const VALID_PLANNERS = [
   "10minute",
   "focusgrid",
   "mediahistory",
-  "monthlygrid", 
+  "monthlygrid",
   "studylog",
   "tasklog",
   "templates",
@@ -464,6 +464,8 @@ document.addEventListener("DOMContentLoaded", () => {
       dated: () => renderFilteredTemplates("dated"),
       undated: () => renderFilteredTemplates("undated"),
       templates: renderTemplates,
+      analytics: renderAnalytics,
+      guide: renderGuide,
     };
 
     // ---- RENDER ----
@@ -547,6 +549,12 @@ document.addEventListener("DOMContentLoaded", () => {
       loadPage(item.dataset.page, item.innerText);
     });
   });
+  
+   //Open Guide page 
+  document.getElementById("guideBtn").addEventListener("click", () => {
+    loadPage("guide", "Guide");
+  });
+
   loadPage("all", "My Space");
   updatePlannerCounter();
 });

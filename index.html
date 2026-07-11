@@ -35,6 +35,11 @@
                 <i data-lucide="book-text"></i><span>My Space</span>
               </div>
 
+              <div class="item nav-item" data-page="analytics">
+                  <i data-lucide="chart-column"></i>
+                  <span>Analytics</span>
+              </div>
+
               <div class="item nav-item" data-page="dated">
                 <i data-lucide="calendar"></i><span>Dated</span>
               </div>
@@ -102,18 +107,19 @@
       <div class="result-item" data-page="all">My Space</div>
       <div class="result-item" data-page="dated">Dated</div>
       <div class="result-item" data-page="undated">Undated</div>
-      <div class="result-item">Templates</div>
+      <div class="result-item" data-page="templates">Templates</div>
+      <div class="result-item" data-page="analytics">Analytics</div>
+      <div class="result-item" data-page="guide">Guide</div>
     </div>
 
   </div>
 
-  <!-- MAIN - TOPBAR: HELP -->
+    <!-- MAIN - TOPBAR: HELP -->
 
- <button class="help-btn">
-   <span>Guide</span>
-  <i data-lucide="book-a"  class="help-icon"></i>
- 
-</button>
+    <button class="help-btn" id="guideBtn">
+        <span>Guide</span>
+        <i data-lucide="book-a"></i>
+    </button>
 
     <div class="viewer-topbar" id="viewerTopbar"></div>
     </div>
@@ -278,6 +284,9 @@
 
 <script src="https://unpkg.com/lucide@latest"></script>
 <script  type="module"  src="cloud.js?v=1.0"></script>
+<script src="pages/analytics.js"></script>
+<script src="pages/guide.js"></script>
+
 <script src="script.js?v=1.0"></script>
 
 </body>
