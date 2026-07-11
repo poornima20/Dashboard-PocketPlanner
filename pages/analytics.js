@@ -2,85 +2,43 @@ function renderAnalytics() {
 
 return `
 
-<div style="
-padding:32px;
-background:#0b0b0b;
-color:white;
-min-height:100%;
-font-family:Inter,sans-serif;
-">
+<div class="analytics-page">
 
-    <h1 style="
-    font-size:42px;
-    font-weight:600;
-    margin-bottom:8px;
-    ">
-        Your journey in numbers ✨
-    </h1>
+    <div class="analytics-header">
 
-    <p style="
-    color:#b7b7b7;
-    font-size:18px;
-    margin-bottom:28px;
-    ">
-        A glance at your planning life.
-    </p>
+        <h1>Your journey in numbers ✨</h1>
+
+        <p>A glance at your planning life.</p>
+
+    </div>
 
 
-    <div style="
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:18px;
-    ">
+    <div class="analytics-grid">
 
-        <div style="
-        background:#111;
-        border:1px solid #262626;
-        border-radius:20px;
-        padding:24px;
-        ">
+        <div class="analytics-card">
 
-            <div style="font-size:15px;color:#999;">
+            <div class="analytics-label">
                 Planner
             </div>
 
-            <div style="
-            margin-top:12px;
-            font-size:34px;
-            font-weight:600;
-            ">
+            <div class="analytics-value planner-name">
                 Pocket Planner
             </div>
 
         </div>
 
 
-        <div style="
-        background:#111;
-        border:1px solid #262626;
-        border-radius:20px;
-        padding:24px;
-        ">
+        <div class="analytics-card">
 
-            <div style="
-            font-size:15px;
-            color:#999;
-            ">
+            <div class="analytics-label">
                 Last Updated
             </div>
 
-            <div style="
-            margin-top:14px;
-            font-size:28px;
-            color:#FFD369;
-            ">
+            <div class="analytics-date">
                 20 July 2026
             </div>
 
-            <div style="
-            color:#888;
-            margin-top:6px;
-            ">
+            <div class="analytics-time">
                 08:45 PM
             </div>
 
@@ -88,29 +46,17 @@ font-family:Inter,sans-serif;
 
 
 
+        <div class="analytics-card">
 
-
-        <div style="
-        background:#111;
-        border-radius:20px;
-        padding:24px;
-        border:1px solid #262626;
-        ">
-
-            <div style="color:#999">
+            <div class="analytics-label">
                 Day Streak
             </div>
 
-            <div style="
-            font-size:64px;
-            color:#ffb84d;
-            font-weight:600;
-            margin-top:10px;
-            ">
+            <div class="analytics-streak streak-fire">
                 🔥18
             </div>
 
-            <div style="color:#999">
+            <div class="analytics-subtitle">
                 Keep going!
             </div>
 
@@ -118,28 +64,17 @@ font-family:Inter,sans-serif;
 
 
 
+        <div class="analytics-card">
 
-        <div style="
-        background:#111;
-        border-radius:20px;
-        padding:24px;
-        border:1px solid #262626;
-        ">
-
-            <div style="color:#999">
+            <div class="analytics-label">
                 Best Streak
             </div>
 
-            <div style="
-            font-size:64px;
-            color:#B66DFF;
-            font-weight:600;
-            margin-top:10px;
-            ">
+            <div class="analytics-streak streak-best">
                 🏆42
             </div>
 
-            <div style="color:#999">
+            <div class="analytics-subtitle">
                 Your all time best
             </div>
 
@@ -147,30 +82,13 @@ font-family:Inter,sans-serif;
 
 
 
-        <div style="
-        grid-column:1/-1;
-        background:#111;
-        border-radius:20px;
-        border:1px solid #262626;
-        padding:26px;
-        ">
+        <div class="analytics-card analytics-wide">
 
-            <div style="
-            font-size:32px;
-            margin-bottom:18px;
-            ">
+            <div class="analytics-section-title">
                 📈 Year Overview
             </div>
 
-            <div style="
-            height:260px;
-            border-radius:16px;
-            background:#181818;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            color:#777;
-            ">
+            <div class="analytics-placeholder">
                 Line Graph Here
             </div>
 
@@ -178,32 +96,17 @@ font-family:Inter,sans-serif;
 
 
 
+        <div class="analytics-card">
 
-        <div style="
-        background:#111;
-        border-radius:20px;
-        padding:24px;
-        border:1px solid #262626;
-        ">
-
-            <div style="
-            font-size:28px;
-            ">
+            <div class="analytics-section-title">
                 👑 Most Used Planner
             </div>
 
-            <div style="
-            font-size:40px;
-            color:#B66DFF;
-            margin-top:18px;
-            ">
+            <div class="analytics-highlight planner-purple">
                 Study Log
             </div>
 
-            <div style="
-            color:#999;
-            margin-top:8px;
-            ">
+            <div class="analytics-subtitle">
                 Used 22 days this month
             </div>
 
@@ -211,31 +114,17 @@ font-family:Inter,sans-serif;
 
 
 
+        <div class="analytics-card">
 
-        <div style="
-        background:#111;
-        border-radius:20px;
-        padding:24px;
-        border:1px solid #262626;
-        ">
-
-            <div style="
-            font-size:28px;
-            ">
+            <div class="analytics-section-title">
                 🌱 Planner Age
             </div>
 
-            <div style="
-            font-size:56px;
-            color:#88D66C;
-            margin-top:18px;
-            ">
+            <div class="analytics-highlight planner-green">
                 124
             </div>
 
-            <div style="
-            color:#999;
-            ">
+            <div class="analytics-subtitle">
                 Days since first use
             </div>
 
@@ -243,31 +132,13 @@ font-family:Inter,sans-serif;
 
 
 
+        <div class="analytics-card analytics-wide">
 
-        <div style="
-        grid-column:1/-1;
-        background:#111;
-        border-radius:20px;
-        padding:24px;
-        border:1px solid #262626;
-        ">
-
-            <div style="
-            font-size:32px;
-            margin-bottom:20px;
-            ">
+            <div class="analytics-section-title">
                 📅 Planner Activity
             </div>
 
-            <div style="
-            height:280px;
-            background:#181818;
-            border-radius:16px;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            color:#777;
-            ">
+            <div class="analytics-placeholder heatmap">
                 Heatmap Here
             </div>
 

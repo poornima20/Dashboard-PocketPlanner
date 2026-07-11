@@ -205,6 +205,7 @@ let myTemplates = Array.isArray(savedTemplates?.data)
   : [];
 
 let currentView = "grid";
+let stickyHandler = null;
 
 /* ==========================================
     Reload templates from Storage
@@ -449,6 +450,10 @@ document.addEventListener("DOMContentLoaded", () => {
      2. PAGE + ACTIVE STATE (CORE FUNCTION)
   ========================================== */
   function loadPage(page, label) {
+    if (stickyHandler) {
+      window.removeEventListener("scroll", stickyHandler);
+      stickyHandler = null;
+    }
     document.body.classList.remove("viewer-active");
     content.classList.remove("planner-mode");
 
@@ -549,8 +554,8 @@ document.addEventListener("DOMContentLoaded", () => {
       loadPage(item.dataset.page, item.innerText);
     });
   });
-  
-   //Open Guide page 
+
+  //Open Guide page
   document.getElementById("guideBtn").addEventListener("click", () => {
     loadPage("guide", "Guide");
   });
@@ -712,22 +717,37 @@ function setupTemplateSticky() {
 
   if (!wrap) return;
 
+  // Remove previous listener
+  if (stickyHandler) {
+    window.removeEventListener("scroll", stickyHandler);
+  }
+
   const start = wrap.getBoundingClientRect().top + window.scrollY;
 
-  window.addEventListener("scroll", () => {
+  stickyHandler = function () {
+    // Page changed
+    if (!wrap.isConnected) {
+      window.removeEventListener("scroll", stickyHandler);
+      stickyHandler = null;
+      return;
+    }
+
     if (window.scrollY >= start) {
       wrap.classList.add("fixed-nav");
 
-      wrap.style.width = `${wrap.parentElement.clientWidth}px`;
-
-      wrap.style.left = `${wrap.parentElement.getBoundingClientRect().left}px`;
+      if (wrap.parentElement) {
+        wrap.style.width = wrap.parentElement.clientWidth + "px";
+        wrap.style.left =
+          wrap.parentElement.getBoundingClientRect().left + "px";
+      }
     } else {
       wrap.classList.remove("fixed-nav");
-
       wrap.style.width = "";
       wrap.style.left = "";
     }
-  });
+  };
+
+  window.addEventListener("scroll", stickyHandler);
 }
 
 /* ==========================================

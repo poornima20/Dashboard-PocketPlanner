@@ -523,9 +523,10 @@ nav{
   color: var(--hover-font-color);
 }
 
-.help-icon{
-  width: 16px;
-  height: 16px;
+.help-btn svg{
+  width: 13px;
+  height: 13px;
+
 }
 
 @media (max-width: 640px) {
@@ -1986,4 +1987,182 @@ body.sidebar-collapsed .fixed-nav{
 
 .sync-cloud-btn:hover{
   opacity:.8;
+}
+
+
+
+/* ==========================
+   Analytics Button
+========================== */
+.analytics-page{
+    padding:32px;
+    background:#0b0b0b;
+    color:#fff;
+    min-height:100%;
+}
+
+.analytics-header{
+    margin-bottom:28px;
+}
+
+.analytics-header h1{
+    font-size:42px;
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+.analytics-header p{
+    color:#b7b7b7;
+    font-size:18px;
+}
+
+.analytics-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.analytics-card{
+    background:#111;
+    border:1px solid #262626;
+    border-radius:20px;
+    padding:24px;
+}
+
+.analytics-wide{
+    grid-column:1/-1;
+}
+
+.analytics-label{
+    font-size:15px;
+    color:#999;
+}
+
+.analytics-value{
+    margin-top:12px;
+    font-size:34px;
+    font-weight:600;
+}
+
+.analytics-date{
+    margin-top:14px;
+    font-size:28px;
+    color:#FFD369;
+}
+
+.analytics-time{
+    color:#888;
+    margin-top:6px;
+}
+
+.analytics-streak{
+    margin-top:10px;
+    font-size:64px;
+    font-weight:600;
+}
+
+.streak-fire{
+    color:#ffb84d;
+}
+
+.streak-best{
+    color:#B66DFF;
+}
+
+.analytics-subtitle{
+    color:#999;
+    margin-top:8px;
+}
+
+.analytics-section-title{
+    font-size:32px;
+    margin-bottom:18px;
+}
+
+.analytics-highlight{
+    margin-top:18px;
+}
+
+.planner-purple{
+    font-size:40px;
+    color:#B66DFF;
+}
+
+.planner-green{
+    font-size:56px;
+    color:#88D66C;
+}
+
+.analytics-placeholder{
+    height:260px;
+    background:#181818;
+    border-radius:16px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:#777;
+}
+
+.heatmap{
+    height:280px;
+}
+
+/* Responsive */
+
+@media(max-width:900px){
+
+    .analytics-grid{
+        grid-template-columns:1fr;
+    }
+
+    .analytics-wide{
+        grid-column:auto;
+    }
+
+    .analytics-header h1{
+        font-size:32px;
+    }
+
+    .analytics-section-title{
+        font-size:24px;
+    }
+
+    .analytics-streak{
+        font-size:48px;
+    }
+
+    .planner-purple{
+        font-size:32px;
+    }
+
+    .planner-green{
+        font-size:42px;
+    }
+
+}
+
+@media(max-width:600px){
+
+    .analytics-page{
+        padding:18px;
+    }
+
+    .analytics-card{
+        padding:18px;
+    }
+
+    .analytics-header p{
+        font-size:15px;
+    }
+
+    .analytics-placeholder{
+        height:200px;
+    }
+
+    .heatmap{
+        height:220px;
+    }
+
 }
