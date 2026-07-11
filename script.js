@@ -2,7 +2,7 @@
      0. Template Data
   ========================================== */
 
-console.log("SCRIPT VERSION 1.0 - 06 July 2026");
+console.log("SCRIPT VERSION 1.1 - 11 July 2026");
 
 /* ==========================================
    CLEAN INVALID PLANNER IDS
