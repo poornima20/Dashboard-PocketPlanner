@@ -511,7 +511,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (page === "analytics") {
         lucide.createIcons();
-        drawYearChart();
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            drawYearChart();
+          });
+        });
       }
 
       lucide.createIcons();
@@ -1609,16 +1614,20 @@ function drawYearChart() {
       },
     },
   });
+
+  setTimeout(() => {
+    yearChart.resize();
+  }, 100);
 }
 
-let resizeTimer;
+// let resizeTimer;
 
-window.addEventListener("resize", () => {
-  clearTimeout(resizeTimer);
+// window.addEventListener("resize", () => {
+//   clearTimeout(resizeTimer);
 
-  resizeTimer = setTimeout(() => {
-    if (document.getElementById("yearChart")) {
-      drawYearChart();
-    }
-  }, 150);
-});
+//   resizeTimer = setTimeout(() => {
+//     if (document.getElementById("yearChart")) {
+//       drawYearChart();
+//     }
+//   }, 150);
+// });

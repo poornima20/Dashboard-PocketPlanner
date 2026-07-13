@@ -2452,14 +2452,17 @@ body.sidebar-collapsed .fixed-nav {
   color: #888;
 }
 
-.analytics-chart {
-  width: 100%;
-  height: 320px;
-  position: relative;
+.analytics-chart{
+    position: relative;
+    width: 100%;
+    height: 220px;
+    min-height: 220px;
 }
 
-.analytics-chart canvas {
-  display: block;
+.analytics-chart canvas{
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
 }
 
 .year-stats {
