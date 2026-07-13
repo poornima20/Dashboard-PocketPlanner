@@ -1450,9 +1450,12 @@ function updatePlannerCounter() {
 let yearChart = null;
 
 function drawYearChart() {
+  alert(typeof Chart);
+
   const isMobile = window.innerWidth <= 768;
   const isSmall = window.innerWidth <= 380;
   const canvas = document.getElementById("yearChart");
+  alert(canvas? "found" : "not found");
   if (!canvas) return;
 
   if (yearChart) {
