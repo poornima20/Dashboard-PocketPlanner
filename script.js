@@ -1445,12 +1445,31 @@ function updatePlannerCounter() {
 let yearChart = null;
 
 function drawYearChart() {
+  const isMobile = window.innerWidth <= 768;
+  const isSmall = window.innerWidth <= 380;
   const canvas = document.getElementById("yearChart");
   if (!canvas) return;
 
   if (yearChart) {
     yearChart.destroy();
   }
+
+  const monthLabels = isSmall
+    ? ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"]
+    : [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
 
   const values = [12, 18, 26, 21, 34, 42, 48, 37, 29, 35, 44, 46];
 
@@ -1466,20 +1485,7 @@ function drawYearChart() {
     type: "line",
 
     data: {
-      labels: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      labels: monthLabels,
 
       datasets: [
         {
@@ -1487,21 +1493,18 @@ function drawYearChart() {
 
           borderColor: "#b66dff",
 
-          borderWidth: 4,
+          pointRadius: isSmall ? 2 : isMobile ? 3 : 5,
+          pointHoverRadius: isSmall ? 3 : isMobile ? 4 : 7,
+          borderWidth: isSmall ? 2 : 3,
+          pointBorderWidth: isSmall ? 2 : isMobile ? 2 : 3,
 
-          pointRadius: 6,
-
-          pointHoverRadius: 7,
+          tension: 0.4,
 
           pointBackgroundColor: "#ffffff",
 
           pointBorderColor: "#b66dff",
 
-          pointBorderWidth: 4,
-
           fill: true,
-
-          tension: 0.4,
 
           backgroundColor(context) {
             const chart = context.chart;
@@ -1541,15 +1544,21 @@ function drawYearChart() {
           backgroundColor: "#181818",
           borderColor: "#333",
           borderWidth: 1,
+          titleFont: {
+            size: isMobile ? 10 : 13,
+          },
+          bodyFont: {
+            size: isMobile ? 10 : 12,
+          },
         },
       },
 
       layout: {
         padding: {
-          top: 10,
-          right: 10,
+          left: isSmall ? 0 : 8,
+          right: isSmall ? 0 : 8,
+          top: 8,
           bottom: 0,
-          left: 8,
         },
       },
 
@@ -1560,9 +1569,13 @@ function drawYearChart() {
           },
 
           ticks: {
-            color: "#8c8c8c",
+            color: "#888",
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0,
+
             font: {
-              size: 12,
+              size: isSmall ? 8 : isMobile ? 9 : 11,
             },
           },
         },
@@ -1575,11 +1588,14 @@ function drawYearChart() {
           max: maxY,
 
           ticks: {
-            stepSize: step,
+            color: "#888",
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0,
 
-            color: "#8c8c8c",
-
-            padding: 10,
+            font: {
+              size: isSmall ? 8 : isMobile ? 9 : 11,
+            },
           },
 
           grid: {
@@ -1594,3 +1610,15 @@ function drawYearChart() {
     },
   });
 }
+
+let resizeTimer;
+
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimer);
+
+  resizeTimer = setTimeout(() => {
+    if (document.getElementById("yearChart")) {
+      drawYearChart();
+    }
+  }, 150);
+});

@@ -348,7 +348,7 @@ function renderAnalytics() {
             </div>
 
             <div class="analytics-placeholder heatmap">
-                Heatmap Here
+               Unlock Heatmap Here
             </div>
 
         </div>

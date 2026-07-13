@@ -1936,7 +1936,7 @@ body.sidebar-collapsed .fixed-nav {
 }
 
 /* ======================================================
-   ANALYTICS
+   ANALYTICS - MAIN CONTAINER
 ====================================================== */
 
 .analytics-page {
@@ -1946,9 +1946,9 @@ body.sidebar-collapsed .fixed-nav {
   min-height: 100%;
 }
 
-/* ==========================
+/* ======================================================
    HEADER
-========================== */
+====================================================== */
 
 .analytics-header {
   margin-bottom: 24px;
@@ -1979,9 +1979,9 @@ body.sidebar-collapsed .fixed-nav {
   color: #cfcfcf;
 }
 
-/* ==========================
-   GRID
-========================== */
+/* ======================================================
+   GRID LAYOUT
+====================================================== */
 
 .analytics-grid {
   display: grid;
@@ -1993,9 +1993,9 @@ body.sidebar-collapsed .fixed-nav {
   grid-column: 1/-1;
 }
 
-/* ==========================
-   CARD
-========================== */
+/* ======================================================
+   CARD BASE
+====================================================== */
 
 .analytics-card {
   background: #111;
@@ -2004,9 +2004,9 @@ body.sidebar-collapsed .fixed-nav {
   padding: 22px;
 }
 
-/* ==========================
-   PLANNER HERO CARD
-========================== */
+/* ======================================================
+   SECTION: PLANNER HERO CARD
+====================================================== */
 
 .analytics-planner-card {
   grid-column: 1/-1;
@@ -2016,63 +2016,72 @@ body.sidebar-collapsed .fixed-nav {
 .planner-main {
   display: flex;
   align-items: center;
-  gap: 28px;
+  justify-content: space-between;
+  gap: 36px;
 }
 
 .planner-left {
   flex: 1;
-}
-
-.planner-right {
-  min-width: 240px;
-  display: flex;
-  align-items: center;
+  min-width: 0;
 }
 
 .planner-divider {
   width: 1px;
   align-self: stretch;
   background: rgba(255, 255, 255, 0.06);
+  flex-shrink: 0;
 }
+
+.planner-right {
+  width: 260px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+}
+
+/* ======================================================
+   TOP ROW
+====================================================== */
 
 .planner-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 14px;
 }
 
-/* ==========================
-   LABELS
-========================== */
+/* ======================================================
+   SECTION: LABELS
+====================================================== */
 
 .analytics-label {
   font-size: 12px;
-  color: #8c8c8c;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  color: #8c8c8c;
 }
 
-/* ==========================
+/* ======================================================
    EDIT BUTTON
-========================== */
+====================================================== */
 
 .planner-edit {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
 
   background: #181818;
   color: #a8a8a8;
 
   cursor: pointer;
-  transition: 0.2s ease;
+  transition: 0.2s;
 }
 
 .planner-edit:hover {
@@ -2081,80 +2090,81 @@ body.sidebar-collapsed .fixed-nav {
 }
 
 .planner-edit svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ======================================================
+   PLANNER NAME
+====================================================== */
+
+.planner-name {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+
+  white-space: nowrap;
+}
+
+/* ======================================================
+   CREATED BADGE
+====================================================== */
+
+.planner-created {
+  margin-top: 20px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 14px;
+
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+
+  color: #8c8c8c;
+  font-size: 13px;
+}
+
+.planner-created svg {
   width: 13px;
   height: 13px;
 }
 
-/* ==========================
-   PLANNER NAME
-========================== */
-
-.planner-name {
-  font-size: 28px;
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.4px;
-}
-
-/* ==========================
-   CREATED BADGE
-========================== */
-
-.planner-created {
-  margin-top: 16px;
-
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-
-  padding: 8px 12px;
-
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-
-  background: #141414;
-
-  color: #8d8d8d;
-  font-size: 12px;
-}
-
-.planner-created svg {
-  width: 12px;
-  height: 12px;
-}
-
-/* ==========================
+/* ======================================================
    LAST UPDATED
-========================== */
+====================================================== */
 
 .planner-last {
   display: flex;
-  gap: 14px;
   align-items: flex-start;
+  gap: 14px;
 }
 
 .planner-last svg {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   color: #8d8d8d;
 }
 
 .planner-date {
-  margin-top: 6px;
-  font-size: 18px;
-  font-weight: 600;
+  margin-top: 8px;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
 .planner-time {
-  margin-top: 6px;
-  font-size: 10px;
-  font-style: normal;
+  margin-top: 8px;
+  font-size: 12px;
   color: #8d8d8d;
 }
 
-/* ==========================
-   NORMAL CARDS
-========================== */
+/* ======================================================
+   SECTION: NORMAL CARDS - TITLES
+====================================================== */
 
 .analytics-section-title {
   font-size: 12px;
@@ -2166,11 +2176,25 @@ body.sidebar-collapsed .fixed-nav {
   color: #8c8c8c;
 }
 
+/* ======================================================
+   SECTION: STREAK
+====================================================== */
+
 .analytics-streak {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   margin-top: 12px;
-  font-size: 34px;
+}
+
+.analytics-streak svg {
+  width: 28px;
+  height: 28px;
+}
+
+.analytics-streak span {
+  font-size: 42px;
   font-weight: 700;
-  line-height: 1;
 }
 
 .analytics-subtitle {
@@ -2193,35 +2217,10 @@ body.sidebar-collapsed .fixed-nav {
   color: #b66dff;
 }
 
-.planner-purple {
-  color: #b66dff;
-}
-
-.planner-green {
-  color: #88d66c;
-}
-
 .analytics-divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.06);
   margin: 18px 0;
-}
-
-.analytics-streak {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: 12px;
-}
-
-.analytics-streak svg {
-  width: 28px;
-  height: 28px;
-}
-
-.analytics-streak span {
-  font-size: 42px;
-  font-weight: 700;
 }
 
 .streak-insights {
@@ -2233,7 +2232,6 @@ body.sidebar-collapsed .fixed-nav {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-
   padding: 6px 0;
 }
 
@@ -2264,9 +2262,31 @@ body.sidebar-collapsed .fixed-nav {
   margin-top: 3px;
 }
 
-/* ==========================
-   ENTERTAINMENT
-========================== */
+/* ======================================================
+   SECTION: COLOR UTILITIES
+====================================================== */
+
+.planner-purple {
+  color: #b66dff;
+}
+
+.planner-green {
+  color: #88d66c;
+}
+
+.planner-purple span {
+  font-size: 26px;
+  line-height: 1.5;
+}
+
+.planner-green span {
+  font-size: 26px;
+  line-height: 1.5;
+}
+
+/* ======================================================
+   SECTION: ENTERTAINMENT
+====================================================== */
 
 .entertainment-card {
   display: flex;
@@ -2284,9 +2304,7 @@ body.sidebar-collapsed .fixed-nav {
 .ent-donut {
   width: 160px;
   height: 160px;
-
   border-radius: 50%;
-
   background: conic-gradient(
     var(--movies) 0% 33%,
     var(--tv) 33% 55%,
@@ -2294,7 +2312,6 @@ body.sidebar-collapsed .fixed-nav {
     var(--anime) 73% 88%,
     var(--reads) 88% 100%
   );
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2303,11 +2320,8 @@ body.sidebar-collapsed .fixed-nav {
 .ent-center {
   width: 125px;
   height: 125px;
-
   border-radius: 50%;
-
   background: #111;
-
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -2326,7 +2340,6 @@ body.sidebar-collapsed .fixed-nav {
 
 .ent-legend {
   flex: 1;
-
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -2342,7 +2355,6 @@ body.sidebar-collapsed .fixed-nav {
   display: flex;
   align-items: center;
   gap: 10px;
-
   font-size: 13px;
 }
 
@@ -2360,26 +2372,9 @@ body.sidebar-collapsed .fixed-nav {
   font-size: 12px;
 }
 
-.movies-percent {
-  color: var(--movies);
-}
-.tv-percent {
-  color: var(--tv);
-}
-.books-percent {
-  color: var(--books);
-}
-.anime-percent {
-  color: var(--anime);
-}
-.reads-percent {
-  color: var(--reads);
-}
-
 .legend-dot {
   width: 12px;
   height: 12px;
-
   border-radius: 50%;
 }
 
@@ -2399,65 +2394,25 @@ body.sidebar-collapsed .fixed-nav {
   background: var(--reads);
 }
 
-@media (max-width: 768px) {
-  .entertainment-card {
-    flex-direction: column;
-    align-items: center;
-    gap: 24px;
-  }
-
-  .ent-chart {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .ent-donut {
-    width: 170px;
-    height: 170px;
-  }
-
-  .ent-center {
-    width: 120px;
-    height: 120px;
-  }
-
-  .ent-legend {
-    width: 100%;
-    gap: 10px;
-  }
-
-  .legend-item {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    align-items: center;
-    column-gap: 14px;
-  }
-
-  .legend-left {
-    min-width: 0;
-    font-size: 14px;
-  }
-
-  .legend-right {
-    display: contents;
-  }
-
-  .legend-right strong {
-    text-align: right;
-    width: 36px;
-    font-size: 16px;
-  }
-
-  .legend-right span {
-    width: 42px;
-    text-align: right;
-    font-size: 13px;
-  }
+.movies-percent {
+  color: var(--movies);
+}
+.tv-percent {
+  color: var(--tv);
+}
+.books-percent {
+  color: var(--books);
+}
+.anime-percent {
+  color: var(--anime);
+}
+.reads-percent {
+  color: var(--reads);
 }
 
-/* ==========================
-   Line Graph
-========================== */
+/* ======================================================
+   SECTION: LINE GRAPH / YEARLY
+====================================================== */
 
 .year-header {
   display: flex;
@@ -2534,50 +2489,17 @@ body.sidebar-collapsed .fixed-nav {
   font-weight: 600;
 }
 
-@media (max-width: 768px) {
-  .year-total {
-    font-size: 42px;
-  }
-
-
-  .analytics-chart {
-    height: 220px;
-  }
-}
-
-/* ==========================
-   PLACEHOLDER
-========================== */
-
-.planner-purple {
-  color: #b66dff;
-}
-
-.planner-green {
-  color: #88d66c;
-}
-
-.planner-purple span {
-  font-size: 26px;
-  line-height: 1.5;
-}
-
-.planner-green span {
-  font-size: 26px;
-  line-height: 1.5;
-}
+/* ======================================================
+   SECTION: PLACEHOLDER / HEATMAP
+====================================================== */
 
 .analytics-placeholder {
   height: 260px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 14px;
-
   background: #181818;
-
   color: #666;
   font-size: 13px;
 }
@@ -2585,6 +2507,150 @@ body.sidebar-collapsed .fixed-nav {
 .heatmap {
   height: 280px;
 }
+
+/* ======================================================
+   RESPONSIVE: TABLET (max-width: 768px)
+====================================================== */
+
+@media (max-width: 768px) {
+  .analytics-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .analytics-card {
+    padding: 18px;
+  }
+
+  .analytics-page {
+    padding: 16px;
+  }
+
+  .analytics-wide {
+    grid-column: auto;
+  }
+
+  /* Planner */
+  .planner-main {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .planner-divider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .planner-right {
+    width: 100%;
+    min-width: 0;
+  }
+
+  /* Entertainment */
+  .entertainment-card {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .ent-chart {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .ent-donut {
+    width: 170px;
+    height: 170px;
+  }
+
+  .ent-center {
+    width: 120px;
+    height: 120px;
+  }
+
+  .ent-legend {
+    width: 100%;
+    gap: 10px;
+  }
+
+  .legend-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    column-gap: 14px;
+  }
+
+  .legend-left {
+    min-width: 0;
+    font-size: 14px;
+  }
+
+  .legend-right {
+    display: contents;
+  }
+
+  .legend-right strong {
+    text-align: right;
+    width: 36px;
+    font-size: 16px;
+  }
+
+  .legend-right span {
+    width: 42px;
+    text-align: right;
+    font-size: 13px;
+  }
+
+  /* Line Chart */
+  .year-header {
+    margin-bottom: 18px;
+  }
+
+  .year-total {
+    font-size: 42px;
+  }
+
+  .year-total-label {
+    font-size: 11px;
+  }
+
+  .analytics-chart {
+    height: 220px;
+  }
+
+  .year-stats {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* ======================================================
+   Prevent from overflowing on mobile
+====================================================== */
+@media (max-width: 568px) {
+.analytics-page,
+.analytics-grid,
+.analytics-card,
+.analytics-planner-card,
+.planner-main,
+.planner-left,
+.planner-right,
+.year-header,
+.year-summary,
+.year-stats,
+.analytics-chart,
+.entertainment-card,
+.ent-legend {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+}
+
+/* ======================================================
+   RESPONSIVE: MOBILE (max-width: 568px)
+====================================================== */
 
 @media (max-width: 568px) {
   .analytics-page {
@@ -2616,6 +2682,7 @@ body.sidebar-collapsed .fixed-nav {
     font-size: 12px;
   }
 
+  /* Planner */
   .planner-main {
     flex-direction: column;
     align-items: flex-start;
@@ -2650,6 +2717,7 @@ body.sidebar-collapsed .fixed-nav {
     justify-content: center;
   }
 
+  /* Streak */
   .analytics-streak {
     font-size: 28px;
   }
@@ -2658,11 +2726,145 @@ body.sidebar-collapsed .fixed-nav {
     font-size: 24px;
   }
 
+  /* Entertainment */
+  .entertainment-card {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .ent-donut {
+    width: 160px;
+    height: 160px;
+  }
+
+  .ent-center {
+    width: 118px;
+    height: 118px;
+  }
+
+  .legend-item {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 12px;
+  }
+
+  .legend-right {
+    display: contents;
+  }
+
+  /* Line Chart */
+  .year-total {
+    font-size: 34px;
+  }
+
+  .year-total-label {
+    font-size: 11px;
+  }
+
+  .analytics-chart {
+    height: 220px;
+  }
+
+  /* Placeholder */
   .analytics-placeholder {
     height: 190px;
   }
 
   .heatmap {
     height: 220px;
+  }
+}
+
+/* ======================================================
+   RESPONSIVE: SMALL MOBILE (max-width: 380px)
+====================================================== */
+
+@media (max-width: 380px) {
+  .analytics-page {
+    padding: 12px;
+  }
+
+  .analytics-card {
+    padding: 14px;
+  }
+
+  .analytics-header h1 {
+    font-size: 22px;
+  }
+
+  .analytics-header p {
+    font-size: 11px;
+  }
+
+  /* Year Header */
+  .year-header {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .year-select {
+    width: 100%;
+  }
+
+  .year-total {
+    font-size: 28px;
+  }
+
+  .year-total-label {
+    font-size: 10px;
+  }
+
+  .analytics-chart {
+    height: 180px;
+  }
+
+  /* Entertainment */
+  .ent-donut {
+    width: 145px;
+    height: 145px;
+  }
+
+  .ent-center {
+    width: 105px;
+    height: 105px;
+  }
+
+  .ent-total {
+    font-size: 28px;
+  }
+
+  .legend-left {
+    font-size: 12px;
+  }
+
+  .legend-right strong {
+    font-size: 13px;
+  }
+
+  .legend-right span {
+    font-size: 11px;
+  }
+
+  /* Year Stats */
+  .year-stat strong {
+    font-size: 18px;
+  }
+
+  .year-stat span {
+    font-size: 10px;
+  }
+
+  .year-header {
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .year-select {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .year-subtitle {
+    font-size: 10px;
   }
 }
