@@ -2619,7 +2619,6 @@ body.sidebar-collapsed .fixed-nav {
   }
 
   .year-stats {
-    grid-template-columns: 1fr;
     gap: 16px;
   }
 }
