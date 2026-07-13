@@ -509,6 +509,11 @@ document.addEventListener("DOMContentLoaded", () => {
         setupViewToggle();
       }
 
+      if (page === "analytics") {
+        lucide.createIcons();
+        drawYearChart();
+      }
+
       lucide.createIcons();
     }, 0);
   }
@@ -1432,4 +1437,160 @@ function updatePlannerCounter() {
   if (!usageText) return;
 
   usageText.textContent = `${addedCount} / ${totalTemplates} planners added`;
+}
+
+/* ==========================================
+   Anaytics Page render
+========================================== */
+let yearChart = null;
+
+function drawYearChart() {
+  const canvas = document.getElementById("yearChart");
+  if (!canvas) return;
+
+  if (yearChart) {
+    yearChart.destroy();
+  }
+
+  const values = [12, 18, 26, 21, 34, 42, 48, 37, 29, 35, 44, 46];
+
+  const highest = Math.max(...values);
+
+  // Round to nearest 10
+  const maxY = Math.ceil(highest / 10) * 10;
+
+  // Five major divisions
+  const step = maxY / 5;
+
+  yearChart = new Chart(canvas, {
+    type: "line",
+
+    data: {
+      labels: [
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+
+      datasets: [
+        {
+          data: values,
+
+          borderColor: "#b66dff",
+
+          borderWidth: 4,
+
+          pointRadius: 6,
+
+          pointHoverRadius: 7,
+
+          pointBackgroundColor: "#ffffff",
+
+          pointBorderColor: "#b66dff",
+
+          pointBorderWidth: 4,
+
+          fill: true,
+
+          tension: 0.4,
+
+          backgroundColor(context) {
+            const chart = context.chart;
+            const { ctx, chartArea } = chart;
+
+            if (!chartArea) return;
+
+            const gradient = ctx.createLinearGradient(
+              0,
+              chartArea.top,
+              0,
+              chartArea.bottom,
+            );
+
+            gradient.addColorStop(0, "rgba(182,109,255,.35)");
+            gradient.addColorStop(0.55, "rgba(182,109,255,.12)");
+            gradient.addColorStop(1, "rgba(182,109,255,0)");
+
+            return gradient;
+          },
+        },
+      ],
+    },
+
+    options: {
+      responsive: true,
+
+      maintainAspectRatio: false,
+
+      animation: false,
+
+      plugins: {
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          backgroundColor: "#181818",
+          borderColor: "#333",
+          borderWidth: 1,
+        },
+      },
+
+      layout: {
+        padding: {
+          top: 10,
+          right: 10,
+          bottom: 0,
+          left: 8,
+        },
+      },
+
+      scales: {
+        x: {
+          grid: {
+            display: false,
+          },
+
+          ticks: {
+            color: "#8c8c8c",
+            font: {
+              size: 12,
+            },
+          },
+        },
+
+        y: {
+          beginAtZero: true,
+
+          min: 0,
+
+          max: maxY,
+
+          ticks: {
+            stepSize: step,
+
+            color: "#8c8c8c",
+
+            padding: 10,
+          },
+
+          grid: {
+            color: "rgba(255,255,255,.06)",
+          },
+
+          border: {
+            display: false,
+          },
+        },
+      },
+    },
+  });
 }

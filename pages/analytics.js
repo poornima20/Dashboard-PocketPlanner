@@ -235,17 +235,65 @@ function renderAnalytics() {
 
 
 
-        <div class="analytics-card analytics-wide">
+   <div class="analytics-card analytics-wide">
 
-            <div class="analytics-section-title">
-                 Year Overview
+    <div class="year-header">
+
+        <div>
+
+            <div class="analytics-label">
+                Year Overview
             </div>
 
-            <div class="analytics-placeholder">
-                Line Graph Here
+            <div class="year-subtitle">
+                Total characters written each month
             </div>
 
         </div>
+
+        <select class="year-select">
+            <option>2026</option>
+            <option>2025</option>
+        </select>
+
+    </div>
+
+    <div class="year-summary">
+
+        <div class="year-total">
+            1.24M
+        </div>
+
+        <div class="year-total-label">
+            Total characters this year
+        </div>
+
+    </div>
+
+    <div class="analytics-chart">
+        <canvas id="yearChart"></canvas>
+    </div>
+
+    <div class="year-stats">
+
+        <div class="year-stat">
+            <span>Best Month</span>
+            <strong>July</strong>
+        </div>
+
+        <div class="year-stat">
+            <span>Average</span>
+            <strong>103K</strong>
+        </div>
+
+        <div class="year-stat">
+            <span>Total Pages</span>
+            <strong>845</strong>
+        </div>
+
+    </div>
+
+</div>
 
 
 
